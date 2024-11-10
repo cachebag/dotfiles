@@ -21,10 +21,11 @@ return {
 
   -- snippets
   {
-  	"L3MON4D3/LuaSnip",
+    "L3MON4D3/LuaSnip",
     dependencies = {
       'saadparwaiz1/cmp_luasnip',
-      'rafamadriz/friendly-snippets' },
+      'rafamadriz/friendly-snippets'
+    },
   },
 
   -- Autocompletion
@@ -50,7 +51,7 @@ return {
         sources = {
           {name = 'nvim_lsp'},
           {name = 'luasnip'},
-          },
+        },
         mapping = cmp.mapping.preset.insert({
           ['<CR>'] = cmp.mapping.confirm({select = false}),
           ['<C-Space>'] = cmp.mapping.complete(),
@@ -110,3 +111,4 @@ return {
     end
   }
 }
+
