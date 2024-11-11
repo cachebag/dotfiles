@@ -1,5 +1,13 @@
 vim.g.mapleader = ' '
 
+vim.cmd([[
+  augroup TransparentBackground
+    autocmd!
+    autocmd ColorScheme * highlight Normal ctermbg=none guibg=none
+    autocmd ColorScheme * highlight NonText ctermbg=none guibg=none
+  augroup END
+]])
+
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
   vim.fn.system({
@@ -12,11 +20,11 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-
+vim.api.nvim_set_hl(0,"@text.strike",{strikethrough=true})
 require("lazy").setup("cachebag.plugins")
 
 vim.o.background = "dark" -- or "light" for light mode
-vim.cmd([[colorscheme bamboo]])
+vim.cmd([[colorscheme melange]])
 
 vim.opt.clipboard = 'unnamedplus'
 vim.opt.number = true
