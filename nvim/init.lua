@@ -24,7 +24,7 @@ vim.api.nvim_set_hl(0,"@text.strike",{strikethrough=true})
 require("lazy").setup("cachebag.plugins")
 
 vim.o.background = "dark" -- or "light" for light mode
-vim.cmd([[colorscheme melange]])
+vim.cmd([[colorscheme gruvbox]])
 
 vim.opt.clipboard = 'unnamedplus'
 vim.opt.number = true
@@ -52,5 +52,27 @@ vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
 
 vim.opt.encoding = 'utf-8'
 vim.opt.fileencoding = 'utf-8'
+
+-- Python specific settings
+vim.g.python3_host_prog = vim.fn.expand("~/.config/nvim/env/bin/python3")  -- Set path to your Python environment
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "python",
+  callback = function()
+    vim.opt_local.expandtab = true
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.tabstop = 4
+    vim.opt_local.softtabstop = 4
+    vim.opt_local.textwidth = 88  -- Black's default line length
+  end,
+})
+
+-- Set completeopt for better completion experience
+vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
+
+-- Format on save
+vim.cmd [[autocmd BufWritePre *.py lua vim.lsp.buf.format()]]
+
+-- Set updatetime for CursorHold
+vim.opt.updatetime = 250
 
 
