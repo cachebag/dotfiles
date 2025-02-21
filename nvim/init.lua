@@ -46,6 +46,11 @@ vim.keymap.set('n', '<C-h>', '<C-w>h', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-j>', '<C-w>j', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-k>', '<C-w>k', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-l>', '<C-w>l', { noremap = true, silent = true })
+vim.keymap.set('n', '<D-Left>', ':bprevious<CR>', { noremap = true, silent = true })  -- ⌘ + Left for previous buffer
+vim.keymap.set('n', '<D-Right>', ':bnext<CR>', { noremap = true, silent = true })  -- ⌘ + Right for next buffer
+vim.keymap.set('n', '<D-Left>', ':tabprevious<CR>', { noremap = true, silent = true })  -- ⌘ + Left for previous tab
+vim.keymap.set('n', '<D-Right>', ':tabnext<CR>', { noremap = true, silent = true })  -- ⌘ + Right for next tab
+
 
 -- NvimTree keybinding
 vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
