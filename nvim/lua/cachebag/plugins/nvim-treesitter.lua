@@ -1,45 +1,29 @@
 return {
   {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    dependencies = {
-      {
-        "cachebag/nvim-tcss",
-        build = "npm install && tree-sitter generate && make",
-      }
-    },
-    config = function()
-      local configs = require("nvim-treesitter.configs")
-      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-      parser_config.tcss = {
-        install_info = {
-          url = "https://github.com/cachebag/nvim-tcss",
-          files = { "src/parser.c" },
-          branch = "main",
-          generate_requires_npm = true,
-          requires_generate_from_grammar = true,
-        },
-        filetype = "tcss",
-      }
-      configs.setup({
-        ensure_installed = {
-          "c",
-          "lua",
-          "vim",
-          "vimdoc",
-          "rust",
-          "go",
-          "cpp",
-          "javascript",
-          "html",
-          "tcss"
-        },
-        sync_install = false,
-        highlight = { enable = true },
-        indent = { enable = true },
-      })
-    end
-  },
+  "nvim-treesitter/nvim-treesitter",
+  build = ":TSUpdate",
+  config = function()
+    require("nvim-treesitter.configs").setup({
+      ensure_installed = {
+        "c",
+        "lua",
+        "vim",
+        "vimdoc",
+        "rust",
+        "go",
+        "cpp",
+        "javascript",
+        "html",
+      },
+      highlight = { enable = true },
+      indent = { enable = true },
+    })
+  end,
+},
+  {
+  "cachebag/nvim-tcss",
+  config = true,
+},
   {
     "neovim/nvim-lspconfig",
     dependencies = {
