@@ -51,6 +51,13 @@ tooltip {
     background-color: transparent;
 }
 
+#workspaces button.active {
+    color: #ffffff;
+    background-color: rgba(204, 85, 0, 0.2); /* or whatever color you like */
+    padding: 0px 6px;
+    border: 2px solid #c7ab7a; 
+}
+
 #clock {
     background-color: transparent;
     border: 2px solid #434a4c;
