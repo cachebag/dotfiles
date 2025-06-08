@@ -98,3 +98,63 @@ tooltip {
     border: 2px solid #c7ab7a;
     color: #c14a4a;
 }
+
+#taskbar {
+    background-color: rgba(48, 53, 54, 0.8);
+    border: 2px solid #434a4c;
+    margin: 6px 0;
+    padding: 2px 4px;
+    border-radius: 6px;
+}
+
+#taskbar button {
+    all: unset;
+    margin: 0 4px;
+    padding: 4px;
+    border-radius: 6px;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+#taskbar button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+#taskbar button.active {
+    background-color: rgba(204, 85, 0, 0.3);
+    border: 2px solid #c7ab7a;
+}
+
+#taskbar button.focused {
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 2px solid #ddc7a1;
+}
+
+#custom-power_menu {
+    margin: 6px 6px 6px 0px; /* Match with others like #cpu */
+    padding: 2px 8px;
+    border: 2px solid #c7ab7a;
+    background-color: transparent;
+    color: white;
+    border-radius: 0; /* Optional: if you want square corners like others */
+    transition: background-color 0.2s ease;
+}
+
+#idle_inhibitor {
+    margin: 6px 6px 6px 0px; /* Match with others like #cpu */
+    padding: 3px 10px;
+    border: 2px solid #c7ab7a;
+    background-color: transparent;
+    color: white;
+    border-radius: 0; /* Optional: if you want square corners like others */
+    transition: background-color 0.2s ease;
+}
+
+#idle_inhibitor:hover,
+#custom-power_menu:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+
+
+
