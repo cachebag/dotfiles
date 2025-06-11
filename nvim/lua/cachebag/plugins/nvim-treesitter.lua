@@ -14,10 +14,15 @@ return {
           "cpp",
           "javascript",
           "html",
-          "toml",  -- For Cargo.toml files
-          "json",  -- For JSON files
-          "markdown",  -- For README.md files
+          "toml",
+          "json",
+          "markdown",
+          "python",
+          "yaml",
+          "bash",
         },
+        sync_install = false,
+        auto_install = true,
         highlight = { 
           enable = true,
           additional_vim_regex_highlighting = false,
@@ -51,17 +56,26 @@ return {
       "saadparwaiz1/cmp_luasnip",
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "simrat39/rust-tools.nvim",  -- Enhanced Rust support
     },
     config = function()
-      require("mason").setup()
+      require("mason").setup({
+        ui = {
+          icons = {
+            package_installed = "✓",
+            package_pending = "➜",
+            package_uninstalled = "✗"
+          }
+        }
+      })
+      
       require("mason-lspconfig").setup({
         ensure_installed = {
           "clangd",      -- C++ LSP
           "lua_ls",      -- Lua LSP
           "pyright",     -- Python LSP
-          "rust_analyzer",  -- Rust LSP
-        }
+          "rust_analyzer", -- Rust LSP (Note: Mason uses rust_analyzer, not rust-analyzer)
+        },
+        automatic_installation = true,
       })
       
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -93,6 +107,7 @@ return {
             },
             workspace = {
               library = vim.api.nvim_get_runtime_file("", true),
+              checkThirdParty = false,
             },
             telemetry = {
               enable = false,
@@ -104,45 +119,39 @@ return {
       -- Python LSP setup
       lspconfig.pyright.setup({
         capabilities = capabilities,
+        settings = {
+          python = {
+            analysis = {
+              autoSearchPaths = true,
+              useLibraryCodeForTypes = true,
+              diagnosticMode = "workspace",
+            },
+          },
+        },
       })
       
-      -- Rust LSP setup with rust-tools
-      local rust_tools = require('rust-tools')
-      rust_tools.setup({
-        server = {
-          capabilities = capabilities,
-          settings = {
-            ["rust-analyzer"] = {
-              assist = {
-                importEnforceGranularity = true,
-                importPrefix = "crate"
-              },
-              cargo = {
-                allFeatures = true
-              },
-              checkOnSave = true,
-              check = {
-                command = "clippy"
-              },
-              inlayHints = {
-                lifetimeElisionHints = {
-                  enable = true,
-                  useParameterNames = true
-                },
-              },
-            }
+      -- Rust LSP setup (basic - rust-tools will enhance this)
+      lspconfig.rust_analyzer.setup({
+        capabilities = capabilities,
+        settings = {
+          ["rust-analyzer"] = {
+            assist = {
+              importEnforceGranularity = true,
+              importPrefix = "crate"
+            },
+            cargo = {
+              allFeatures = true,
+              loadOutDirsFromCheck = true,
+            },
+            procMacro = {
+              enable = true,
+            },
+            checkOnSave = {
+              enable = true,
+              command = "clippy",
+            },
           }
-        },
-        tools = {
-          hover_actions = {
-            auto_focus = true,
-          },
-          inlay_hints = {
-            show_parameter_hints = true,
-            parameter_hints_prefix = "<- ",
-            other_hints_prefix = "=> ",
-          },
-        },
+        }
       })
       
       -- Set up nvim-cmp
@@ -185,11 +194,12 @@ return {
           end, { 'i', 's' }),
         }),
         sources = cmp.config.sources({
-          { name = 'nvim_lsp' },
-          { name = 'luasnip' },
+          { name = 'nvim_lsp', priority = 1000 },
+          { name = 'luasnip', priority = 750 },
+          { name = 'crates', priority = 700 },
         }, {
-          { name = 'buffer' },
-          { name = 'path' },
+          { name = 'buffer', priority = 500 },
+          { name = 'path', priority = 250 },
         }),
         formatting = {
           format = function(entry, vim_item)
@@ -198,13 +208,17 @@ return {
               luasnip = "[Snippet]",
               buffer = "[Buffer]",
               path = "[Path]",
+              crates = "[Crates]",
             })[entry.source.name]
             return vim_item
           end,
         },
+        experimental = {
+          ghost_text = true,
+        },
       })
       
-      -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+      -- Use buffer source for `/` and `?`
       cmp.setup.cmdline({ '/', '?' }, {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {
@@ -212,7 +226,7 @@ return {
         }
       })
       
-      -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+      -- Use cmdline & path source for ':'
       cmp.setup.cmdline(':', {
         mapping = cmp.mapping.preset.cmdline(),
         sources = cmp.config.sources({
@@ -232,22 +246,117 @@ return {
       "mfussenegger/nvim-dap",
     },
     config = function()
-      -- Configuration is handled in the lspconfig setup above
+      local rt = require("rust-tools")
+      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      
+      rt.setup({
+        server = {
+          capabilities = capabilities,
+          on_attach = function(client, bufnr)
+            -- Enable inlay hints if available
+            if vim.lsp.inlay_hint then
+              vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+            end
+            
+            -- Rust-specific keybindings
+            local opts = { buffer = bufnr, silent = true }
+            vim.keymap.set('n', '<leader>rh', rt.hover_actions.hover_actions, opts)
+            vim.keymap.set('n', '<leader>ra', rt.code_action_group.code_action_group, opts)
+          end,
+          settings = {
+            ["rust-analyzer"] = {
+              assist = {
+                importEnforceGranularity = true,
+                importPrefix = "crate"
+              },
+              cargo = {
+                allFeatures = true,
+                loadOutDirsFromCheck = true,
+              },
+              procMacro = {
+                enable = true,
+              },
+              checkOnSave = {
+                enable = true,
+                command = "clippy",
+              },
+              inlayHints = {
+                bindingModeHints = {
+                  enable = false,
+                },
+                chainingHints = {
+                  enable = true,
+                },
+                closingBraceHints = {
+                  enable = true,
+                  minLines = 25,
+                },
+                closureReturnTypeHints = {
+                  enable = "never",
+                },
+                lifetimeElisionHints = {
+                  enable = "never",
+                  useParameterNames = false,
+                },
+                maxLength = 25,
+                parameterHints = {
+                  enable = true,
+                },
+                reborrowHints = {
+                  enable = "never",
+                },
+                renderColons = true,
+                typeHints = {
+                  enable = true,
+                  hideClosureInitialization = false,
+                  hideNamedConstructor = false,
+                },
+              },
+            }
+          }
+        },
+        tools = {
+          hover_actions = {
+            auto_focus = true,
+          },
+          inlay_hints = {
+            show_parameter_hints = true,
+            parameter_hints_prefix = "<- ",
+            other_hints_prefix = "=> ",
+          },
+        },
+      })
     end,
   },
   {
     "saecki/crates.nvim",
-    ft = {"rust", "toml"},
+    event = { "BufRead Cargo.toml" },
+    dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
-      require("crates").setup {
+      require("crates").setup({
         completion = {
           cmp = {
             enabled = true
           }
-        }
-      }
-      require("cmp").setup.buffer({
-        sources = { { name = "crates" } }
+        },
+        lsp = {
+          enabled = true,
+          actions = true,
+          completion = true,
+          hover = true,
+        },
+        popup = {
+          autofocus = true,
+        },
+      })
+      
+      -- Add crates source to nvim-cmp for Cargo.toml files
+      vim.api.nvim_create_autocmd("BufRead", {
+        group = vim.api.nvim_create_augroup("CmpSourceCargo", { clear = true }),
+        pattern = "Cargo.toml",
+        callback = function()
+          require("cmp").setup.buffer({ sources = { { name = "crates" } } })
+        end,
       })
     end,
   },

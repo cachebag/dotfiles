@@ -46,20 +46,20 @@ vim.keymap.set('n', '<C-h>', '<C-w>h', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-j>', '<C-w>j', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-k>', '<C-w>k', { noremap = true, silent = true })
 vim.keymap.set('n', '<C-l>', '<C-w>l', { noremap = true, silent = true })
-vim.keymap.set('n', '<D-Left>', ':bprevious<CR>', { noremap = true, silent = true })  -- ⌘ + Left for previous buffer
-vim.keymap.set('n', '<D-Right>', ':bnext<CR>', { noremap = true, silent = true })  -- ⌘ + Right for next buffer
-vim.keymap.set('n', '<D-Left>', ':tabprevious<CR>', { noremap = true, silent = true })  -- ⌘ + Left for previous tab
-vim.keymap.set('n', '<D-Right>', ':tabnext<CR>', { noremap = true, silent = true })  -- ⌘ + Right for next tab
+vim.keymap.set('n', '<D-Left>', ':bprevious<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<D-Right>', ':bnext<CR>', { noremap = true, silent = true })
 
 -- NvimTree keybinding
 vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
--- Telescope keybindings
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+-- Telescope keybindings (wrapped in pcall to avoid errors if not installed)
+pcall(function()
+  local builtin = require('telescope.builtin')
+  vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+  vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+  vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+  vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+end)
 
 -- Encoding settings
 vim.opt.encoding = 'utf-8'
@@ -99,10 +99,6 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.tabstop = 4
     vim.opt_local.softtabstop = 4
     vim.opt_local.textwidth = 100
-    -- Enable inlay hints for Rust (if supported by your LSP server)
-    if vim.lsp.inlay_hint then
-      vim.lsp.inlay_hint.enable(true, { bufnr = 0 })
-    end
   end,
 })
 
@@ -110,6 +106,11 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
   callback = function(ev)
+    -- Enable inlay hints if available
+    if vim.lsp.inlay_hint then
+      vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+    end
+    
     local opts = { buffer = ev.buf }
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
@@ -122,12 +123,14 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>f', function()
       vim.lsp.buf.format { async = true }
     end, opts)
+    
     -- Rust-specific keybindings
     if vim.bo[ev.buf].filetype == 'rust' then
       vim.keymap.set('n', '<leader>rr', ':!cargo run<CR>', opts)
       vim.keymap.set('n', '<leader>rt', ':!cargo test<CR>', opts)
       vim.keymap.set('n', '<leader>rb', ':!cargo build<CR>', opts)
       vim.keymap.set('n', '<leader>rc', ':!cargo check<CR>', opts)
+      vim.keymap.set('n', '<leader>rC', ':!cargo clippy<CR>', opts)
     end
   end,
 })
@@ -137,6 +140,15 @@ vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 
 -- Performance settings
 vim.opt.updatetime = 250
+
+-- Diagnostic configuration
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  underline = true,
+  update_in_insert = false,
+  severity_sort = true,
+})
 
 -- Diagnostic icons
 local signs = {
@@ -151,4 +163,28 @@ for type, icon in pairs(signs) do
   vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
+-- Disable copilot by default
 vim.g.copilot_enabled = false
+
+-- Additional useful settings
+vim.opt.splitbelow = true
+vim.opt.splitright = true
+vim.opt.termguicolors = true
+vim.opt.scrolloff = 8
+vim.opt.sidescrolloff = 8
+vim.opt.wrap = false
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.hlsearch = true
+vim.opt.incsearch = true
+
+-- Clear search highlighting with Escape
+vim.keymap.set('n', '<Esc>', ':nohlsearch<CR>', { silent = true })
+
+-- Better indenting in visual mode
+vim.keymap.set('v', '<', '<gv')
+vim.keymap.set('v', '>', '>gv')
+
+-- Move selected lines up/down
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
