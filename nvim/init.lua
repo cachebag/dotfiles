@@ -51,7 +51,6 @@ vim.keymap.set('n', '<D-Right>', ':bnext<CR>', { noremap = true, silent = true }
 vim.keymap.set('n', '<D-Left>', ':tabprevious<CR>', { noremap = true, silent = true })  -- ⌘ + Left for previous tab
 vim.keymap.set('n', '<D-Right>', ':tabnext<CR>', { noremap = true, silent = true })  -- ⌘ + Right for next tab
 
-
 -- NvimTree keybinding
 vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
 
@@ -91,6 +90,22 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+-- Rust configuration
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "rust",
+  callback = function()
+    vim.opt_local.expandtab = true
+    vim.opt_local.shiftwidth = 4
+    vim.opt_local.tabstop = 4
+    vim.opt_local.softtabstop = 4
+    vim.opt_local.textwidth = 100
+    -- Enable inlay hints for Rust (if supported by your LSP server)
+    if vim.lsp.inlay_hint then
+      vim.lsp.inlay_hint.enable(true, { bufnr = 0 })
+    end
+  end,
+})
+
 -- LSP configuration
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -104,6 +119,16 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+    vim.keymap.set('n', '<leader>f', function()
+      vim.lsp.buf.format { async = true }
+    end, opts)
+    -- Rust-specific keybindings
+    if vim.bo[ev.buf].filetype == 'rust' then
+      vim.keymap.set('n', '<leader>rr', ':!cargo run<CR>', opts)
+      vim.keymap.set('n', '<leader>rt', ':!cargo test<CR>', opts)
+      vim.keymap.set('n', '<leader>rb', ':!cargo build<CR>', opts)
+      vim.keymap.set('n', '<leader>rc', ':!cargo check<CR>', opts)
+    end
   end,
 })
 
@@ -115,10 +140,10 @@ vim.opt.updatetime = 250
 
 -- Diagnostic icons
 local signs = {
-  Error = "",
-  Warn = "",
-  Hint = "",
-  Info = ""
+  Error = "",
+  Warn = "",
+  Hint = "",
+  Info = ""
 }
 
 for type, icon in pairs(signs) do
@@ -127,4 +152,3 @@ for type, icon in pairs(signs) do
 end
 
 vim.g.copilot_enabled = false
-
