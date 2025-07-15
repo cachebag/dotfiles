@@ -1,0 +1,36 @@
+{
+  "name": "cachebag-dotfiles",
+  "version": "1.0.0",
+  "description": "cahebag's dotfiles",
+  "main": "install.sh",
+  "scripts": {
+    "install": "./install.sh",
+    "backup": "./scripts/backup.sh",
+    "update": "./scripts/update.sh",
+    "clean": "./scripts/clean.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cachebag/dotfiles.git"
+  },
+  "keywords": [
+    "dotfiles",
+    "hyprland",
+    "neovim",
+    "waybar",
+    "rofi",
+    "wayland",
+    "arch-linux"
+  ],
+  "author": "cachebag",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cachebag/dotfiles/issues"
+  },
+  "homepage": "https://github.com/cachebag/dotfiles#readme",
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
