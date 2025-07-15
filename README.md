@@ -1,16 +1,13 @@
 # Cachebag's Dotfiles
 
-A modern, minimalist dotfiles configuration featuring Hyprland (Wayland), Neovim, and a carefully curated set of tools for a productive development environment.
+A minimal dotfiles config.
 
 ## Config covers...
 
-- **Hyprland**: Modern Wayland compositor with smooth animations
-- **Waybar**: Customizable status bar with system information
-- **Rofi**: Fast application launcher and window switcher
-- **Neovim**: Fully configured with LSP, completion, and plugins
-- **Transparent backgrounds**: Clean, minimal aesthetic
-- **Optimized keybindings**: Efficient workflow shortcuts
-
+- **Hyprland**
+- **Waybar**
+- **Rofi**
+- **Neovim**
 
 ## Install
 
@@ -28,7 +25,7 @@ A modern, minimalist dotfiles configuration featuring Hyprland (Wayland), Neovim
 
 3. **Log out and select Hyprland** as your session when logging back in.
 
-## 🔧 Manual Installation
+## Manual Installation
 
 If you prefer to install manually or want to understand what the script does:
 
@@ -73,39 +70,6 @@ npm install -g neovim
 # Install Neovim plugins
 nvim --headless "+Lazy! sync" +qa
 ```
-
-## 🎨 Customization
-
-### Hyprland
-
-- **Config**: `hypr/hyprland.conf`
-- **Keybindings**: `Super` key as main modifier
-- **Animations**: Smooth transitions and effects
-
-### Waybar
-
-- **Config**: `waybar/config`
-- **Styling**: `waybar/style.css`
-- **Modules**: CPU, memory, network, battery, clock
-
-### Rofi
-
-- **Config**: `rofi/config.rasi`
-- **Themes**: Custom styling to match overall aesthetic
-
-### Neovim
-
-- **Plugin Manager**: Lazy.nvim
-- **LSP**: Python, Lua language servers
-- **Theme**: Gruvbox Material
-- **Key Features**:
-  - Telescope for fuzzy finding
-  - Treesitter for syntax highlighting
-  - Auto-completion with nvim-cmp
-  - File explorer with nvim-tree
-
-## ⌨️ Key Bindings
-
 ### Hyprland (Super key)
 
 | Keybinding | Action |
@@ -151,12 +115,6 @@ nvim --headless "+Lazy! sync" +qa
    - Restart waybar: `killall waybar && waybar &`
    - Check config syntax: `waybar -t`
 
-
-- [Hyprland](https://hyprland.org/) - Amazing Wayland compositor
-- [Neovim](https://neovim.io/) - The future of Vim
-- [Gruvbox](https://github.com/morhetz/gruvbox) - Beautiful color scheme
-- The dotfiles community for inspiration
-
 ---
 
-**Note**: This configuration is optimized for my personal workflow. Feel free to adapt it to your needs!
+**Note**: This configuration is optimized for my personal workflow. 
