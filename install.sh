@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Cachebag's Dotfiles Installation Script
 # Automated setup for Hyprland + Neovim configuration
 
 set -e
@@ -11,6 +12,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
+# Logging functions
 log_info() {
     echo -e "${BLUE}[INFO]${NC} $1"
 }
@@ -72,6 +74,9 @@ install_dependencies() {
         "kitty"
         "dunst"
         "yazi"
+        "zsh"
+        "neofetch"
+        "fzf"
     )
     
     log_info "Installing packages with pacman..."
@@ -111,9 +116,11 @@ create_directories() {
         "$HOME/.config/waybar"
         "$HOME/.config/rofi"
         "$HOME/.config/nvim"
+        "$HOME/.config/kitty"
         "$HOME/.local/share/applications"
         "$HOME/.local/bin"
         "$HOME/wallpapers"
+        "$HOME/.local/share/zinit"
     )
     
     for dir in "${dirs[@]}"; do
@@ -131,7 +138,7 @@ backup_configs() {
     local backup_dir="$HOME/.config/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
     mkdir -p "$backup_dir"
     
-    local configs=("hypr" "waybar" "rofi" "nvim")
+    local configs=("hypr" "waybar" "rofi" "nvim" "kitty")
     
     for config in "${configs[@]}"; do
         if [[ -d "$HOME/.config/$config" ]] && [[ ! -L "$HOME/.config/$config" ]]; then
@@ -139,6 +146,17 @@ backup_configs() {
             mv "$HOME/.config/$config" "$backup_dir/"
         fi
     done
+    
+    # Backup zsh files
+    if [[ -f "$HOME/.zshrc" ]] && [[ ! -L "$HOME/.zshrc" ]]; then
+        log_warning "Backing up existing .zshrc"
+        cp "$HOME/.zshrc" "$backup_dir/"
+    fi
+    
+    if [[ -f "$HOME/.zsh_history" ]] && [[ ! -L "$HOME/.zsh_history" ]]; then
+        log_warning "Backing up existing .zsh_history"
+        cp "$HOME/.zsh_history" "$backup_dir/"
+    fi
     
     if [[ -n "$(ls -A "$backup_dir" 2>/dev/null)" ]]; then
         log_success "Existing configurations backed up to: $backup_dir"
@@ -160,7 +178,30 @@ create_symlinks() {
         "waybar:$HOME/.config/waybar"
         "rofi:$HOME/.config/rofi"
         "nvim:$HOME/.config/nvim"
+        "kitty:$HOME/.config/kitty"
     )
+    
+    # Handle zsh config separately (goes to home directory)
+    if [[ -f "$dotfiles_dir/zsh/zshrc" ]]; then
+        if [[ -f "$HOME/.zshrc" ]] && [[ ! -L "$HOME/.zshrc" ]]; then
+            log_warning "Moving existing .zshrc to backup"
+            mv "$HOME/.zshrc" "$HOME/.zshrc.backup.$(date +%s)"
+        fi
+        rm -f "$HOME/.zshrc"
+        ln -sf "$dotfiles_dir/zsh/zshrc" "$HOME/.zshrc"
+        log_success "Linked zsh/zshrc -> ~/.zshrc"
+    fi
+    
+    # Handle zsh history if it exists
+    if [[ -f "$dotfiles_dir/zsh/zsh_history" ]]; then
+        if [[ -f "$HOME/.zsh_history" ]] && [[ ! -L "$HOME/.zsh_history" ]]; then
+            log_warning "Moving existing .zsh_history to backup"
+            mv "$HOME/.zsh_history" "$HOME/.zsh_history.backup.$(date +%s)"
+        fi
+        rm -f "$HOME/.zsh_history"
+        ln -sf "$dotfiles_dir/zsh/zsh_history" "$HOME/.zsh_history"
+        log_success "Linked zsh/zsh_history -> ~/.zsh_history"
+    fi
     
     for config in "${configs[@]}"; do
         local src="${config%%:*}"
@@ -255,6 +296,23 @@ setup_wallpapers() {
     fi
 }
 
+# Setup zsh as default shell
+setup_zsh() {
+    log_info "Setting up Zsh..."
+    
+    # Change default shell to zsh if not already
+    if [[ "$SHELL" != "/usr/bin/zsh" ]] && [[ "$SHELL" != "/bin/zsh" ]]; then
+        log_info "Changing default shell to zsh..."
+        chsh -s /usr/bin/zsh
+        log_success "Default shell changed to zsh (will take effect on next login)"
+    else
+        log_info "Zsh is already the default shell"
+    fi
+    
+    # Zinit will be installed automatically when zsh starts
+    log_success "Zsh setup completed"
+}
+
 # Post-installation steps
 post_install() {
     log_info "Running post-installation steps..."
@@ -275,6 +333,12 @@ post_install() {
         log_success "Updated hyprpaper config paths"
     fi
     
+    # Update autostart config with correct user path
+    if [[ -f "$HOME/.config/hypr/autostart.conf" ]]; then
+        sed -i "s|/home/cachebag|$HOME|g" "$HOME/.config/hypr/autostart.conf"
+        log_success "Updated autostart config paths"
+    fi
+    
     log_success "Post-installation steps completed"
 }
 
@@ -289,6 +353,8 @@ main() {
     echo "║  • Waybar (Status bar)                                      ║"
     echo "║  • Rofi (Application launcher)                              ║"
     echo "║  • Neovim (Text editor with plugins)                       ║"
+    echo "║  • Kitty (Terminal emulator)                               ║"
+    echo "║  • Zsh (Shell with Zinit and Spaceship prompt)             ║"
     echo "╚══════════════════════════════════════════════════════════════╝"
     echo -e "${NC}"
     
@@ -310,6 +376,7 @@ main() {
     setup_node_dependencies
     setup_fonts
     setup_wallpapers
+    setup_zsh
     setup_neovim_plugins
     post_install
     
@@ -320,7 +387,8 @@ main() {
     echo "║  Next steps:                                                 ║"
     echo "║  1. Log out and log back in                                  ║"
     echo "║  2. Select Hyprland as your session                         ║"
-    echo "║  3. Enjoy your new setup!                                   ║"
+    echo "║  3. Your shell is now zsh with Spaceship prompt             ║"
+    echo "║  4. Enjoy your new setup!                                   ║"
     echo "║                                                              ║"
     echo "║  For issues: https://github.com/cachebag/dotfiles/issues    ║"
     echo "╚══════════════════════════════════════════════════════════════╝"
