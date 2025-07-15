@@ -25,7 +25,8 @@
         "cpu",
         "memory",
         "network",
-        "pulseaudio"
+        "pulseaudio",
+        "custom/wallpaper"
     ],
 
     "hyprland/workspaces": {
@@ -98,6 +99,13 @@
         "tooltip": false,
         "on-click": "~/.config/waybar/scripts/power_menu.sh",
         "interval": 0
+    },
+
+    "custom/wallpaper": {
+      "format": "@",
+      "tooltip": false,
+      "on-click": "~/.config/hypr/scripts/wallpaper_bemenu.sh",
+      "interval": 0
     },
 
     "idle_inhibitor": {

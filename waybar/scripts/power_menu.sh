@@ -39,7 +39,7 @@ confirm_cmd() {
 	rofi -dmenu \
 		-p 'Confirmation' \
 		-mesg 'Are you Sure?' \
-		-theme ${dir}/shared/confirm.rasi
+		-theme "$HOME/.config/rofi/powermenu/type-3/shared/confirm.rasi"
 }
 
 # Ask for confirmation
