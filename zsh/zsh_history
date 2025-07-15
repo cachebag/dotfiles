@@ -1,0 +1,1326 @@
+nvim ~/.zsh
+cd ..c
+cleacd ..
+mv ~/.config/hypr ~/dotfiles/hyprland
+mv ~/.config/rofi ~/dotfiles/rofi
+sudo mv /usr/share/sddm/themes/simple-sddm ~/dotfiles/sddm
+ln -s ~/dotfiles/hyprland ~/.config/hypr\
+
+ln -s ~/dotfiles/rofi ~/.config/rofi\
+
+git init
+git remote add origin git@github.com:cachebag/dotfiles.git
+git branch -M master
+git config --global user.email "alhakimiakrmj@gmail.com"
+git config --global user.name "Akrm Al-Hakimi"
+git commit -m 'batman'
+git push -u origin master
+mv ~/.config/waybar ~/dotfiles/waybar
+ln -s ~/dotfiles/waybar ~/.config/waybar\
+
+git commit -m 'add: waybar'
+cat ~/.zshrc
+nvim ~/.zshrc
+source ~/.zshrc
+cd .config/nvim
+yay -S install git
+cat .config/waybar/style.css
+sudo pacman -S wlogout\
+
+sudo pacman -S steam
+python -m venv venv
+pip install ticked
+source venv/bin/activate
+ticked
+python main.py
+deactivate
+reboot
+la
+la -l
+ls /usr/share/sddm/themes
+sudo nvim /etc/sddm.conf
+ls simple-sddm
+ls sddm
+ln -s ~/dotfiles/sddm /usr/share/sddm/themes/simple-sddm
+claer
+sudo rm -rf /usr/share/sddm/themes/simple-sddm\
+
+sudo ln -s ~/dotfiles/sddm /usr/share/sddm/themes/simple-sddm\
+
+sddm --test-mode --theme /usr/share/sddm/themes/simple-sddm\
+
+ls -l /usr/share/sddm/themes/simple-sddm\
+
+ls /home/cachebag/dotfiles/sddm/Main.qml\
+
+ls -ld /home/cachebag\
+ls -ld /home/cachebag/dotfiles\
+ls -ld /home/cachebag/dotfiles/sddm\
+ls -l /home/cachebag/dotfiles/sddm/Main.qml\
+
+chmod o+rx /home/cachebag\
+chmod o+rx /home/cachebag/dotfiles\
+chmod o+rx /home/cachebag/dotfiles/sddm\
+chmod o+r /home/cachebag/dotfiles/sddm/Main.qml\
+
+a
+fc-list : family\
+
+\:
+nvim /usr/share/sddm/themes/simple-sddm
+c;ear
+pipewire
+git commit -m 'style: active workspace styling'
+sudo systemctl restart sddm\
+
+nvim ~/.config/hypr
+sudo reboot
+shutdown
+waybar
+mkdir ~/.config/waybar/scripts
+nvim ~/.config/waybar/scripts/power_menu.sh
+chmod +x ~/.config/waybar/scripts/power_menu.sh\
+
+nvim ~/.config/waybar/scripts/auto_sleep_toggle.sh
+chmod +x ~/.config/waybar/scripts/auto_sleep_toggle.sh\
+
+nvim ~/.config/waybar/s
+yay -S pavucontrol
+chmod +x ~/.config/waybar/scripts/auto_sleep_toggle.sh\
+chmod +x ~/.config/waybar/scripts/power_menu.sh\
+
+echo "Ran at $(date)" >> /tmp/auto_sleep.log\
+
+~/.config/waybar/scripts/auto_sleep_toggle.sh\
+echo $?\
+
+nvim ~/.config/waybar/config
+cd .config/waybar/scripts/auto_sleep_toggle.sh
+nvim .config/waybar/scripts/auto_sleep_toggle.sh
+~/.config/waybar/scripts/auto_sleep_toggle.sh\
+
+nvim ~/.config/waybar/style.css
+rm .config/waybar/scripts/auto_sleep_toggle.sh
+nvim .config/waybar
+mkdir -p ~/.config/rofi\
+nvim ~/.config/rofi/powermenu.rasi\
+
+printf "âƒ¯» Shutdown\nðƒ¿ƒ´ƒ² Logout\nðƒ¿ƒ²¤ Sleep" | rofi -dmenu -theme ~/.config/rofi/powermenu.rasi -p "Power Menu"\
+
+~/.config/waybar/scripts/power_menu.sh\
+
+# On Arch:\
+sudo pacman -S noto-fonts-emoji\
+\
+# On Debian/Ubuntu:\
+sudo apt install fonts-noto-color-emoji\
+
+nvim ~/.config/waybar/scripts/power_menu.sh\
+
+cclear
+rm .config/rofi/powermenu.rasi
+\:%d
+mkdir shared
+cd shared
+touch colors.rasi fonts.rasi
+ls colors
+sudo pacman -S inetutils\
+
+ls -l .config/rofi/colors
+nvim .config/rofi/shared/colors.rasi
+nvim .config/rofi/powermenu.rasi
+nvim .config/waybar/scripts/power_menu.sh\ 
+nvim .config/waybar/scripts/power_menu.sh
+cat .config/waybar/config
+nvim .config/waybar/style.css
+nvim .config/waybar/config
+pkill waybar && waybar &
+yay -S discord
+nvim .config/hypr
+git commit -m 'feat: shutdown menu, idle inhibitor, resize binds, taskbar applications menu'
+git config pull.rebase true
+cat .gitmodules\
+
+git submodule deinit -f sddm\
+git rm -f sddm\
+rm -rf .git/modules/sddm\
+
+git add sddm\
+git commit -m "Convert sddm from submodule to regular directory"\
+
+git log -- sddm\
+
+git --no-pager log -- sddm\
+
+git checkout a4d9c1494be087e137316f04b2da55b9386f31b3 -- sddm\
+
+git ls-tree -r a4d9c1494be087e137316f04b2da55b9386f31b3\
+
+git ls-tree -r 2325ee3e2de30693ddbaa96b752e71e888128b2c\
+
+git show 2325ee3e2de30693ddbaa96b752e71e888128b2c:.gitmodules\
+
+git submodule status\
+
+ls .git/modules/sddm\
+
+afd038e57f8c678a14adf3fd9407a44dde5a660b site:github.com\
+
+sddm restart
+cd sddm-astronaut-theme/
+./
+cd /usr/share/sddm
+cd themes
+nvim simple-sddm
+cd /etc/sddm.conf
+nvim /etc/sddm.conf
+nvim /etc/
+nvim /usr/share/sddm
+mkdir sddm
+tree
+mv /etc/sddm.conf ~/dotfiles/sddm
+sudo mv /etc/sddm.conf ~/dotfiles/sddm
+sudo ln -s ~/dotfiles/sddm/sddm.conf /etc/sddm.conf
+git commit -m 'feat: sddm greet'
+nvim sddm-astronaut-theme/
+cd sddm-astronaut-theme
+./setup.sh
+cd /usr/share/sddm/themes
+cd simple-sddm
+rm -rf .git
+rm -rf elarun maldives maya sddm-astronaut-theme_1749424374 simple-sddm sugar-candy
+sudo rm -rf elarun maldives maya sddm-astronaut-theme_1749424374 simple-sddm sugar-candy
+cp Pictures/wallpapers/W1.png /usr/share/sddm/themes/sddm-astronaut-theme/Backgrounds
+sudo cp Pictures/wallpapers/W1.png /usr/share/sddm/themes/sddm-astronaut-theme/Backgrounds
+;s
+rm japanese_aesthetic.png
+sudo rm japanese_aesthetic.png
+sudo mv W1.png japanese_aesthetic.png
+cd /usr/share/sddm/themes/sddm-astronaut-theme/Backgrounds
+sudo mv astronaut.png fake_as.png
+sudo mv japanese_aesthetic.png astronaut.png
+sudo cp /usr/share/sddm/themes/sddm-astronaut-theme/ dotfiles/sddm
+sudo cp -r /usr/share/sddm/themes/sddm-astronaut-theme/ dotfiles/sddm
+cd dotfiles/sddm
+mv sddm-astronaut-theme theme
+ls theme
+hnvim
+ls -la
+rm -rf LICENSE metadata.desktop Previews README.md setup.sh
+sudo rm -rf LICENSE metadata.desktop Previews README.md setup.sh
+tree Backgrounds
+cd Backgrounds
+rm black_hole.png cyberpunk.png fake_as.png hyprland_kath.png hyprland_kath.mp4 jake_the_dog.mp4 jake_the_dog.png post-apocalyptic_hacker.png purple_leaves.png pixel_sakura.gif pixel_sakura_static.png
+y
+sudo rm black_hole.png cyberpunk.png fake_as.png hyprland_kath.png hyprland_kath.mp4 jake_the_dog.mp4 jake_the_dog.png post-apocalyptic_hacker.png purple_leaves.png pixel_sakura.gif pixel_sakura_static.png
+ls Components
+cd dotfiles/
+git commit -m 'fix: add sddm files'
+cd sddm
+cd theme
+ls Fonts
+cd Fonts
+rm -rf Fonts
+rm -rf sddm
+sudo rm -rf sddm
+hy
+hyprctl dispatch exit
+git commit -m 'chore: nevermind'
+mv rofi ~/.config/rofi
+cd .config/rofi
+ls rofi
+cd ...
+cd~
+nvim main.cpp
+g++ main.cpp -o main
+./main
+cd Desktop
+mkdir personal
+cd personal
+git clone git@github.com:cachebag/cpp-cookbook.git
+cd cpp-cookbook
+rm abbreviation_state.txt add.js c.cpp config.js conf.ini go.go go.main go.rs main. main.c main.cpp main.py pyproject.toml random_apr17.txt random_apr19.txt random_apr20.txt random_apr21.txt r.cpp r.js state_population.txt test.cpp test.py t.ts vim.cpp zip_code_state.txt
+rm proxy.js main.rs main.j main.go.c main.go main.cs
+rm main.hs run StatePair.h
+git commit -m 'cleanup'
+gcc -version
+gcc --version
+ls --version
+sudo pacman -Syu base-devel gmp libmpc mpfr
+export PREFIX="$HOME/opt/cross"
+export TARGET=i686-elf
+export PATH="$PREFIX/bin:$PATH"
+cd $HOME/src
+mkdir cache-os
+cd cache-os
+mkdir build-binutils
+cd build-binutils
+ld --version
+../binutils-2.44.0/configure --target=x86_64-elf --prefix="$HOME/cross" --with-sysroot --disable-nls --disable-werror\
+
+ls ../
+wget https://ftp.gnu.org/gnu/binutils/binutils-2.44.tar.xz\
+
+tar -xf binutils-2.44.tar.xz\
+
+rm -rf binutils-2.44.tar.xz
+cd binutils-2.44
+../binutils-2.44/configure --target=x86_64-elf --prefix="$HOME/cross" --with-sysroot --disable-nls --disable-werror\
+
+make
+make install
+mkdir build-gcc
+ckear
+wget https://ftp.gnu.org/gnu/gcc/gcc-14.1.0/gcc-14.1.0.tar.xz\
+
+tar -xf gcc-14.1.0.tar.xz\
+
+rm -rf gcc-14.1.0.tar.xz
+cd gcc-14.1.0
+./contrib/download_prerequisites
+../gcc-x.y.z/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-
+../gcc-14.1.0/configure --target=x86_64-elf --prefix="$HOME/cross" --disable-nls --enable-languages=c,c++ --without-headers\
+
+../gcc-x.y.z/configure --target=$TARGET --prefix="$PREFIX" --disable-nls --enable-languages=c,c++ --without-headers --disable-hosted-libstdcxx
+make all-gcc
+make all-target-libgcc
+make all-target-libstdc++-v3
+make install-gcc
+make install-target-libgcc
+make install-target-libstdc++-v3
+$HOME/opt/cross/bin/$TARGET-gcc --version
+/opt/discord/ls $HOME/opt/cross/bin/i686-elf-gcc\
+
+ls $HOME/opt/cross/bin/i686-elf-gcc\
+
+grep prefix= build-gcc/config.log\
+
+echo $TARGET\
+
+cd build-gcc
+make -j$(nproc) all-gcc\
+make -j$(nproc) all-target-libgcc\
+make install-gcc\
+make install-target-libgcc\
+
+export TARGET=i686-elf\
+export PREFIX="$HOME/opt/cross"\
+
+cd ~/cache-os\
+wget https://ftp.gnu.org/gnu/gcc/gcc-14.1.0/gcc-14.1.0.tar.xz\
+tar -xf gcc-14.1.0.tar.xz\
+cd gcc-14.1.0\
+./contrib/download_prerequisites\
+
+rm -rf c
+rm -rf cache-os
+sl
+cd cr
+cd cross
+rm -rf cross
+nvim mian
+nvim main
+rm main main.py venv :wq
+rm -f main main.py venv :wq
+rm main.cpp
+ls -l
+clar
+git clone https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+cd linux
+git branch
+git branch -r
+sudo pacman -S build-essential libncurses-dev bison flex libssl-dev libelf-dev
+sudo pacman -S install build-essential libncurses-dev bison flex libssl-dev libelf-dev
+cd
+mkdir source
+cd source
+mkdir repos
+mv ~/linux repos
+ls repos
+cd repos/linux
+cp -v /boot/config-$(uname -r) .config
+make defconfig
+make -j$(nproc)
+rm -rf source
+git clone git@github.com:AWS-WSU/AWS-Student-Hub.git
+cd AWS-Student-Hub/
+cd backend
+cd frontend
+npm install
+cd .
+cd ~
+cd Do
+cd Downloads
+chmod +x ~/Downloads/Cursor-1.0.0-x86_64.AppImage\
+
+sudo pacman -S fuse
+./Cursor-1.0.0-x86_64.AppImage
+sudo mkdir -p /opt/cursor\
+sudo mv ~/Downloads/Cursor-1.0.0-x86_64.AppImage /opt/cursor/Cursor.AppImage\
+sudo chmod +x /opt/cursor/Cursor.AppImage\
+
+/opt/cursor/Cursor.AppImage --appimage-extract\
+
+sudo cp squashfs-root/usr/share/icons/hicolor/256x256/apps/cursor.png /opt/cursor/icon.png\
+
+nvim ~/.local/share/applications/cursor.desktop
+\:q
+update-desktop-database ~/.local/share/applications\
+
+npm run dev
+git status
+git commit -m 'style: media styles'
+sudo pacman -Syyu
+sudo reboot a
+yay -S fastfetch
+fastfetch
+cd dotfiles
+git clone git@github.com:cachebag/tarpit.git
+nvim dotfiles/nvim/init.lua
+yay -S rust
+cd dotfiles/nvim
+cargo run
+nvim ~/dotfiles/nvim/lua/cachebag/plugins/nvim-treesitter.lua
+nvim ~/dotfiles/nvim/init.lua
+cd ..
+cd home/cachebag/.local/share/nvim/lazy/rust-tools.nvim/lua/rust-tools/inlay_hints.lua
+nvim home/cachebag/.local/share/nvim/lazy/rust-tools.nvim/lua/rust-tools/inlay_hints.lua
+nvim home/cachebag/.local/share/nvim/lazy/rust-tools.nvim/lua/rust-tools/init.lua
+cd ~/dotfiles
+git rm --cached rofi/rofi
+git rm --cached rofi/rofi -f
+ls
+git commit -m 'fix rust analyzer'
+rustdoc
+rustdoc --no-defaults
+cargo doc --open
+lear
+cd ~/tarpit
+pkill waybar
+waybar &
+nohup waybar &\
+
+sudo pacman -S espeak-ng\
+
+espeak-ng -v en+m3 "Hello, this is a test."\
+
+sudo pacman -S pulseaudio pavucontrol\
+
+espeak-ng -v en+m3 "testing" --stdout | paplay --device=VirtualSink\
+
+pactl list short sinks | grep VirtualSink\
+
+sudo pacman -S pipewire pipewire-pulse wireplumber pavucontrol espeak-ng\
+
+pactl load-module module-null-sink sink_name=VirtualSink\
+
+V
+pactl unload-module 536870916\
+pactl unload-module 536870917\
+
+pactl list modules short\
+
+systemctl --user restart pipewire pipewire-pulse wireplumber\
+
+pactl load-module module-null-sink sink_name=VirtualSink sink_properties=device.description=VirtualSink\
+
+pactl list short sinks | grep VirtualSink\
+pactl list short sources | grep VirtualSink\
+
+espeak-ng -v en+m3 "virtual sink is ready" --stdout | paplay --device=VirtualSink\
+
+ps -eo cmd | grep -i discord\
+
+pactl list short sources\
+
+pactl set-default-source VirtualSink.monitor\
+
+pkill -x discord\
+discord --no-sandbox\
+
+default.source = VirtualSink.monitor\
+
+espeak-ng -v en+m3 "test from virtual sink into discord" --stdout | paplay --device=VirtualSink\
+
+pw-loopback --capture-props=node.name=LoopTTSIn --playback-props=node.name=LoopTTSOut --capture-node=VirtualSink.monitor\
+
+sudo pacman -S helvum\
+helvum\
+
+pw-top\
+
+pkill -x discord\
+XDG_RUNTIME_DIR=/run/user/$(id -u) discord --no-sandbox\
+
+pactl list short sink-inputs\
+
+XDG_RUNTIME_DIR=/run/user/$(id -u) PIPEWIRE_LATENCY=128/48000 discord --no-sandbox\
+
+pavucontrol\
+
+pactl list short sinks | grep Scarlett\
+
+espeak-ng -v en+m3 "audio test" --stdout | paplay --device=alsa_output.usb-Focusrite_Scarlett_Solo_USB_Y7XM5X50189DDA-00.HiFi__Line1__sink\
+
+pkill -x discord\
+
+pkill discord
+XDG_RUNTIME_DIR=/run/user/$(id -u) discord --no-sandbox\
+
+espeak-ng -v en+m3 "hello, this is the robotic voice test" --stdout | paplay --device=VirtualSink\
+
+nano ~/speak.sh\
+
+chmod +x ~/speak.sh\
+
+espeak-ng -v en+m3 "hello from the robot" --stdout | paplay --device=VirtualSink\
+
+espeak-ng -v en+m3 "hello, sofia is sleeping i gotta use this instead" --stdout | paplay --device=VirtualSink\
+
+espeak-ng -v en+m3 "discord test input" --stdout | paplay --device=VirtualSink\
+
+sudo pacman -S pipewire-tools\
+
+sudo pacman -S helvum\
+
+helvum
+~/speak.sh\
+
+pactl unload-module module-null-sink\
+
+pactl unload-module 42\
+
+sudo pactl unload-module 42\
+
+pactl unload-module module-null-sink\
+\
+\
+~ \
+âƒ¾ƒ¼ pactl unload-module 42\
+\
+Failure: Access denied\
+\
+~ \
+âƒ¾ƒ¼ sudo pactl unload-module 42\
+\
+[sudo] password for cachebag: \
+Connection failure: Connection refused\
+pa_context_connect() failed: Connection refused\
+\
+~ \
+âƒ¾ƒ¼
+pactl list short modules | grep null-sink\
+
+pactl list short sinks\
+
+pactl set-default-sink alsa_output.usb-Focusrite_Scarlett_Solo_USB_Y7XM5X50189DDA-00.HiFi__Line1__sink\
+
+cd tarpit
+nvim
+git add.
+git add .
+git commit -m 'foo'
+git push
+git pull
+yay -S tmux
+tmux exit
+clear
+tmux
+nivim ~/.tmux.conf
+nvim ~/.tmux.conf
+exit all
+exit
+: 1749778067:0;nvim
+: 1749778078:0;cargo run
+: 1749954153:0;cd ~/.config/nvim
+: 1749954156:0;git pulll
+: 1749954158:0;git pull
+: 1749954166:0;nvim
+: 1749954179:0;git pull
+: 1749954187:0;git reset --hard HEAD
+: 1749954189:0;git pull
+: 1749954191:0;clear
+: 1749954197:0;cd ~/tarpit
+: 1749954197:0;clear
+: 1749954200:0;nvim
+: 1749954456:0;cd src
+: 1749954457:0;ls
+: 1749954466:0;rm archive.rs writer.rs
+: 1749954467:0;ls
+: 1749954470:0;clear
+: 1749954473:0;nvim
+: 1749955087:0;cargo run
+: 1749955109:0;clar
+: 1749955112:0;clear
+: 1749955113:0;cargo run
+: 1749955139:0;clear
+: 1749955565:0;cargo run
+: 1749955585:0;clear
+: 1749955586:0;cargo run
+: 1749955733:0;sudo pacman -S lib32-nvidia-utils\
+
+: 1749955737:0;clear
+: 1749955740:0;lsmod | grep nvidia\
+
+: 1749955758:0;nvim /etc/modprobe.d/nvidia-drm.conf\
+
+: 1749955770:0;sudo nvim /etc/modprobe.d/nvidia-drm.conf\
+
+: 1749955780:0;sudo mkinitcpio -P\
+
+: 1749955799:0;export __GLX_VENDOR_LIBRARY_NAME=nvidia\
+export LIBVA_DRIVER_NAME=nvidia\
+export VDPAU_DRIVER=nvidia\
+
+: 1750015015:0;sudo reboot
+: 1750018484:0;sreboot
+: 1750018485:0;reboot
+: 1750110717:0;cd Dow
+: 1750110720:0;cd Downloads
+: 1750110721:0;ls
+: 1750110764:0;sudo pacman -S ./discord-0.0.98.deb
+: 1750110770:0;sudo pacman -U ./discord-0.0.98.deb
+: 1750110784:0;yay -S dpkg
+: 1750110790:0;clear
+: 1750110812:0;sudo dpkg -i discord-0.0.98.deb\
+
+: 1750110818:0;sudo apt -f install\
+
+: 1750110833:0;cd ~
+: 1750110834:0;clear
+: 1750110836:0;sudo pacman -Syu discord\
+
+: 1750110853:0;cd Downloads
+: 1750110857:0;rm discord-0.0.98.deb
+: 1750110858:0;clear
+: 1750110859:0;ls
+: 1750110870:0;rm -rf gcc-14.1.0.tar.xz Iosevka.zip ttc-iosevka-33.2.3-1-any.pkg.tar.zst
+: 1750110871:0;ls
+: 1750110872:0;clear
+: 1750110873:0;cd ..
+: 1750110873:0;clear
+: 1750111055:0;git clone git@github.com:cachebag/rust-cookbook.git
+: 1750111059:0;cd rust-cookbook
+: 1750111059:0;clear
+: 1750120732:0;nvim
+: 1750120754:0;git checkout -b chapter-6
+: 1750120756:0;clear
+: 1750120761:0;git push origin chapter-6
+: 1750120764:0;clear
+: 1750120765:0;nivm
+: 1750120766:0;clear
+: 1750120767:0;nvim
+: 1750120777:0;tmux
+: 1750120795:0;nvim
+: 1750120798:0;clear
+: 1750120800:0;cargo run
+: 1750120802:0;clear
+: 1750194380:0;reboot
+: 1750640477:0;cd Desktop/rl
+: 1750640483:0;ls
+: 1750640493:0;git clone git@github.com:cachebag/rlox.git
+: 1750640496:0;clear
+: 1750640498:0;cd rlox
+: 1750640499:0;clear
+: 1750640501:0;cargo run
+: 1750640537:0;lear
+: 1750640538:0;clear
+: 1750640639:0;nvim
+: 1750640653:0;clear
+: 1750896955:0;git pull
+: 1750896957:0;clear
+: 1750896960:0;cargo run
+: 1750897495:0;clear
+: 1750897498:0;tmux
+: 1750897508:0;clear
+: 1750897509:0;nvim
+: 1750988349:0;cd rlox
+: 1750988350:0;clear
+: 1750988351:0;git pull
+: 1750988354:0;clear
+: 1750988355:0;cargo run
+: 1751070990:0;clear
+: 1751070991:0;git pull
+: 1751070993:0;clear
+: 1751070996:0;cargo run test.lox
+: 1751070999:0;clear
+: 1751076538:0;TMUX
+: 1751076539:0;tmux
+: 1751076545:0;nvim
+: 1751076597:0;git pull
+: 1751076600:0;clear
+: 1751076604:0;clea
+: 1751076605:0;r
+: 1751076605:0;clea
+: 1751076610:0;laer
+: 1751076612:0;celar
+: 1751076615:0;clear
+: 1751076633:0;cargo run
+: 1751076639:0;nvim
+: 1751078482:0;git add .
+: 1751078495:0;git commit -m 'feat: environment enclosing and nesting'
+: 1751078498:0;git push
+: 1751078499:0;clear
+: 1751156188:0;reboot
+: 1751585690:0;cd rlox
+: 1751585692:0;git pull
+: 1751585694:0;clear
+: 1751585695:0;cargo run
+: 1751585767:0;clear
+: 1751586224:0;tmux
+: 1751586228:0;nvim
+: 1751589835:0;reboot
+: 1751854029:0;sudo pacman -S sddm\
+
+: 1751854034:0;clear
+: 1751854037:0;sudo systemctl enable sddm.service\
+sudo systemctl start sddm.service\
+
+: 1751854058:0;git clone https://github.com/EliverLara/Nordic.git\
+
+: 1751854079:0;sudo mv Nordic /usr/share/sddm/themes/\
+
+: 1751854084:0;sudo mkdir -p /etc/sddm.conf.d\
+sudo nano /etc/sddm.conf.d/theme.conf\
+
+: 1751854110:0;reboot\
+
+: 1751854232:0;ls /usr/share/sddm/themes/\
+
+: 1751854236:0;ls /usr/share/sddm/themes/Nordic/\
+
+: 1751854255:0;git clone https://github.com/EliverLara/Sugar-Candy.git\
+sudo mv Sugar-Candy /usr/share/sddm/themes/\
+
+: 1751854285:0;git clone https://github.com/Box-Of-Hats/sddm-gruvbox-dark.git\
+sudo mv sddm-gruvbox-dark /usr/share/sddm/themes/\
+
+: 1751854296:0;clear
+: 1751854305:0;git clone https://github.com/loadfred/tidy-sddm.git\
+sudo mv tidy-sddm /usr/share/sddm/themes/\
+
+: 1751854325:0;nvim /etc/sddm.conf.d/theme.conf
+: 1751854373:0;sudo nvim /etc/sddm.conf.d/theme.conf
+: 1751854383:0;sudo systemctl restart sddm\
+
+: 1751854421:0;nvim /etc/sddm.conf.d/theme.conf
+: 1751854430:0;sudo nvim /etc/sddm.conf.d/theme.conf
+: 1751854486:0;sudo nvim /usr/share/sddm/themes/tidy-sddm/theme.conf\
+
+: 1751854509:0;sudo systemctl restart sddm\
+
+: 1751936505:0;reboot
+: 1752100741:0;clear
+: 1752100788:0;cd dotfiles/waybar
+: 1752100789:0;ls
+: 1752100790:0;clear
+: 1752100792:0;nvim
+: 1752100865:0;cd dotfiles/rofi/
+: 1752100867:0;ls
+: 1752100868:0;tree
+: 1752100902:0;-theme "$HOME/.config/rofi/powermenu/type-3/shared/confirm.rasi"\
+
+: 1752100910:0;nvim
+: 1752100963:0;ls
+: 1752100966:0;nvim
+: 1752100981:0;cd ..
+: 1752100981:0;ls
+: 1752100988:0;nvim
+: 1752101061:0;clear
+: 1752101063:0;cd ~
+: 1752101065:0;cclear
+: 1752101066:0;clear
+: 1752101069:0;paru -S hypridle-git\
+# or\
+yay -S hypridle-git\
+
+: 1752101278:0;yay -Rns hypridle-git hyprlang-git hyprutils-git hyprland-protocols-git hyprwayland-scanner-git\
+
+: 1752101282:0;yay -S hypridle\
+
+: 1752101310:0;nvim ~/.config/hypr/hypridle.conf
+: 1752101394:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752101422:0;sudo nvim chmod +x ~/.config/hypr/scripts/lock.sh
+: 1752101438:0;sudo nvim ~/.config/hypr/scripts/lock.sh
+: 1752101459:0;mkdir ~/.config/hypr/scripts
+: 1752101461:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752101464:0;c;ear
+: 1752101478:0;nvim .config/hypr/hyprland.conf
+: 1752101485:0;nvim dotfiles
+: 1752101518:0;~/.config/hypr/scripts/lock.sh\
+
+: 1752101523:0;chmod +x ~/.config/hypr/scripts/lock.sh
+: 1752101526:0;~/.config/hypr/scripts/lock.sh\
+
+: 1752101548:0;yay -S betterlockscreen
+: 1752101593:0;~/.config/hypr/scripts/lock.sh\
+
+: 1752101601:0;hypridle -c ~/.config/hypr/hypridle.conf -d\
+
+: 1752101623:0;clear
+: 1752101631:0;sudo pacman -S swaylock\
+
+: 1752101647:0;nvim .config/hypr/scripts/lock.sh
+: 1752101656:0;chmod +x ~/.config/hypr/scripts/lock.sh\
+
+: 1752101658:0;~/.config/hypr/scripts/lock.sh\
+
+: 1752101688:0;paru -S swaylock-effects-git\
+
+: 1752101694:0;yay -S swaylock-effects-git
+: 1752101716:0;clear
+: 1752101718:0;nvim .config/hypr/scripts/lock.sh
+: 1752101725:0;chmod +x ~/.config/hypr/scripts/lock.sh\
+
+: 1752101726:0;~/.config/hypr/scripts/lock.sh\
+
+: 1752101740:0;chmod +x ~/.config/hypr/scripts/lock.sh\
+
+: 1752101742:0;~/.config/hypr/scripts/lock.sh\
+
+: 1752101753:0;nvim dotfiles/hyprland
+: 1752101767:0;hypridle -c ~/.config/hypr/hypridle.conf -d\
+
+: 1752101825:0;clear
+: 1752101825:0;which swaylock-effects\
+
+: 1752101839:0;yay -S swaylock-effects-git
+: 1752101854:0;which swaylock-effects\
+
+: 1752101869:0;clear
+: 1752101869:0;find /usr -type f -iname "*swaylock-effects*" 2>/dev/null\
+
+: 1752101877:0;swaylock --version\
+
+: 1752101893:0;nvim .config/hypr/scripts/lock.sh
+: 1752101917:0;chmod +x ~/.config/hypr/scripts/lock.sh\
+
+: 1752101918:0;~/.config/hypr/scripts/lock.sh\
+
+: 1752101958:0;swaylock
+: 1752101972:0;ls /etc/pam.d/swaylock\
+
+: 1752101983:0;passwd\
+
+: 1752102001:0;~/.config/hypr/scripts/lock.sh\
+
+: 1752102012:0;nvim .config/hypr/scripts/lock.sh
+: 1752102018:0;nvim dotfiles
+: 1752102096:0;clear
+: 1752102099:0;swaylock -d\
+
+: 1752102133:0;ls /etc/pam.d/swaylock\
+
+: 1752102146:0;cat /etc/pam.d/swaylock\
+
+: 1752102168:0;sudo nvim /etc/pam.d/swaylock\
+
+: 1752102176:0;~/.config/hypr/scripts/lock.sh\
+
+: 1752102182:0;reboot
+: 1752102218:0;~/.config/hypr/scripts/lock.sh\
+
+: 1752102223:0;nvim dotfiles/hyprland
+: 1752102226:0;nvim dotfiles
+: 1752102334:0;pgrep swayidle\
+
+: 1752102336:0;pgrep hypridle
+: 1752102340:0;ps aux | grep -E "(swayidle|hypridle|xss-lock)"
+: 1752102354:0;cat ~/.config/hypr/hypridle.conf
+: 1752102357:0;# Test manual inhibition\
+systemd-inhibit --what=idle --who=test --why=testing sleep 10 &\
+\
+# Check if hypridle recognizes the inhibition\
+journalctl -u hypridle --since="1 minute ago"
+: 1752102389:0;clear
+: 1752102391:0;systemd-inhibit --what=idle --who=test --why=testing sleep 10 &\
+systemd-inhibit --list
+: 1752102424:0;systemd-inhibit --what=idle --who=test --why=testing sleep 5 &
+: 1752102427:0;systemd-inhibit --list\
+
+: 1752102463:0;nvim .config/hypr/hypridle.conf
+: 1752102482:0;pkill hypridle\
+hypridle &
+: 1752102485:0;clear
+: 1752102539:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752102556:0;# Test your lock script manually\
+~/.config/hypr/scripts/lock.sh
+: 1752102571:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752102578:0;# Test your lock script manually\
+~/.config/hypr/scripts/lock.sh
+: 1752102627:0;hyprland
+: 1752102643:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752102649:0;firefox
+: 1752102688:0;reboot
+: 1752102780:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752102795:0;# Check if swaylock has proper permissions\
+ls -la $(which swaylock)\
+\
+# It should be setuid root or have proper capabilities\
+sudo chmod u+s $(which swaylock)\
+\
+# Or install swaylock-effects if you don't have it\
+# sudo pacman -S swaylock-effects  # Arch\
+# sudo apt install swaylock-effects  # Ubuntu/Debian
+: 1752102799:0;ls -la $(which swaylock)
+: 1752102803:0;sudo chmod u+s $(which swaylock)
+: 1752102809:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752102816:0;# Test it manually\
+~/.config/hypr/scripts/lock.sh\
+\
+# Try typing your password - it should work now
+: 1752102821:0;~/.config/hypr/scripts/lock.sh
+: 1752102831:0;sudo chmod a-s $(which swaylock)
+: 1752102833:0;~/.config/hypr/scripts/lock.sh
+: 1752102858:0;reboot
+: 1752102912:0;ls /etc/pam.d/swaylock\
+
+: 1752102920:0;cat /etc/pam.d/swaylock
+: 1752102943:0;nvim /etc/pam.d/swaylock
+: 1752102992:0;sudo tee /etc/pam.d/swaylock >/dev/null <<'EOF'\
+#%PAM-1.0
+: 1752102993:0;clear
+: 1752102995:0;# Create the proper PAM config for swaylock\
+sudo tee /etc/pam.d/swaylock >/dev/null <<'EOF'\
+#%PAM-1.0\
+auth      include   login\
+account   include   login\
+password  include   login\
+session   include   login\
+EOF
+: 1752102999:0;# Check the contents\
+cat /etc/pam.d/swaylock
+: 1752103014:0;~/.config/hypr/scripts/lock.sh
+: 1752103034:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103042:0;~/.config/hypr/scripts/lock.sh
+: 1752103070:0;# Run swaylock manually to see any error messages\
+swaylock --screenshots --effect-blur 7x5 --effect-vignette 0.5:0.5 --fade-in 0.2 --clock --indicator --indicator-radius 100 --indicator-thickness 7 --ring-color bbccdd --key-hl-color 88c0d0 --line-color 00000000 --inside-color 00000088 --separator-color 00000000 --grace 2 --ignore-empty-password
+: 1752103076:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103086:0;~/.config/hypr/scripts/lock.sh
+: 1752103092:0;swaylock --version
+: 1752103095:0;hich swaylock
+: 1752103098:0;which swaylock
+: 1752103121:0;âƒ¾ƒ¼ nvim ~/.config/hypr/scripts/lock.sh\
+\
+~ took 8.6s \
+âƒ¾ƒ¼ ~/.config/hypr/scripts/lock.sh \
+\
+~ \
+âƒ¾ƒ¼ swaylock --version\
+swaylock version v1.7.0.0-1-g496059a (" __DATE__ ", branch 'master')\
+\
+~ \
+âƒ¾ƒ¼ hich swaylock\
+zsh: command not found: hich\
+\
+~ \
+âƒ¾ƒ¼ which swaylock \
+/usr/bin/swaylock\
+\
+~
+: 1752103123:0;clear
+: 1752103127:0;sudo pacman -S grim
+: 1752103137:0;~/.config/hypr/scripts/lock.sh
+: 1752103153:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103159:0;# Test grim manually first\
+grim /tmp/test-screenshot.png\
+ls -la /tmp/test-screenshot.png
+: 1752103167:0;~/.config/hypr/scripts/lock.sh
+: 1752103173:0;nvim
+: 1752103176:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103182:0;~/.config/hypr/scripts/lock.sh
+: 1752103198:0;grim /tmp/test.png
+: 1752103206:0;echo $?
+: 1752103211:0;swaylock --color 000000 --fade-in 0.2
+: 1752103218:0;swaylock --color 1e1e2e --effect-blur 7x5
+: 1752103226:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103236:0;# Run with verbose output to see what's failing\
+swaylock --debug --screenshots --effect-blur 7x5 2>&1
+: 1752103240:0;swaylock --debug --screenshots --effect-blur 7x5 2>&1
+: 1752103264:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103279:0;~/.config/hypr/scripts/lock.sh
+: 1752103282:0;swaylock --debug --screenshots --effect-blur 7x5 2>&1
+: 1752103318:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103330:0;swaylock --debug --screenshots --effect-blur 7x5 2>&1
+: 1752103337:0;~/.config/hypr/scripts/lock.sh
+: 1752103342:0;clear
+: 1752103377:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103399:0;~/.config/hypr/scripts/lock.sh
+: 1752103407:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103412:0;~/.config/hypr/scripts/lock.sh
+: 1752103426:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103434:0;~/.config/hypr/scripts/lock.sh
+: 1752103443:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103447:0;~/.config/hypr/scripts/lock.sh
+: 1752103461:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103466:0;~/.config/hypr/scripts/lock.sh
+: 1752103494:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103504:0;~/.config/hypr/scripts/lock.sh
+: 1752103533:0;nvim ~/.config/hypr/scripts/lock.sh
+: 1752103537:0;~/.config/hypr/scripts/lock.sh
+: 1752103573:0;nvim dotfiles/hyprland/hypridle.conf
+: 1752103607:0;clear
+: 1752103610:0;mkdir -p ~/.config/hypr/scripts\
+nvim ~/.config/hypr/scripts/wallpaper.sh
+: 1752103638:0;chmod +x ~/.config/hypr/scripts/wallpaper.sh
+: 1752103648:0;nvim dotfiles/waybar/config
+: 1752103687:0;pkill waybar
+: 1752103689:0;waybar &
+: 1752103709:0;git
+: 1752103712:0;clear
+: 1752103721:0;git clone git@github.com:cachebag/wallpapers.git
+: 1752103754:0;nvim dotfiles/waybar/config
+: 1752103762:0;nvim dotfiles/hyprland
+: 1752103817:0;clear
+: 1752103835:0;nvim dotfiles/hyprland
+: 1752103849:0;ps aux | grep hyprpaper
+: 1752103862:0;cat ~/.config/hyprpaper/hyprpaper.conf
+: 1752103876:0;nvim ~/.config/hyprpaper/hyprpaper.conf
+: 1752103887:0;pkill hyprpaper
+: 1752103895:0;hyprpaper &
+: 1752103922:0;hyprpaper --config ~/.config/hyprpaper/hyprpaper.conf &
+: 1752103926:0;clear
+: 1752103942:0;mkdir -p ~/.config/hypr
+: 1752103945:0;cp ~/.config/hyprpaper/hyprpaper.conf ~/.config/hypr/hyprpaper.conf
+: 1752103951:0;nvim ~/.config/hypr/hyprpaper.conf
+: 1752103960:0;hyprpaper --config ~/.config/hyprpaper/hyprpaper.conf &
+: 1752103964:0;hyprpaper &
+: 1752103966:0;pkill hyprpaper
+: 1752103966:0;hyprpaper &
+: 1752103969:0;clear
+: 1752103972:0;hyprctl hyprpaper listloaded\
+hyprctl hyprpaper listactive
+: 1752103990:0;nvim ~/.config/hypr/hyprpaper.conf
+: 1752103995:0;pkill hyprpaper
+: 1752103997:0;hyprpaper &
+: 1752103998:0;clear
+: 1752104057:0;hyprctl hyprpaper preload /home/cachebag/Pictures/wallpapers/W1.png
+: 1752104060:0;hyprctl hyprpaper wallpaper "DP-2,/home/cachebag/Pictures/wallpapers/W1.png"
+: 1752104064:0;~/.config/hypr/scripts/wallpaper.sh
+: 1752104073:0;WALLPAPER_DIR="$HOME/Pictures/wallpapers"
+: 1752104078:0;find "$WALLPAPER_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" -o -iname "*.webp" \) -exec basename {} \;\
+
+: 1752104095:0;ls -la ~/Pictures/wallpapers/
+: 1752104100:0;ls -la ~/wallpapers/
+: 1752104113:0;nvim ~/.config/hypr/scripts/wallpaper.sh
+: 1752104124:0;~/.config/hypr/scripts/wallpaper.sh
+: 1752104160:0;nvim ~/.config/hypr/scripts/wallpaper_preview.sh
+: 1752104178:0;sudo pacman -S feh
+: 1752104211:0;nvim ~/.config/waybar/config
+: 1752104263:0;~/.config/hypr/scripts/wallpaper_preview.sh
+: 1752104276:0;chmod +x /home/cachebag/.config/hypr/scripts/wallpaper_preview.sh
+: 1752104280:0;~/.config/hypr/scripts/wallpaper_preview.sh
+: 1752104288:0;nvim dotfiles/hyprland
+: 1752104308:0;pkill waybar
+: 1752104311:0;waybar &
+: 1752104324:0;nvim dotfiles/hyprland
+: 1752104347:0;feh ~/wallpapers/
+: 1752104355:0;nvim ~/.config/hypr/scripts/wallpaper_preview.sh
+: 1752104393:0;clear
+: 1752104393:0;sudo pacman -S wofi
+: 1752104401:0;nvim ~/.config/hypr/scripts/wallpaper_wofi.sh
+: 1752104425:0;sudo pacman -S bemenu
+: 1752104435:0;clear
+: 1752104439:0;nvim ~/.config/hypr/scripts/wallpaper_bemenu.sh
+: 1752104448:0;hyprpaper &
+: 1752104466:0;wybar &
+: 1752104468:0;waybar &
+: 1752104469:0;clear
+: 1752104477:0;chmod +x ~/.config/hypr/scripts/wallpaper_bemenu.sh
+: 1752104482:0;~/.config/hypr/scripts/wallpaper_bemenu.sh
+: 1752104501:0;nvim ~/.config/waybar/config
+: 1752104513:0;killall waybar\
+waybar &
+: 1752104546:0;sudo pacman -S tofi
+: 1752104549:0;clear
+: 1752104553:0;sudo pacman -S fuzzel
+: 1752104558:0;nvim ~/.config/hypr/scripts/wallpaper_bemenu.sh
+: 1752104585:0;~/.config/hypr/scripts/wallpaper_bemenu.sh
+: 1752104590:0;clear
+: 1752104595:0;reboot
+: 1752104678:0;nvim dotfiles/hyprland
+: 1752104726:0;reboot
+: 1752427848:0;nvim dotfiles
+: 1752427860:0;hyprctl monitors
+: 1752427966:0;iwctl
+: 1752453214:0;reboot
+: 1752608137:0;nvim dotfiles
+: 1752608178:0;yay -S vscode
+: 1752608243:0;lspci -nnk | grep -A3 -i network\
+\
+\
+
+: 1752608263:0;clear
+: 1752608266:0;uname -r\
+
+: 1752608273:0;dmesg | grep iwlwifi\
+
+: 1752608300:0;sudo dmesg | grep iwlwifi\
+
+: 1752608317:0;clear
+: 1752608319:0;iw reg get\
+
+: 1752608327:0;sudo iw reg set US\
+
+: 1752608335:0;sudo pacman -S iw\
+
+: 1752608343:0;sudo iw reg set US\
+
+: 1752608347:0;iw reg get\
+
+: 1752608404:0;clear
+: 1752608404:0;cat /proc/cmdline\
+
+: 1752608422:0;clear
+: 1752608513:0;code -d
+: 1752608553:0;vscode
+: 1752608557:0;yay -S code
+: 1752608562:0;clear
+: 1752608563:0;code
+: 1752608587:0;yay -S opencode
+: 1752608595:0;clear
+: 1752608612:0;tmux
+: 1752608619:0;nvim
+: 1752608626:0;cd dotfiles
+: 1752608627:0;clear
+: 1752608630:0;cd dotfiles
+: 1752608631:0;clear
+: 1752608635:0;nvim
+: 1752608735:0;swaylock --debug --screenshots --effect-blur 10x8 --effect-scale 0.5 --clock --indicator --indicator-radius 85 --indicator-thickness 8 --ring-color a89984 --key-hl-color b8bb26 --text-color ebdbb2 --inside-color 1d2021dd --inside-clear-color 83a598dd --inside-ver-color b8bb26dd --inside-wrong-color fb4934dd --ring-clear-color 83a598 --ring-ver-color b8bb26 --ring-wrong-color fb4934 --line-color 00000000 --separator-color 504945\
+
+: 1752608750:0;cat /etc/pam.d/swaylock
+: 1752608769:0;login\
+
+: 1752608772:0;a
+: 1752608776:0;login\
+
+: 1752608779:0;a
+: 1752608801:0;swaylock --debug --show-failed-attempts\
+
+: 1752608852:0;clear
+: 1752608852:0;ls
+: 1752608855:0;lcear
+: 1752608857:0;cd hyprland
+: 1752608858:0;;s
+: 1752608858:0;c;ear
+: 1752608859:0;clear
+: 1752608861:0;ls scripts
+: 1752608874:0;ls -la
+: 1752608900:0;rm current_wallpaper scripts/wallpaper_bemenu.sh scripts/wallpaper_preview.sh scripts/wallpaper_wofi.sh
+: 1752608901:0;clear
+: 1752608901:0;ls
+: 1752608903:0;cd ..
+: 1752608904:0;clear
+: 1752608983:0;tree
+: 1752608987:0;clear
+: 1752608989:0;tree
+: 1752608990:0;clear
+: 1752608991:0;tree
+: 1752609002:0;clear
+: 1752609009:0;tree | pbcopy
+: 1752609014:0;tree | cat
+: 1752609019:0;clear
+: 1752609021:0;tree hyprland
+: 1752609030:0;ls
+: 1752609079:0;clear
+: 1752609087:0;ls wallpapers
+: 1752609243:0;chmod +x ~/.config/hypr/scripts/wallpaper.sh\
+
+: 1752612142:0;rebot
+: 1752612144:0;reboot
+: 1752612304:0;cd dotfiles
+: 1752612305:0;nvim
+: 1752612397:0;hyprctl monitors
+: 1752612479:0;hyprctl hyprpaper list\
+
+: 1752612491:0;hyprctl version\
+
+: 1752612498:0;yay -S hyprland-git hyprpaper-git\
+
+: 1752612620:0;clear
+: 1752612622:0;hyprpaper
+: 1752612633:0;pkill hyprpaper
+: 1752612636:0;hyprpaper --config ~/.config/hypr/hyprpaper.conf &
+: 1752612678:0;pkill hyprpaper\
+hyprctl reload\
+
+: 1752612715:0;nvim
+: 1752612752:0;pgrep -a hyprpaper\
+
+: 1752612757:0;hyprpaper --config ~/.config/hypr/hyprpaper.conf &
+: 1752612797:0;nvim
+: 1752612801:0;nvim dotfiles
+: 1752612840:0;pgrep -a hyprpaper\
+
+: 1752612844:0;hyprpaper --config ~/.config/hypr/hyprpaper.conf &
+: 1752612850:0;pkill hyprpaper\
+hyprctl reload\
+
+: 1752612862:0;hyprctl reload
+: 1752612863:0;clear
+: 1752612865:0;reboot
+: 1752612920:0;hyprpaper
+: 1752612926:0;pgrep -a hyprpaper\
+
+: 1752612946:0;cat ~/.config/hyprpaper/hyprpaper.conf\
+
+: 1752612954:0;nvim dotfiles
+: 1752613004:0;nvim .config/hyprpaper/hyprpaper.conf
+: 1752613023:0;hyprctl reload
+: 1752613041:0;reboot
+: 1752613098:0;nvim dotfiles
+: 1752613141:0;yay -S nsxiv\
+
+: 1752613207:0;yay -S yazi ueberzugpp\
+
+: 1752613224:0;yazi ~/wallpapers\
+
+: 1752613272:0;hyprctl reload\
+
+: 1752613324:0;yazi ~/wallpapers\
+
+: 1752613354:0;nvim dotfiles
+: 1752613416:0;bash -x ~/.config/hypr/scripts/wallpaper_picker.sh\
+
+: 1752613422:0;hyprctl monitors\
+
+: 1752613431:0;cat dotfiles/hyprland/keybinds.conf
+: 1752613456:0;nvim dotfiles
+: 1752613480:0;bash -x ~/.config/hypr/scripts/wallpaper.sh\
+
+: 1752613510:0;bash -x ~/.config/hypr/scripts/wallpaper.sh\
+nvim
+: 1752613516:0;nvim dotfiles
+: 1752613528:0;chmod +x ~/.config/hypr/scripts/wallpaper.sh\
+
+: 1752613573:0;hyprctl reload\
+
+: 1752613574:0;c;ear
+: 1752613579:0;clear
+: 1752613588:0;nvim dotfiles
+: 1752613604:0;hyprctl reload\
+
+: 1752613612:0;cat /tmp/wallpaper_debug.log\
+
+: 1752613630:0;nvim
+: 1752613636:0;nvim dotfiles
+: 1752613775:0;clear
+: 1752613780:0;echo "$selected" > ~/.config/hypr/current_wallpaper\
+
+: 1752613815:0;nvim
+: 1752613817:0;nvim dotfiles
+: 1752613843:0;nvim ~/.config/hypr/hyprpaper.conf
+: 1752613867:0;nvim dotfiles/hyprland/autostart.conf
+: 1752613922:0;nvim ~/.config/kitty/kitty.conf\
+
+: 1752613956:0;reboot
+: 1752617359:0;cd dotfiles
+: 1752617360:0;clear
+: 1752617363:0;git status
+: 1752617365:0;git add .
+: 1752617376:0;git commit -m 'hyprpaper'
+: 1752617377:0;git push
+: 1752617379:0;cler
+: 1752617380:0;clear
+: 1752617528:0;nvim
+: 1752617640:0;pkill waybar
+: 1752617642:0;waybar &
+: 1752617649:0;hyprctl reload\
+
+: 1752617654:0;waybar & -d
+: 1752617677:0;killall waybar && waybar
+: 1752617708:0;waybar --version\
+
+: 1752617760:0;yay -S waybar-git\
+
+: 1752617861:0;clear
+: 1752617862:0;waybar
+: 1752617877:0;nvim
+: 1752617919:0;waybar
+: 1752617938:0;nvim dotfiles
+: 1752617992:0;:q
+: 1752617993:0;clear
+: 1752618004:0;waybar --version\
+
+: 1752618021:0;WAYBAR_DEBUG=1 waybar\
+
+: 1752618067:0;hyprctl clients | jq '.[] | {title: .title, workspace: .workspace.id, monitor: .monitorID}'\
+
+: 1752618071:0;yay -S jq
+: 1752618075:0;clear
+: 1752618077:0;hyprctl clients | jq '.[] | {title: .title, workspace: .workspace.id, monitor: .monitorID}'\
+
+: 1752618089:0;hyprctl clients\
+
+: 1752618101:0;hyprctl clients -j\
+
+: 1752618177:0;hyprctl activeworkspace\
+
+: 1752618271:0;clear
+: 1752618275:0;reboot
+: 1752618364:0;cd dotfiles
+: 1752618366:0;git add .
+: 1752618368:0;lear
+: 1752618370:0;git restore .
+: 1752618373:0;git reset --hard HEAD
+: 1752618375:0;clear
+: 1752619025:0;cd dotfiles
+: 1752619027:0;cd ..
+: 1752619029:0;cd .config
+: 1752619030:0;ls
+: 1752619555:0;cd ..
+: 1752619555:0;cler
+: 1752619556:0;cd dotfiles
+: 1752619557:0;clear
+: 1752619582:0;nvim dotfiles install.sh
+: 1752619607:0;ls
+: 1752619608:0;rm dotfiles
+: 1752619622:0;nvim install.sh
+: 1752619631:0;nvim README.md
+: 1752619893:0;nvim package.json
+: 1752619928:0;mkdir scripts
+: 1752619930:0;cd scripts
+: 1752619936:0;nvim backup.sh
+: 1752619979:0;cd ..
+: 1752619985:0;nvim dependencies.yml
+: 1752619994:0;nvim Makefile
+: 1752620010:0;mkdir .github
+: 1752620016:0;mkdir .github/workflows
+: 1752620035:0;nvim .github/workflows/test.yml
+: 1752620113:0;nvim test-install.sh
+: 1752620126:0;chmod +x test-install.sh
+: 1752620131:0;./test-install.sh
+: 1752620172:0;clear
+: 1752620181:0;nvim install.sh
+: 1752620263:0;nvim test-install.sh
+: 1752620291:0;chmod +x test-install.sh
+: 1752620293:0;./test-install.sh
+: 1752620330:0;nvim quick.sh
+: 1752620339:0;chmod +x quick.sh
+: 1752620340:0;./quick.sh
+: 1752620354:0;rm quick.sh
+: 1752620355:0;clear
+: 1752620367:0;ls
+: 1752620373:0;clear
+: 1752620374:0;git add .
+: 1752620381:0;git commit -m 'distribution'
+: 1752620383:0;git push
+: 1752620384:0;clear
+: 1752621315:0;cd dotfiles
+: 1752621317:0;ls
+: 1752621321:0;cd ..
+: 1752621325:0;tree .config/kitty
+: 1752621372:0;ledar
+: 1752621373:0;cd dotfiles
+: 1752621374:0;clear
+: 1752621380:0;mkdir -p kitty
+: 1752621392:0;cp -r ~/.config/kitty/* ./kitty
+: 1752621413:0;nvim install.sh
+: 1752621443:0;cd ..
+: 1752621457:0;tree .zshrc
+: 1752621463:0;cat .zshrc
+: 1752621503:0;clear
+: 1752621507:0;cd dotfiles
+: 1752621514:0;mkdir -p zsh
+: 1752621529:0;cp ~/.zshrc ./zsh/zshrc
+: 1752621535:0;cp ~/.zsh_history ./zsh/zsh_history 2>/dev/null || echo "No history file found (that's okay)"
