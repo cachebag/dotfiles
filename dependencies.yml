@@ -1,0 +1,51 @@
+# Dependencies configuration for dotfiles
+
+system:
+  arch_packages:
+    - hyprland
+    - waybar
+    - rofi-wayland
+    - neovim
+    - git
+    - curl
+    - wget
+    - ripgrep
+    - fd
+    - nodejs
+    - npm
+    - python
+    - python-pip
+    - python-virtualenv
+    - ttf-fira-code
+    - ttf-font-awesome
+    - wl-clipboard
+    - xdg-desktop-portal-hyprland
+    - qt5-wayland
+    - qt6-wayland
+
+aur_packages:
+  - hyprpaper
+  - swaylock-effects
+  - wlogout
+
+python:
+  packages:
+    - pynvim
+
+nodejs:
+  global_packages:
+    - neovim
+
+fonts:
+  - name: "FiraCode Nerd Font"
+    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip"
+    install_path: "~/.local/share/fonts"
+
+directories:
+  - ~/.config/hypr
+  - ~/.config/waybar
+  - ~/.config/rofi
+  - ~/.config/nvim
+  - ~/.local/share/applications
+  - ~/.local/bin
+  - ~/.local/share/fonts

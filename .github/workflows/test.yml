@@ -1,0 +1,35 @@
+name: Test Installation
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-install:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Test script syntax
+      run: |
+        bash -n install.sh
+        
+    - name: Check script permissions
+      run: |
+        test -x install.sh || chmod +x install.sh
+        
+    - name: Validate shell scripts
+      run: |
+        if command -v shellcheck &> /dev/null; then
+          shellcheck install.sh
+        fi
+        
+    - name: Test file structure
+      run: |
+        test -d nvim || exit 1
+        test -f nvim/init.lua || exit 1
+        test -d nvim/lua/cachebag/plugins || exit 1
+        echo "File structure validation passed"
