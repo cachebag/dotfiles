@@ -1,6 +1,6 @@
 # Cachebag's Dotfiles
 
-A minimal dotfiles config.
+A minimal arch config.
 
 ## Config covers...
 
