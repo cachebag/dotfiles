@@ -2,7 +2,7 @@
 
 WALLPAPER_DIR="$HOME/wallpapers"
 CHOOSER_FILE="/tmp/wallpaper_selected"
-MONITOR="HDMI-A-1"  # Replace with your actual monitor name from `hyprctl monitors`
+MONITOR="eDP-1"  # Replace with your actual monitor name from `hyprctl monitors`
 
 rm -f "$CHOOSER_FILE"
 
