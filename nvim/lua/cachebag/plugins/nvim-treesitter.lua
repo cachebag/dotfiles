@@ -20,7 +20,8 @@ return {
           "python",
           "yaml",
           "bash",
-          "astro",  -- Astro syntax highlighting
+          "astro",
+          "java",
         },
         sync_install = false,
         auto_install = true,
@@ -75,6 +76,7 @@ return {
           "pyright",          -- Python
           "rust_analyzer",    -- Rust
           "astro",            -- Astro LSP
+          "jdtls",            -- Java LSP 
         },
         automatic_installation = true,
       })
@@ -96,8 +98,14 @@ return {
           },
         },
       })
+      require("lspconfig").jdtls.setup({
+        capabilities = capabilities,
+      })
       lspconfig.pyright.setup({ capabilities = capabilities })
-      lspconfig.rust_analyzer.setup({ capabilities = capabilities })
+      lspconfig.rust_analyzer.setup({
+        capabilities = capabilities,
+        cmd = { "rustup", "run", "stable", "rust-analyzer"},
+      })
       -- Astro LSP
       lspconfig.astro.setup({
         capabilities = capabilities,
@@ -182,6 +190,7 @@ return {
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
       rt.setup({
         server = {
+          cmd = { "rustup", "run", "stable", "rust-analyzer" },
           capabilities = capabilities,
           on_attach = function(_, bufnr)
             if vim.lsp.inlay_hint then
