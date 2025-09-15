@@ -2,7 +2,7 @@
 
 WALLPAPER_DIR="$HOME/wallpapers"
 CHOOSER_FILE="/tmp/wallpaper_selected"
-MONITOR="HDMI-A-1"  # Replace with your actual monitor name from `hyprctl monitors`
+MONITOR="HDMI-A-1"
 
 rm -f "$CHOOSER_FILE"
 
@@ -12,7 +12,7 @@ yazi "$WALLPAPER_DIR" --chooser-file="$CHOOSER_FILE"
 # If file was selected
 if [[ -f "$CHOOSER_FILE" ]]; then
     selected=$(<"$CHOOSER_FILE")
-    
+
     if [[ -n "$selected" && -f "$selected" ]]; then
         # Apply wallpaper immediately
         hyprctl hyprpaper preload "$selected"
@@ -29,6 +29,13 @@ ipc = on
 preload = $selected
 wallpaper = $MONITOR,$selected
 EOF
+
+        if command -v wal &>/dev/null; then
+            wal -q -n -i "$selected"    # build palette from wallpaper
+            # Optionally reload apps that understand wal:
+            pkill -USR1 waybar 2>/dev/null
+            kitty @ set-colors --all ~/.cache/wal/colors-kitty.conf 2>/dev/null
+        fi
 
     else
         notify-send "Wallpaper not applied" "Invalid file selected."
