@@ -4,12 +4,12 @@
 
 set -e
 
-DRY_RUN=true   # set to true to avoid making changes
+#DRY_RUN=true   # set to true to avoid making changes
 
-[[ $DRY_RUN == true ]] && {
-    set -x       # print every command
-    trap "echo 'Dry run finished'; exit 0" EXIT
-}
+# [[ $DRY_RUN == true ]] && {
+  #  set -x       # print every command
+   # trap "echo 'Dry run finished'; exit 0" EXIT
+# }
 
 # Colors for output
 RED='\033[0;31m'
@@ -100,27 +100,69 @@ backup_configs() {
 create_symlinks() {
     log_info "Creating symlinks..."
     local root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+    # Core configs that live in ~/.config
     declare -A map=(
         [hyprland]="$HOME/.config/hypr"
         [waybar]="$HOME/.config/waybar"
-        [rofi]="$HOME/.config/rofi"
         [nvim]="$HOME/.config/nvim"
         [kitty]="$HOME/.config/kitty"
     )
 
-    # zsh
+    # Zsh files
     if [[ -f "$root/zsh/zshrc" ]]; then
-        [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]] && mv "$HOME/.zshrc" "$HOME/.zshrc.bak.$(date +%s)"
+        [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]] && \
+            mv "$HOME/.zshrc" "$HOME/.zshrc.bak.$(date +%s)"
         ln -sf "$root/zsh/zshrc" "$HOME/.zshrc"
     fi
     if [[ -f "$root/zsh/zsh_history" ]]; then
-        [[ -f "$HOME/.zsh_history" && ! -L "$HOME/.zsh_history" ]] && mv "$HOME/.zsh_history" "$HOME/.zsh_history.bak.$(date +%s)"
+        [[ -f "$HOME/.zsh_history" && ! -L "$HOME/.zsh_history" ]] && \
+            mv "$HOME/.zsh_history" "$HOME/.zsh_history.bak.$(date +%s)"
         ln -sf "$root/zsh/zsh_history" "$HOME/.zsh_history"
     fi
 
-    for src in "${!map[@]}"; do
-        [[ -d "$root/$src" ]] && rm -rf "${map[$src]}" && ln -sf "$root/$src" "${map[$src]}"
+    # --- Rofi --------------------
+    local rofi_dir="$HOME/.config/rofi"
+    mkdir -p "$rofi_dir"
+
+    for f in config.rasi gruvbox-material.rasi; do
+        src="$root/rofi/$f"
+        dst="$rofi_dir/$f"
+        if [[ -f "$src" ]]; then
+            # Backup if it's a normal file, not a symlink
+            if [[ -f "$dst" && ! -L "$dst" ]]; then
+                mv "$dst" "$dst.bak.$(date +%s)"
+                log_warning "Backed up existing $dst"
+            fi
+            ln -snf "$src" "$dst"
+            log_info "Linked $f → $dst"
+        fi
     done
+
+
+    # Link the main configs
+    for src in "${!map[@]}"; do
+        [[ -d "$root/$src" ]] && rm -rf "${map[$src]}" && \
+            ln -sf "$root/$src" "${map[$src]}"
+    done
+
+    # --- Extra symlinks for major components ----------------------------
+    declare -A extras=(
+        [alacritty]="$HOME/.config/alacritty"
+        [fastfetch]="$HOME/.config/fastfetch"
+        [yazi]="$HOME/.config/yazi"
+        [dunst]="$HOME/.config/dunst"
+    )
+
+    for src in "${!extras[@]}"; do
+        if [[ -d "$root/$src" ]]; then
+            [[ -e "${extras[$src]}" && ! -L "${extras[$src]}" ]] && \
+                mv "${extras[$src]}" "${extras[$src]}.bak.$(date +%s)"
+            ln -snf "$root/$src" "${extras[$src]}"
+            log_info "Linked $src → ${extras[$src]}"
+        fi
+    done
+
     log_success "Symlinks created"
 }
 
