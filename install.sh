@@ -105,7 +105,6 @@ create_symlinks() {
     declare -A map=(
         [hyprland]="$HOME/.config/hypr"
         [waybar]="$HOME/.config/waybar"
-        [rofi]="$HOME/.config/rofi"
         [nvim]="$HOME/.config/nvim"
         [kitty]="$HOME/.config/kitty"
     )
@@ -121,6 +120,25 @@ create_symlinks() {
             mv "$HOME/.zsh_history" "$HOME/.zsh_history.bak.$(date +%s)"
         ln -sf "$root/zsh/zsh_history" "$HOME/.zsh_history"
     fi
+
+    # --- Rofi --------------------
+    local rofi_dir="$HOME/.config/rofi"
+    mkdir -p "$rofi_dir"
+
+    for f in config.rasi gruvbox-material.rasi; do
+        src="$root/rofi/$f"
+        dst="$rofi_dir/$f"
+        if [[ -f "$src" ]]; then
+            # Backup if it's a normal file, not a symlink
+            if [[ -f "$dst" && ! -L "$dst" ]]; then
+                mv "$dst" "$dst.bak.$(date +%s)"
+                log_warning "Backed up existing $dst"
+            fi
+            ln -snf "$src" "$dst"
+            log_info "Linked $f → $dst"
+        fi
+    done
+
 
     # Link the main configs
     for src in "${!map[@]}"; do

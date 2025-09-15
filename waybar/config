@@ -76,7 +76,7 @@
 
   "custom/launcher":{
       "format": " ",
-      "on-click": "sh ~/.config/rofi/launchers/type-2/launcher.sh",
+      "on-click": "rofi -show drun ~/.config/rofi/config.rasi",
       "on-click-right": "killall rofi"
   },
 
