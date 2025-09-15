@@ -2,7 +2,7 @@
   "layer": "top",
   "modules-left": ["custom/launcher", "pulseaudio"],
   "modules-center": ["hyprland/workspaces"],
-  "modules-right": ["network", "cpu", "memory", "battery", "clock"],
+  "modules-right": ["custom/power", "network", "cpu", "memory", "battery", "clock"],
 
   "pulseaudio": {
     "format": "{icon} {volume}%",
@@ -65,6 +65,11 @@
     "escape": true,
     "exec": "$HOME/.config/system_scripts/mediaplayer.py 2> /dev/null",
     "on-click": "playerctl play-pause"
+  },
+
+  "custom/power": {
+    "format": "",
+    "on-click": "~/dotfiles/scripts/power_menu.sh"
   },
 
   "custom/launcher": {

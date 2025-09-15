@@ -179,3 +179,15 @@ window#waybar.hidden {
   color: #161320;
   background: #f2cdcd;
 }
+
+#custom-power {
+  margin-top: 6px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  color: #fbf1c7;       /* text/icon color */
+  background: #cc241d;  /* background color for the button */
+}
