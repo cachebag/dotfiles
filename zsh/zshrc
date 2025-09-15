@@ -80,5 +80,5 @@ zinit light zdharma-continuum/history-search-multi-word
 
 # Run neofetch on terminal start
 if [[ $TERM_PROGRAM != "vscode" ]]; then
-  neofetch
+  fastfetch
 fi
