@@ -1,85 +1,77 @@
 {
-	"layer": "top",
-	"modules-left": ["custom/launcher", "backlight", "wireplumber"],
-	"modules-center": ["hyprland/workspaces"],
-	"modules-right": ["network", "cpu", "memory", "battery", "clock"],
-	
-  "wireplumber": {
-    "tooltip": false,
-    "scroll-step": 5,
+  "layer": "top",
+  "modules-left": ["custom/launcher", "pulseaudio"],
+  "modules-center": ["hyprland/workspaces"],
+  "modules-right": ["network", "cpu", "memory", "battery", "clock"],
+
+  "pulseaudio": {
     "format": "{icon} {volume}%",
     "format-muted": "󰝟 {volume}%",
-    "on-click":"kitty -- alsamixer -V all",
+    "scroll-step": 5,
+    "on-click": "pavucontrol",
     "format-icons": {
       "default": ["", "", ""]
     }
   },
 
-
   "network": {
     "tooltip": false,
     "format-wifi": "  {essid}",
     "format-ethernet": "",
-    "on-click":"kitty -- nmtui",
-	},
+    "on-click": "kitty -- nmtui"
+  },
 
   "battery": {
-      "states": {
-          "full": 100,
-          "good": 95,
-          "decent": 50,
-          "warning": 30,
-          "critical": 20
-      },
-      "format": "{icon}  {capacity}%",
-      "format-time": "{H} h {M} min",
-      "format-alt": "{icon} {time}",
-      "format-icons": ["", "", "", "", ""]
+    "states": {
+      "full": 100,
+      "good": 95,
+      "decent": 50,
+      "warning": 30,
+      "critical": 20
+    },
+    "format": "{icon}  {capacity}%",
+    "format-time": "{H} h {M} min",
+    "format-alt": "{icon} {time}",
+    "format-icons": ["", "", "", "", ""]
   },
-
 
   "clock": {
-      "format": "{:%H:%M}",
-      "format-alt": "{:%m-%d-%Y}"
+    "format": "{:%H:%M}",
+    "format-alt": "{:%A, %d %B %Y}"
   },
-
 
   "cpu": {
-      "interval": 15,
-      "format": "  {}%",
-      "max-length": 10,
-      "on-click":"kitty -- btop"
+    "interval": 15,
+    "format": "  {}%",
+    "max-length": 10,
+    "on-click": "kitty -- btop"
   },
-
 
   "memory": {
-      "interval": 30,
-      "format": "  {}%",
-      "max-length": 10
+    "interval": 30,
+    "format": "  {}%",
+    "max-length": 10
   },
-
 
   "custom/media": {
-      "interval": 30,
-      "format": "{icon} {}",
-      "return-type": "json",
-      "max-length": 20,
-      "format-icons": {
-          "spotify": " ",
-          "default": " "
-      },
-      "escape": true,
-      "exec": "$HOME/.config/system_scripts/mediaplayer.py 2> /dev/null",
-      "on-click": "playerctl play-pause"
+    "interval": 30,
+    "format": "{icon} {}",
+    "return-type": "json",
+    "max-length": 20,
+    "format-icons": {
+      "spotify": " ",
+      "default": " "
+    },
+    "escape": true,
+    "exec": "$HOME/.config/system_scripts/mediaplayer.py 2> /dev/null",
+    "on-click": "playerctl play-pause"
   },
 
-
-  "custom/launcher":{
-      "format": " ",
-      "on-click": "rofi -show drun ~/.config/rofi/config.rasi",
-      "on-click-right": "killall rofi"
+  "custom/launcher": {
+    "format": " ",
+    "on-click": "rofi -show drun ~/.config/rofi/config.rasi",
+    "on-click-right": "killall rofi"
   },
-
 
   "hyprland/workspaces": {
     "format": "{icon}",
@@ -94,9 +86,9 @@
       "7": "柒",
       "8": "捌",
       "9": "玖",
-      "10": "拾",
+      "10": "拾"
     },
     "active": "",
     "sort-by-number": true
-  },
+  }
 }
