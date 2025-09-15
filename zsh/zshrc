@@ -1,5 +1,3 @@
-# Created by newuser for 5.9
-
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
@@ -23,6 +21,8 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
+# Aliases
+alias ls='ls -1 --color=auto'
 
 # Set Spaceship options BEFORE loading the prompt
 SPACESHIP_PROMPT_ORDER=(
