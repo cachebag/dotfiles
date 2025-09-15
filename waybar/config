@@ -1,120 +1,102 @@
 {
-    "layer": "top",
-    "position": "bottom",
-    "spacing": 0,
-    "height": 0,
+	"layer": "top",
+	"modules-left": ["custom/launcher", "backlight", "wireplumber"],
+	"modules-center": ["hyprland/workspaces"],
+	"modules-right": ["network", "cpu", "memory", "battery", "clock"],
+	
+  "wireplumber": {
+    "tooltip": false,
+    "scroll-step": 5,
+    "format": "{icon} {volume}%",
+    "format-muted": "󰝟 {volume}%",
+    "on-click":"kitty -- alsamixer -V all",
+    "format-icons": {
+      "default": ["", "", ""]
+    }
+  },
 
-    "margin-top": 8,
-    "margin-right": 8,
-    "margin-bottom": 0,
-    "margin-left": 8,
 
-    "modules-left": [
-        "hyprland/workspaces"
-    ],
+  "network": {
+    "tooltip": false,
+    "format-wifi": "  {essid}",
+    "format-ethernet": "",
+    "on-click":"kitty -- nmtui",
+	},
 
-    "modules-center": [
-        "wlr/taskbar",
-        "clock"
-    ],
+  "battery": {
+      "states": {
+          "full": 100,
+          "good": 95,
+          "decent": 50,
+          "warning": 30,
+          "critical": 20
+      },
+      "format": "{icon}  {capacity}%",
+      "format-time": "{H} h {M} min",
+      "format-alt": "{icon} {time}",
+      "format-icons": ["", "", "", "", ""]
+  },
 
-    "modules-right": [
-        "custom/power_menu",
-        "idle_inhibitor",
-        "tray",
-        "cpu",
-        "memory",
-        "network",
-        "pulseaudio",
-        "custom/wallpaper"
-    ],
 
-    "hyprland/workspaces": {
-        "format": "{name}",
-        "on-click": "activate",
-        "disable-scroll": true,
-        "all-outputs": true,
-        "tooltip": false
+  "clock": {
+      "format": "{:%H:%M}",
+      "format-alt": "{:%m-%d-%Y}"
+  },
+
+
+  "cpu": {
+      "interval": 15,
+      "format": "  {}%",
+      "max-length": 10,
+      "on-click":"kitty -- btop"
+  },
+
+
+  "memory": {
+      "interval": 30,
+      "format": "  {}%",
+      "max-length": 10
+  },
+
+
+  "custom/media": {
+      "interval": 30,
+      "format": "{icon} {}",
+      "return-type": "json",
+      "max-length": 20,
+      "format-icons": {
+          "spotify": " ",
+          "default": " "
+      },
+      "escape": true,
+      "exec": "$HOME/.config/system_scripts/mediaplayer.py 2> /dev/null",
+      "on-click": "playerctl play-pause"
+  },
+
+
+  "custom/launcher":{
+      "format": " ",
+      "on-click": "sh ~/.config/rofi/launchers/type-2/launcher.sh",
+      "on-click-right": "killall rofi"
+  },
+
+
+  "hyprland/workspaces": {
+    "format": "{icon}",
+    "on-click": "activate",
+    "format-icons": {
+      "1": "壹",
+      "2": "貳",
+      "3": "參",
+      "4": "肆",
+      "5": "伍",
+      "6": "陸",
+      "7": "柒",
+      "8": "捌",
+      "9": "玖",
+      "10": "拾",
     },
-
-    "tray": {
-        "spacing": 10,
-        "tooltip": false
-    },
-
-    "clock": {
-        "format": "{:%I:%M %p - %a, %d %b %Y}",
-        "tooltip": false
-    },
-
-    "cpu": {
-        "format": "cpu {usage}%",
-        "interval": 2,
-
-        "states": {
-            "critical": 90
-        }
-    },
-
-    "memory": {
-        "format": "mem {percentage}%",
-        "interval": 2,
-
-        "states": {
-            "critical": 80
-        }
-    },
-
-    "network": {
-        "format-wifi" : "wifi {bandwidthDownBits}",
-        "format-ethernet": "enth {bandwidthDownBits}",
-        "format-disconnected" : "no network",
-        "interval": 5,
-        "tooltip": false
-    },
-
-    "pulseaudio": {
-        "scroll-step": 5,
-        "max-volume": 150,
-        "format": "vol {volume}%",
-        "format-bluetooth": "vol {volume}%",
-        "nospacing": 1,
-        "on-click": "pavucontrol",
-        "tooltip": false
-    },
-
-    "wlr/taskbar": {
-        "icon-size": 20,
-        "tooltip": true,
-        "on-click": "activate",
-        "on-click-right": "close",
-        "format": "{icon}",
-        "max-length": 10,
-        "all-outputs": true,
-        "ignore-list": []
-    },
-
-    "custom/power_menu": {
-        "format": "⏻",  
-        "tooltip": false,
-        "on-click": "~/.config/waybar/scripts/power_menu.sh",
-        "interval": 0
-    },
-
-    "custom/wallpaper": {
-      "format": "@",
-      "tooltip": false,
-      "on-click": "~/.config/hypr/scripts/wallpaper_bemenu.sh",
-      "interval": 0
-    },
-
-    "idle_inhibitor": {
-        "format": "{icon}",
-        "format-icons": {
-            "activated": " ",
-            "deactivated": " "
-        },
-        "tooltip-format-activated": "The computer is prevented from going to sleep",
-        "tooltip-format-deactivated": "The computer will go to sleep if the user is idle"
-    },
+    "active": "",
+    "sort-by-number": true
+  },
 }
