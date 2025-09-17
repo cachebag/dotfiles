@@ -202,7 +202,11 @@ setup_sddm() {
         sudo cp -r "$DOTFILES_ROOT/sddm/themes/"* /usr/share/sddm/themes/cachebag-theme/
         
         if [[ -f "$DOTFILES_ROOT/sddm/conf.d/theme.conf" ]]; then
+            sudo mkdir -p /etc/sddm.conf.d/
             sudo cp "$DOTFILES_ROOT/sddm/conf.d/theme.conf" /etc/sddm.conf.d/
+        elif [[ -f "$DOTFILES_ROOT/sddm/theme.conf" ]]; then
+            sudo mkdir -p /etc/sddm.conf.d/
+            sudo cp "$DOTFILES_ROOT/sddm/theme.conf" /etc/sddm.conf.d/
         fi
         
         sudo systemctl enable sddm
