@@ -1,11 +1,12 @@
 # Cachebag's Dotfiles
 
+A minimal Arch config
 
 ## Components
 
 - **Hyprland** 
 - **Waybar** 
-- **Rofi** -
+- **Rofi** 
 - **Neovim** 
 
 ## Installation
@@ -68,18 +69,36 @@ nvim --headless "+Lazy! sync" +qa
 
 ## Keybindings
 
-### Hyprland
+### Applications
 
 | Key | Action |
 |-----|--------|
-| `Super + Return` | Terminal |
-| `Super + D` | Rofi launcher |
+| `Super + Return` | Terminal (Kitty) |
+| `Super + A` | App launcher (Rofi) |
+| `Super + R` | Alternative launcher (Wofi) |
+| `Super + B` | Firefox |
+| `Super + E` | File manager (Dolphin) |
+| `Super + G` | ChatGPT |
+| `Super + F` | WhatsApp |
+| `Super + O` | Obsidian |
+| `Super + W` | Wallpaper picker |
+| `Super + S` | Screenshot |
+| `Super + P` | Power menu |
+| `Super + L` | Lock screen |
+
+### Window Management
+
+| Key | Action |
+|-----|--------|
 | `Super + Q` | Close window |
-| `Super + M` | Exit |
+| `Super + M` | Exit Hyprland |
 | `Super + V` | Toggle floating |
-| `Super + F` | Toggle fullscreen |
-| `Super + 1-9` | Switch workspace |
-| `Super + Shift + 1-9` | Move window to workspace |
+| `Super + J` | Toggle split |
+| `Super + 1-5` | Switch workspace |
+| `Super + Shift + 1-5` | Move window to workspace |
+| `Super + Ctrl + Left/Right` | Previous/Next workspace |
+| `Super + Left/Right` | Move focus |
+| `Super + Shift + Arrows` | Resize window |
 
 ### Neovim
 
@@ -110,10 +129,7 @@ nvim --headless "+Lazy! sync" +qa
 ### Waybar not visible
 - Restart: `killall waybar && waybar &`
 - Check syntax: `waybar -t`
-4. **Waybar not showing**
-   - Restart waybar: `killall waybar && waybar &`
-   - Check config syntax: `waybar -t`
 
 ---
 
-**Note**: This configuration is optimized for my personal workflow. 
+**Note**: This configuration is optimized for my personal workflow.
