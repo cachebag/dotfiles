@@ -61,7 +61,7 @@ install_dependencies() {
         sddm qt5-graphicaleffects qt5-quickcontrols2
         network-manager-applet bluez bluez-utils
         thunar thunar-archive-plugin file-roller
-        firefox dolphin wofi obsidian snapd
+        firefox dolphin wofi obsidian
         base-devel cmake make gcc
     )
     
@@ -77,7 +77,7 @@ install_dependencies() {
         cd "$DOTFILES_ROOT"
     fi
 
-    local aur_pkgs=(hyprpaper swaylock-effects wlogout hypridle hyprshot)
+    local aur_pkgs=(hyprpaper swaylock-effects wlogout hypridle hyprshot snapd)
     if ! yay -Qi "${aur_pkgs[@]}" &>/dev/null; then
         yay -S --needed --noconfirm "${aur_pkgs[@]}"
     fi
