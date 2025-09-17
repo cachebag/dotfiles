@@ -23,6 +23,8 @@ zinit light-mode for \
 
 # Aliases
 alias ls='ls -1 --color=auto'
+alias vim='nvim'
+alias copy='xclip -selection clipboard'
 
 # Set Spaceship options BEFORE loading the prompt
 SPACESHIP_PROMPT_ORDER=(
