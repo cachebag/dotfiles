@@ -1,271 +1,487 @@
 #!/bin/bash
 # Cachebag's Dotfiles Installation Script
-# Automated setup for Hyprland + Neovim configuration
 
-set -e
+set -euo pipefail
 
-#DRY_RUN=true   # set to true to avoid making changes
-
-# [[ $DRY_RUN == true ]] && {
-  #  set -x       # print every command
-   # trap "echo 'Dry run finished'; exit 0" EXIT
-# }
-
-# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-# Logging helpers
 log_info()    { echo -e "${BLUE}[INFO]${NC} $1"; }
 log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
 log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
 log_error()   { echo -e "${RED}[ERROR]${NC} $1"; }
 
-# --- Checks -------------------------------------------------------------
+DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+STATE_FILE="$HOME/.dotfiles_install_state"
+
+save_state() {
+    echo "$1" > "$STATE_FILE"
+}
+
+get_state() {
+    [[ -f "$STATE_FILE" ]] && cat "$STATE_FILE" || echo "start"
+}
 
 check_arch() {
     if [[ ! -f /etc/arch-release ]]; then
-        log_error "This script is designed for Arch Linux systems"
+        log_error "This script requires Arch Linux"
         exit 1
     fi
 }
 
 check_user() {
     if [[ $EUID -eq 0 ]]; then
-        log_error "Do not run this as root"
+        log_error "Do not run this script as root"
         exit 1
     fi
 }
 
-# --- Dependencies -------------------------------------------------------
+cleanup_on_error() {
+    log_error "Installation failed. State saved. Run script again to continue."
+    exit 1
+}
+
+trap cleanup_on_error ERR
 
 install_dependencies() {
     log_info "Installing system dependencies..."
     local pacman_pkgs=(
-        hyprland waybar rofi-wayland neovim git curl wget ripgrep fd
-        nodejs npm python python-pip python-virtualenv
-        ttf-fira-code ttf-font-awesome wl-clipboard
+        hyprland waybar rofi-wayland dunst kitty neovim
+        git curl wget ripgrep fd fzf fastfetch yazi
+        nodejs npm python python-pip python-virtualenv python-pynvim
+        ttf-fira-code ttf-font-awesome ttf-jetbrains-mono-nerd
+        wl-clipboard grim slurp swappy
         xdg-desktop-portal-hyprland qt5-wayland qt6-wayland
-        kitty dunst yazi zsh fastfetch fzf
+        pipewire pipewire-alsa pipewire-pulse pavucontrol
+        polkit-gnome brightnessctl playerctl
+        zsh zsh-autosuggestions zsh-syntax-highlighting
+        sddm qt5-graphicaleffects qt5-quickcontrols2
+        network-manager-applet bluez bluez-utils
+        thunar thunar-archive-plugin file-roller
+        firefox dolphin wofi obsidian snapd
+        base-devel cmake make gcc
     )
-    sudo pacman -S --needed --noconfirm "${pacman_pkgs[@]}"
-
-    if ! command -v yay &>/dev/null; then
-        log_info "Installing yay..."
-        cd /tmp && git clone https://aur.archlinux.org/yay.git
-        cd yay && makepkg -si --noconfirm && cd -
+    
+    if ! pacman -Qi "${pacman_pkgs[@]}" &>/dev/null; then
+        sudo pacman -Syu --needed --noconfirm "${pacman_pkgs[@]}"
     fi
 
-    local aur_pkgs=(hyprpaper swaylock-effects wlogout hypridle)
-    yay -S --needed --noconfirm "${aur_pkgs[@]}"
-    log_success "Dependencies installed"
-}
+    if ! command -v yay &>/dev/null; then
+        log_info "Installing yay AUR helper..."
+        cd /tmp
+        git clone https://aur.archlinux.org/yay.git
+        cd yay && makepkg -si --noconfirm
+        cd "$DOTFILES_ROOT"
+    fi
 
-# --- Directories --------------------------------------------------------
+    local aur_pkgs=(hyprpaper swaylock-effects wlogout hypridle hyprshot)
+    if ! yay -Qi "${aur_pkgs[@]}" &>/dev/null; then
+        yay -S --needed --noconfirm "${aur_pkgs[@]}"
+    fi
+    
+    log_success "Dependencies installed"
+    save_state "dependencies_done"
+}
 
 create_directories() {
     log_info "Creating config directories..."
     local dirs=(
-        "$HOME/.config" "$HOME/.config/hypr" "$HOME/.config/waybar"
-        "$HOME/.config/rofi" "$HOME/.config/nvim" "$HOME/.config/kitty"
-        "$HOME/.local/share/applications" "$HOME/.local/bin"
-        "$HOME/wallpapers" "$HOME/.local/share/zinit"
+        "$HOME/.config/hypr" "$HOME/.config/waybar" "$HOME/.config/rofi"
+        "$HOME/.config/nvim" "$HOME/.config/kitty" "$HOME/.config/dunst"
+        "$HOME/.config/yazi" "$HOME/.config/fastfetch" "$HOME/.config/sddm"
+        "$HOME/.local/share/applications" "$HOME/.local/bin" "$HOME/.local/share/fonts"
+        "$HOME/wallpapers" "$HOME/Pictures/screenshots"
     )
-    for d in "${dirs[@]}"; do mkdir -p "$d"; done
+    for d in "${dirs[@]}"; do 
+        mkdir -p "$d"
+    done
     log_success "Directories created"
+    save_state "directories_done"
 }
 
-# --- Backup -------------------------------------------------------------
-
 backup_configs() {
-    log_info "Backing up old configs..."
-    local bdir="$HOME/.config/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
-    mkdir -p "$bdir"
-    for c in hypr waybar rofi nvim kitty; do
-        if [[ -d "$HOME/.config/$c" && ! -L "$HOME/.config/$c" ]]; then
-            mv "$HOME/.config/$c" "$bdir/"
-            log_warning "Backed up $c"
+    log_info "Backing up existing configurations..."
+    local backup_dir="$HOME/.config/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
+    local configs=(hypr waybar rofi nvim kitty dunst yazi fastfetch)
+    local backup_needed=false
+    
+    for config in "${configs[@]}"; do
+        local config_path="$HOME/.config/$config"
+        if [[ -d "$config_path" && ! -L "$config_path" ]]; then
+            [[ "$backup_needed" == false ]] && mkdir -p "$backup_dir"
+            mv "$config_path" "$backup_dir/"
+            log_warning "Backed up $config to $backup_dir"
+            backup_needed=true
         fi
     done
-    [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]] && cp "$HOME/.zshrc" "$bdir/"
-    [[ -f "$HOME/.zsh_history" && ! -L "$HOME/.zsh_history" ]] && cp "$HOME/.zsh_history" "$bdir/"
-    [[ -n "$(ls -A "$bdir")" ]] || rmdir "$bdir"
+    
+    for file in .zshrc .zsh_history; do
+        if [[ -f "$HOME/$file" && ! -L "$HOME/$file" ]]; then
+            [[ "$backup_needed" == false ]] && mkdir -p "$backup_dir"
+            cp "$HOME/$file" "$backup_dir/"
+            backup_needed=true
+        fi
+    done
+    
+    [[ "$backup_needed" == false ]] && [[ -d "$backup_dir" ]] && rmdir "$backup_dir"
+    log_success "Backup completed"
+    save_state "backup_done"
 }
 
 # --- Symlinks -----------------------------------------------------------
 
 create_symlinks() {
     log_info "Creating symlinks..."
-    local root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-    # Core configs that live in ~/.config
-    declare -A map=(
-        [hyprland]="$HOME/.config/hypr"
-        [waybar]="$HOME/.config/waybar"
-        [nvim]="$HOME/.config/nvim"
-        [kitty]="$HOME/.config/kitty"
+    local core_configs=(
+        "hyprland:$HOME/.config/hypr"
+        "waybar:$HOME/.config/waybar" 
+        "nvim:$HOME/.config/nvim"
+        "kitty:$HOME/.config/kitty"
+        "rofi:$HOME/.config/rofi"
     )
 
-    # Zsh files
-    if [[ -f "$root/zsh/zshrc" ]]; then
-        [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]] && \
-            mv "$HOME/.zshrc" "$HOME/.zshrc.bak.$(date +%s)"
-        ln -sf "$root/zsh/zshrc" "$HOME/.zshrc"
-    fi
-    if [[ -f "$root/zsh/zsh_history" ]]; then
-        [[ -f "$HOME/.zsh_history" && ! -L "$HOME/.zsh_history" ]] && \
-            mv "$HOME/.zsh_history" "$HOME/.zsh_history.bak.$(date +%s)"
-        ln -sf "$root/zsh/zsh_history" "$HOME/.zsh_history"
-    fi
-
-    # --- Rofi --------------------
-    local rofi_dir="$HOME/.config/rofi"
-    mkdir -p "$rofi_dir"
-
-    for f in config.rasi gruvbox-material.rasi; do
-        src="$root/rofi/$f"
-        dst="$rofi_dir/$f"
-        if [[ -f "$src" ]]; then
-            # Backup if it's a normal file, not a symlink
-            if [[ -f "$dst" && ! -L "$dst" ]]; then
-                mv "$dst" "$dst.bak.$(date +%s)"
-                log_warning "Backed up existing $dst"
-            fi
-            ln -snf "$src" "$dst"
-            log_info "Linked $f → $dst"
+    for mapping in "${core_configs[@]}"; do
+        local src="${mapping%:*}"
+        local dst="${mapping#*:}"
+        if [[ -d "$DOTFILES_ROOT/$src" ]]; then
+            [[ -e "$dst" ]] && rm -rf "$dst"
+            ln -sf "$DOTFILES_ROOT/$src" "$dst"
+            log_info "Linked $src → $dst"
         fi
     done
 
-
-    # Link the main configs
-    for src in "${!map[@]}"; do
-        [[ -d "$root/$src" ]] && rm -rf "${map[$src]}" && \
-            ln -sf "$root/$src" "${map[$src]}"
-    done
-
-    # --- Extra symlinks for major components ----------------------------
-    declare -A extras=(
-        [alacritty]="$HOME/.config/alacritty"
-        [fastfetch]="$HOME/.config/fastfetch"
-        [yazi]="$HOME/.config/yazi"
-        [dunst]="$HOME/.config/dunst"
+    local optional_configs=(
+        "dunst:$HOME/.config/dunst"
+        "yazi:$HOME/.config/yazi"
+        "fastfetch:$HOME/.config/fastfetch"
     )
 
-    for src in "${!extras[@]}"; do
-        if [[ -d "$root/$src" ]]; then
-            [[ -e "${extras[$src]}" && ! -L "${extras[$src]}" ]] && \
-                mv "${extras[$src]}" "${extras[$src]}.bak.$(date +%s)"
-            ln -snf "$root/$src" "${extras[$src]}"
-            log_info "Linked $src → ${extras[$src]}"
+    for mapping in "${optional_configs[@]}"; do
+        local src="${mapping%:*}"
+        local dst="${mapping#*:}"
+        if [[ -d "$DOTFILES_ROOT/$src" ]]; then
+            [[ -e "$dst" ]] && rm -rf "$dst"
+            ln -sf "$DOTFILES_ROOT/$src" "$dst"
+            log_info "Linked $src → $dst"
         fi
     done
+
+    if [[ -f "$DOTFILES_ROOT/zsh/zshrc" ]]; then
+        [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]] && rm -f "$HOME/.zshrc"
+        ln -sf "$DOTFILES_ROOT/zsh/zshrc" "$HOME/.zshrc"
+        log_info "Linked zshrc"
+    fi
+
+    if [[ -f "$DOTFILES_ROOT/zsh/zsh_history" ]]; then
+        [[ -f "$HOME/.zsh_history" && ! -L "$HOME/.zsh_history" ]] && rm -f "$HOME/.zsh_history"
+        ln -sf "$DOTFILES_ROOT/zsh/zsh_history" "$HOME/.zsh_history"
+        log_info "Linked zsh_history"
+    fi
+
+    if [[ -d "$DOTFILES_ROOT/scripts" ]]; then
+        chmod +x "$DOTFILES_ROOT/scripts/"*.sh
+        for script in "$DOTFILES_ROOT/scripts/"*.sh; do
+            local script_name=$(basename "$script")
+            ln -sf "$script" "$HOME/.local/bin/${script_name%.sh}"
+        done
+        log_info "Linked utility scripts to ~/.local/bin"
+    fi
 
     log_success "Symlinks created"
+    save_state "symlinks_done"
 }
 
-# --- Neovim / Node ------------------------------------------------------
-
-setup_neovim_python() {
-    log_info "Setting up Neovim Python env..."
-    local venv="$HOME/.config/nvim/env"
-    [[ -d "$venv" ]] || python -m venv "$venv"
-    source "$venv/bin/activate"
-    pip install --upgrade pip pynvim
-    deactivate
+setup_sddm() {
+    log_info "Setting up SDDM theme..."
+    if [[ -d "$DOTFILES_ROOT/sddm" ]]; then
+        sudo mkdir -p /usr/share/sddm/themes/cachebag-theme
+        sudo cp -r "$DOTFILES_ROOT/sddm/themes/"* /usr/share/sddm/themes/cachebag-theme/
+        
+        if [[ -f "$DOTFILES_ROOT/sddm/conf.d/theme.conf" ]]; then
+            sudo cp "$DOTFILES_ROOT/sddm/conf.d/theme.conf" /etc/sddm.conf.d/
+        fi
+        
+        sudo systemctl enable sddm
+        log_success "SDDM theme installed"
+    fi
+    save_state "sddm_done"
 }
-
-setup_node_dependencies() {
-    log_info "Ensuring npm & neovim package..."
-    sudo npm install -g npm   # <--- ensure npm itself is updated
-    sudo npm install -g neovim
-}
-
-setup_neovim_plugins() {
-    log_info "Installing Neovim plugins..."
-    nvim --headless "+Lazy! sync" +qa
-}
-
-# --- Fonts / Wallpapers -------------------------------------------------
 
 setup_fonts() {
     log_info "Installing fonts..."
-    local fontdir="$HOME/.local/share/fonts"
-    mkdir -p "$fontdir"
-    if [[ ! -f "$fontdir/FiraCodeNerdFont-Regular.ttf" ]]; then
+    local font_dir="$HOME/.local/share/fonts"
+    
+    if [[ ! -f "$font_dir/FiraCodeNerdFont-Regular.ttf" ]]; then
         cd /tmp
-        wget https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip
-        unzip -o FiraCode.zip -d "$fontdir"
-        rm FiraCode.zip
-        fc-cache -fv
+        wget -q https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip
+        unzip -q -o FiraCode.zip -d "$font_dir"
+        rm -f FiraCode.zip
     fi
+    
+    if [[ ! -f "$font_dir/JetBrainsMonoNerdFont-Regular.ttf" ]]; then
+        cd /tmp
+        wget -q https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip
+        unzip -q -o JetBrainsMono.zip -d "$font_dir"
+        rm -f JetBrainsMono.zip
+    fi
+    
+    fc-cache -fv > /dev/null 2>&1
+    log_success "Fonts installed"
+    save_state "fonts_done"
 }
 
 setup_wallpapers() {
+    log_info "Setting up wallpapers..."
     mkdir -p "$HOME/wallpapers"
-    if [[ -z "$(ls -A "$HOME/wallpapers")" ]]; then
-        wget -O "$HOME/wallpapers/sample-wallpaper.jpg" \
-            "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2560&h=1440&fit=crop"
+    if [[ -z "$(ls -A "$HOME/wallpapers" 2>/dev/null)" ]]; then
+        cd /tmp
+        wget -q -O sample-wallpaper.jpg "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2560&h=1440&fit=crop" || \
+        wget -q -O sample-wallpaper.jpg "https://picsum.photos/2560/1440"
+        mv sample-wallpaper.jpg "$HOME/wallpapers/"
+        log_info "Downloaded sample wallpaper"
     fi
+    save_state "wallpapers_done"
 }
 
-# --- Shell / Post -------------------------------------------------------
+setup_services() {
+    log_info "Enabling system services..."
+    sudo systemctl enable bluetooth NetworkManager snapd
+    sudo usermod -aG video,input,audio "$USER"
+    
+    if [[ -d "$DOTFILES_ROOT/hyprland/scripts" ]]; then
+        chmod +x "$DOTFILES_ROOT/hyprland/scripts/"*.sh
+    fi
+    
+    log_success "Services configured"
+    save_state "services_done"
+}
+
+setup_snap_apps() {
+    log_info "Setting up snap and installing applications..."
+    
+    sudo systemctl start snapd
+    sudo ln -sf /var/lib/snapd/snap /snap 2>/dev/null || true
+    
+    local snap_apps=(
+        "chatgpt-linux"
+        "whatsapp-linux-app"
+    )
+    
+    for app in "${snap_apps[@]}"; do
+        if ! snap list | grep -q "^$app "; then
+            log_info "Installing $app via snap..."
+            sudo snap install "$app" || log_warning "Failed to install $app - may need manual installation"
+        else
+            log_info "$app already installed"
+        fi
+    done
+    
+    log_success "Snap applications installed"
+    save_state "snap_done"
+}
+
+setup_neovim() {
+    log_info "Setting up Neovim environment..."
+    
+    if command -v python &>/dev/null; then
+        python -m pip install --user --upgrade pynvim > /dev/null 2>&1
+    fi
+    
+    if command -v npm &>/dev/null; then
+        sudo npm install -g neovim > /dev/null 2>&1
+    fi
+    
+    log_info "Installing Neovim plugins..."
+    timeout 300 nvim --headless "+Lazy! sync" +qa || log_warning "Plugin install timed out - run :Lazy sync manually"
+    
+    log_info "Rebuilding telescope-nvim and fzf-native..."
+    local telescope_dir="$HOME/.local/share/nvim/lazy/telescope.nvim"
+    local fzf_dir="$HOME/.local/share/nvim/lazy/telescope-fzf-native.nvim"
+    
+    if [[ -d "$telescope_dir" ]]; then
+        cd "$telescope_dir"
+        if [[ -f "Makefile" ]]; then
+            make clean > /dev/null 2>&1 || true
+            make > /dev/null 2>&1 || log_warning "Failed to rebuild telescope - may need manual rebuild"
+            log_info "Telescope rebuilt successfully"
+        fi
+    else
+        log_warning "Telescope directory not found - plugins may need manual installation"
+    fi
+    
+    if [[ -d "$fzf_dir" ]]; then
+        cd "$fzf_dir"
+        if [[ -f "Makefile" ]]; then
+            make clean > /dev/null 2>&1 || true
+            make > /dev/null 2>&1 || log_warning "Failed to rebuild fzf-native - may need manual rebuild"
+            log_info "FZF-native rebuilt successfully"
+        fi
+    fi
+    
+    cd "$DOTFILES_ROOT"
+    log_success "Neovim setup completed"
+    save_state "neovim_done"
+}
 
 setup_zsh() {
+    log_info "Configuring Zsh..."
     if [[ "$SHELL" != "/usr/bin/zsh" && "$SHELL" != "/bin/zsh" ]]; then
+        log_info "Changing default shell to Zsh..."
         chsh -s /usr/bin/zsh
+        log_warning "Shell changed - logout/login required for full effect"
     fi
+    save_state "zsh_done"
+}
+
+fix_paths() {
+    log_info "Fixing hardcoded paths in configs..."
+    local files_to_fix=(
+        "$HOME/.config/hypr/hyprpaper.conf"
+        "$HOME/.config/hypr/autostart.conf"
+        "$HOME/.config/hypr/keybinds.conf" 
+        "$HOME/.config/hypr/hypridle.conf"
+    )
+    
+    for file in "${files_to_fix[@]}"; do
+        if [[ -f "$file" ]]; then
+            sed -i "s|/home/cachebag|$HOME|g" "$file"
+        fi
+    done
+    
+    log_success "Paths updated"
+    save_state "paths_done"
 }
 
 post_install() {
-    sudo usermod -aG video,input "$USER"
-    local root="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-    [[ -d "$root/hyprland/scripts" ]] && chmod +x "$root/hyprland/scripts/"*.sh
-    [[ -f "$HOME/.config/hypr/hyprpaper.conf" ]] && sed -i "s|/home/cachebag|$HOME|g" "$HOME/.config/hypr/hyprpaper.conf"
-    [[ -f "$HOME/.config/hypr/autostart.conf" ]] && sed -i "s|/home/cachebag|$HOME|g" "$HOME/.config/hypr/autostart.conf"
-
-    # --- Telescope rebuild helper --------------------------------------
+    log_info "Running post-installation tasks..."
+    
+    if [[ ! -d "$HOME/.local/bin" ]]; then
+        mkdir -p "$HOME/.local/bin"
+        echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
+    fi
+    
+    log_info "Installation complete!"
+    echo -e "${GREEN}=== INSTALLATION SUMMARY ===${NC}"
+    echo "✓ Dependencies installed"
+    echo "✓ Configurations symlinked" 
+    echo "✓ Fonts installed"
+    echo "✓ SDDM theme configured"
+    echo "✓ Services enabled"
+    echo "✓ Snap applications installed"
+    echo "✓ Neovim plugins installed"
+    echo "✓ Zsh configured as default shell"
+    echo ""
+    echo -e "${YELLOW}INSTALLED APPLICATIONS:${NC}"
+    echo "• Firefox (Super+B)"
+    echo "• Dolphin file manager (Super+E)"
+    echo "• ChatGPT (Super+G)"
+    echo "• WhatsApp (Super+F)"
+    echo "• Obsidian (Super+O)"
+    echo ""
+    echo -e "${YELLOW}NEXT STEPS:${NC}"
+    echo "1. Reboot your system to apply all changes"
+    echo "2. Select 'Hyprland' from your display manager"
+    echo "3. Press Super+A to launch applications"
+    echo "4. Use Super+W to select wallpapers"
+    echo ""
+    echo -e "${BLUE}KEYBINDS:${NC}"
+    echo "Super+Return: Terminal"
+    echo "Super+A: App launcher (Rofi)"
+    echo "Super+R: Alternative launcher (Wofi)"
+    echo "Super+Q: Close window"
+    echo "Super+E: File manager (Dolphin)"
+    echo "Super+W: Wallpaper picker"
+    echo "Super+S: Screenshot"
+    echo "Super+P: Power menu"
+    echo "Super+L: Lock screen"
+    echo ""
+    
+    rm -f "$STATE_FILE"
+    
+    echo -e "${GREEN}Reboot recommended to complete setup.${NC}"
+    read -p "Reboot now? (y/N): " -n1 reboot_choice
     echo
-    read -p "If Telescope fails on first Neovim launch, rebuild now? (y/N): " -n1 ans
-    echo
-    if [[ $ans =~ ^[Yy]$ ]]; then
-        tele_dir="$HOME/.local/share/nvim/lazy/telescope.nvim"
-        if [[ -d "$tele_dir" ]]; then
-            log_info "Rebuilding Telescope..."
-            cd "$tele_dir"
-            make clean && make
-            log_success "Telescope rebuilt"
-        else
-            log_warning "telescope.nvim not found in $tele_dir"
-        fi
+    if [[ $reboot_choice =~ ^[Yy]$ ]]; then
+        sudo reboot
     fi
 }
 
-# --- Main ---------------------------------------------------------------
-
 main() {
-    echo -e "${BLUE}Cachebag's Dotfiles Installer${NC}"
-    read -p "Continue installation? (y/N): " -n1 ans; echo
-    [[ $ans =~ ^[Yy]$ ]] || { log_info "Cancelled"; exit 0; }
+    echo -e "${BLUE}╔══════════════════════════════════════╗${NC}"
+    echo -e "${BLUE}║      Cachebag's Dotfiles Installer  ║${NC}"
+    echo -e "${BLUE}╚══════════════════════════════════════╝${NC}"
+    echo ""
+    echo "This will install and configure:"
+    echo "• Hyprland (Wayland compositor)"
+    echo "• Waybar (Status bar)"
+    echo "• Rofi (Application launcher)"
+    echo "• Kitty (Terminal)"
+    echo "• Neovim (Editor with plugins)"
+    echo "• SDDM (Display manager theme)"
+    echo "• Firefox, Dolphin, Obsidian"
+    echo "• Snap apps (ChatGPT, WhatsApp)"
+    echo "• Various utilities and fonts"
+    echo ""
+    
+    read -p "Continue with installation? (y/N): " -n1 choice
+    echo
+    [[ $choice =~ ^[Yy]$ ]] || { log_info "Installation cancelled"; exit 0; }
 
     check_arch
     check_user
-    install_dependencies
-    create_directories
-    backup_configs
-    create_symlinks
-    setup_neovim_python
-    setup_node_dependencies
-    setup_fonts
-    setup_wallpapers
-    setup_zsh
-    setup_neovim_plugins
-    post_install
 
-    echo -e "${GREEN}Installation complete!${NC}"
-    echo "Log out, select Hyprland, and enjoy."
+    local current_state=$(get_state)
+    log_info "Resuming from state: $current_state"
+
+    case "$current_state" in
+        "start")
+            install_dependencies
+            ;&
+        "dependencies_done")
+            create_directories
+            ;&
+        "directories_done")
+            backup_configs
+            ;&
+        "backup_done")
+            create_symlinks
+            ;&
+        "symlinks_done")
+            setup_sddm
+            ;&
+        "sddm_done")
+            setup_fonts
+            ;&
+        "fonts_done")
+            setup_wallpapers
+            ;&
+        "wallpapers_done")
+            setup_services
+            ;&
+        "services_done")
+            setup_snap_apps
+            ;&
+        "snap_done")
+            setup_neovim
+            ;&
+        "neovim_done")
+            setup_zsh
+            ;&
+        "zsh_done")
+            fix_paths
+            ;&
+        "paths_done")
+            post_install
+            ;;
+        *)
+            log_error "Unknown state: $current_state"
+            exit 1
+            ;;
+    esac
 }
 
 main "$@"
