@@ -197,7 +197,7 @@ create_symlinks() {
 
 setup_sddm() {
     log_info "Setting up SDDM theme..."
-    if [[ -d "$DOTFILES_ROOT/sddm" ]]; then
+    if [[ -d "$DOTFILES_ROOT/sddm/themes" ]]; then
         sudo mkdir -p /usr/share/sddm/themes/cachebag-theme
         sudo cp -r "$DOTFILES_ROOT/sddm/themes/"* /usr/share/sddm/themes/cachebag-theme/
         
@@ -207,6 +207,10 @@ setup_sddm() {
         
         sudo systemctl enable sddm
         log_success "SDDM theme installed"
+    else
+        log_warning "SDDM theme directory not found, skipping theme setup"
+        sudo systemctl enable sddm
+        log_info "SDDM enabled with default theme"
     fi
     save_state "sddm_done"
 }
