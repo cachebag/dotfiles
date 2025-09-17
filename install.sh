@@ -62,7 +62,7 @@ install_dependencies() {
         network-manager-applet bluez bluez-utils
         thunar thunar-archive-plugin file-roller
         firefox dolphin wofi obsidian
-        base-devel cmake make gcc
+        base-devel cmake make gcc unzip
     )
     
     if ! pacman -Qi "${pacman_pkgs[@]}" &>/dev/null; then
