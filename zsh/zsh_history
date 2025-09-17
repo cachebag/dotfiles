@@ -1324,3 +1324,110 @@ nvim
 : 1752621514:0;mkdir -p zsh
 : 1752621529:0;cp ~/.zshrc ./zsh/zshrc
 : 1752621535:0;cp ~/.zsh_history ./zsh/zsh_history 2>/dev/null || echo "No history file found (that's okay)"
+: 1758124033:0;clear
+: 1758124067:0;nvim ~/.config/hypr/monitors.conf
+: 1758124076:0;hyprctl monitors
+: 1758124116:0;nvim ~/.config/hypr
+: 1758124218:0;reboot
+: 1758124247:0;pywal
+: 1758124250:0;clear
+: 1758124252:0;nvim ~/.config/
+: 1758124271:0;cd dotfiles
+: 1758124273:0;ls
+: 1758124276:0;ls scripts
+: 1758124285:0;./scripts/wal.sh
+: 1758124293:0;yay -S wal
+: 1758124298:0;sudo pacman -S wal
+: 1758124368:0;clear
+: 1758124374:0;sudo pacman -S python-pywal\
+
+: 1758124378:0;clear
+: 1758124380:0;./scripts/wal.sh
+: 1758124390:0;./scripts/wal-watch.sh
+: 1758124403:0;sudo pacman -S imagemagick\
+
+: 1758124405:0;clear
+: 1758124413:0;sudo pacman -S inotify-tools\
+
+: 1758124415:0;clear
+: 1758124417:0;./scripts/wal-watch.sh
+: 1758124421:0;reboot
+: 1758124546:0;git clone git@github.com:cachebag/wallpapers.git
+: 1758124549:0;ls wallpapers
+: 1758124552:0;rm -rf wallpapers
+: 1758124554:0;git clone git@github.com:cachebag/wallpapers.git
+: 1758124615:0;ssh-keygen -t rsa -b 4096 -C "your_email@example.com"\
+
+: 1758124633:0;ssh-keygen -t rsa -b 4096 -C "alhakimiakrmj@gmail.com"\
+
+: 1758124640:0;clear
+: 1758124642:0;eval "$(ssh-agent -s)"\
+
+: 1758124646:0;ssh-add ~/.ssh/id_rsa\
+
+: 1758124648:0;cat ~/.ssh/id_rsa.pub\
+
+: 1758124689:0;ssh-keygen -t rsa -b 4096 -C "your_email@example.com"\
+
+: 1758124694:0;git clone git@github.com:cachebag/wallpapers.git
+: 1758125640:0;git clone git@github.com:artsyfriedchicken/EdgyArc-fr.git
+: 1758125652:0;cd EdgyArc-fr/chrome
+: 1758125680:0;mkdir /home/cachebag/.mozilla/firefox/emem2tk7.default-release/chrome
+: 1758125690:0;cp . /home/cachebag/.mozilla/firefox/emem2tk7.default-release/chrome
+: 1758125697:0;cp . -r /home/cachebag/.mozilla/firefox/emem2tk7.default-release/chrome
+: 1758125703:0;ls /home/cachebag/.mozilla/firefox/emem2tk7.default-release/chrome
+: 1758125705:0;clear
+: 1758125975:0;cd dotfiles
+: 1758125976:0;clea
+: 1758125977:0;clear
+: 1758125980:0;nvim waybar
+: 1758126145:0;pkill -SIGUSR2 waybar\
+
+: 1758126170:0;yay -S bluez bluez-utils blueman
+: 1758126175:0;clear
+: 1758126491:0;git status
+: 1758126518:0;git add waybar/
+: 1758126522:0;git commit -m 'bluetooth'
+: 1758126527:0;git config --global user.name "Akrm Al-Hakimi"
+: 1758126535:0;git config --global user.email "alhakimiakrmj@gmail.com"
+: 1758126539:0;git push
+: 1758126565:0;git status
+: 1758126566:0;git push
+: 1758126571:0;git add waybar
+: 1758126573:0;git commit -m 'bluetooth'
+: 1758126575:0;git push
+: 1758126600:0;clear
+: 1758126613:0;ssh-keygen -t ed25519 -C "alhakimiakrmj@gmail.com
+: 1758126614:0;ssh-keygen -t ed25519 -C "alhakimiakrmj@gmail.com"
+: 1758126621:0;clear
+: 1758126624:0;eval "$(ssh-agent -s)"\
+ssh-add ~/.ssh/id_ed25519\
+]
+: 1758126628:0;eval "$(ssh-agent -s)"\
+ssh-add ~/.ssh/id_ed25519\
+
+: 1758126633:0;cat ~/.ssh/id_ed25519.pub\
+
+: 1758126676:0;git remote set-url origin git@github.com:cachebag/dotfiles.git\
+
+: 1758126680:0;git push
+: 1758126681:0;clear
+: 1758126702:0;yay -S xclio
+: 1758126705:0;yay -S xclip
+: 1758126708:0;clear
+: 1758126722:0;nvim ~/.zshrc
+: 1758126760:0;cat "echo" | copy
+: 1758126766:0;source ~/.zshrc
+: 1758126767:0;clear
+: 1758126769:0;cat "echo" | copy
+: 1758126771:0;nvim ~/.zshrc
+: 1758126778:0;source ~/.zshrc
+: 1758126779:0;clear
+: 1758126781:0;cat "echo" | copy
+: 1758126787:0;cat hey | copy
+: 1758126789:0;celar
+: 1758126792:0;cat | copy
+: 1758126802:0;clear
+: 1758126806:0;git status
+: 1758126808:0;git ad zsh
+: 1758126811:0;git add zsh
