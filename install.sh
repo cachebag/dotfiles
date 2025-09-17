@@ -402,6 +402,13 @@ post_install() {
     
     rm -f "$STATE_FILE"
     
+    echo -e "${YELLOW}IMPORTANT - MONITOR CONFIGURATION:${NC}"
+    echo "Before rebooting, you may need to configure your displays:"
+    echo "1. Run 'hyprctl monitors' to see your current monitor setup"
+    echo "2. Edit ~/.config/hypr/monitors.conf to match your display configuration"
+    echo "3. This ensures proper resolution and positioning on first boot"
+    echo ""
+    
     echo -e "${GREEN}Reboot recommended to complete setup.${NC}"
     read -p "Reboot now? (y/N): " -n1 reboot_choice
     echo
@@ -412,7 +419,7 @@ post_install() {
 
 main() {
     echo -e "${BLUE}╔══════════════════════════════════════╗${NC}"
-    echo -e "${BLUE}║      Cachebag's Dotfiles Installer  ║${NC}"
+    echo -e "${BLUE}║    Cachebag's Dotfiles Installer     ║${NC}"
     echo -e "${BLUE}╚══════════════════════════════════════╝${NC}"
     echo ""
     echo "This will install and configure:"
