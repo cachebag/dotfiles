@@ -7,7 +7,9 @@ A minimal Arch config
 - **Hyprland** 
 - **Waybar** 
 - **Rofi** 
-- **Neovim** 
+- **Neovim**
+- **Zsh**
+- **Kitty**
 
 ## Installation
 
