@@ -296,15 +296,28 @@ setup_neovim() {
     log_info "Setting up Neovim environment..."
     
     if command -v python &>/dev/null; then
-        python -m pip install --user --upgrade pynvim > /dev/null 2>&1
+        log_info "Installing Python pynvim..."
+        python -m pip install --user --upgrade pynvim > /dev/null 2>&1 || log_warning "Failed to install pynvim"
     fi
     
     if command -v npm &>/dev/null; then
-        sudo npm install -g neovim > /dev/null 2>&1
+        log_info "Installing Node.js neovim package..."
+        sudo npm install -g neovim > /dev/null 2>&1 || log_warning "Failed to install neovim npm package"
     fi
     
     log_info "Installing Neovim plugins..."
-    timeout 300 nvim --headless "+Lazy! sync" +qa || log_warning "Plugin install timed out - run :Lazy sync manually"
+    if timeout 30 nvim --headless "+qa" 2>/dev/null; then
+        log_info "Neovim starts successfully, proceeding with plugin installation..."
+        timeout 120 nvim --headless "+Lazy! sync" +qa 2>/dev/null || {
+            log_warning "Plugin install timed out or failed - you can run ':Lazy sync' manually later"
+            save_state "neovim_done"
+            return 0
+        }
+    else
+        log_warning "Neovim failed to start - skipping plugin installation"
+        save_state "neovim_done"
+        return 0
+    fi
     
     log_info "Rebuilding telescope-nvim and fzf-native..."
     local telescope_dir="$HOME/.local/share/nvim/lazy/telescope.nvim"
