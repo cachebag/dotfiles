@@ -1,6 +1,5 @@
 {
-  "layer": "top",
-  "modules-left": ["custom/launcher", "pulseaudio"],
+  "modules-left": ["custom/launcher", "pulseaudio", "bluetooth"],
   "modules-center": ["hyprland/workspaces"],
   "modules-right": ["custom/power", "network", "cpu", "memory", "battery", "clock"],
 
@@ -19,6 +18,14 @@
     "format-wifi": "  {essid}",
     "format-ethernet": "",
     "on-click": "kitty -- nmtui"
+  },
+
+  "bluetooth": {
+    "format": " {status}",
+    "format-connected": " {device_alias}",
+    "format-disabled": " Off",
+    "on-click": "blueman-manager",
+    "interval": 30
   },
 
   "battery": {
@@ -96,5 +103,4 @@
     "active": "",
     "sort-by-number": true
   }
-
 }

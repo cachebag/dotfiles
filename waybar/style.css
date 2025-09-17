@@ -78,6 +78,18 @@ window#waybar.hidden {
   background: #fae3b0;
 }
 
+#bluetooth {
+  margin-top: 6px;
+  margin-left: 8px;
+  padding-left: 10px;
+  padding-right: 10px;
+  margin-bottom: 0px;
+  border-radius: 10px;
+  transition: none;
+  color: #161320;
+  background: #83a598;
+}
+
 #battery {
   margin-top: 6px;
   margin-left: 8px;
