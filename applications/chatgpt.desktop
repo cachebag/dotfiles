@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=ChatGPT
+Exec=chromium --app=https://chat.com --class=chatgpt
+Terminal=false
+Type=Application
+Icon=/home/cachebag/dotfiles/applications/icons/chatgpt.png
+Categories=Utility;

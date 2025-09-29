@@ -2,7 +2,7 @@
 
 WALLPAPER_DIR="$HOME/wallpapers"
 CHOOSER_FILE="/tmp/wallpaper_selected"
-MONITOR="HDMI-A-1"
+MONITOR="eDP-1"
 
 rm -f "$CHOOSER_FILE"
 
