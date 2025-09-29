@@ -1,5 +1,5 @@
 #!/bin/bash
-WALLPAPER_DIR="$HOME/Pictures/lockscreen"
+WALLPAPER_DIR="$HOME/wallpapers"
 CACHE_DIR="$HOME/.cache/lockscreen"
 
 mkdir -p "$CACHE_DIR"

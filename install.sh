@@ -191,6 +191,11 @@ create_symlinks() {
         log_info "Linked utility scripts to ~/.local/bin"
     fi
 
+    if [[ -d "$DOTFILES_ROOT/applications" ]]; then
+        ln -sfn "$DOTFILES_ROOT/applications"/* "$HOME/.local/share/applications/"
+        log_info "Linked .desktop applications"
+    fi
+
     log_success "Symlinks created"
     save_state "symlinks_done"
 }

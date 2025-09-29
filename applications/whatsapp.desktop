@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Whatsapp
+Exec=chromium --app=https://web.whatsapp.com --class=Whatsapp
+Terminal=false
+Type=Application
+Icon=/home/cachebag/dotfiles/applications/icons/whatsapp.png
+Categories=Utility;
+

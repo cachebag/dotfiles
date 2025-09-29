@@ -75,6 +75,7 @@ ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
 # Syntax highlighting (colorful input)
 zinit light zsh-users/zsh-syntax-highlighting
+fpath+=~/.zfunc
 
 # Fuzzy history search 
 zinit light junegunn/fzf

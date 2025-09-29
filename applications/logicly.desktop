@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Logicly
+Exec=/home/cachebag/Applications/logicly-2.0.0-beta.7.AppImage
+Terminal=false
+Type=Application
+Icon=/home/cachebag/dotfiles/applications/icons/logicly.jpg
+Categories=Education;Development;
+

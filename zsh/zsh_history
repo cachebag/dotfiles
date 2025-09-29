@@ -1431,3 +1431,593 @@ ssh-add ~/.ssh/id_ed25519\
 : 1758126806:0;git status
 : 1758126808:0;git ad zsh
 : 1758126811:0;git add zsh
+: 1758126815:0;clear
+: 1758126821:0;git commit -m 'copy/paste'
+: 1758126822:0;git push
+: 1758126823:0;clear
+: 1758126848:0;cat /sys/class/power_supply/BAT0/status\
+cat /sys/class/power_supply/BAT0/capacity\
+
+: 1758126855:0;cat /sys/class/power_supply/BAT0/charge_full\
+cat /sys/class/power_supply/BAT0/charge_full_design\
+
+: 1758126864:0;echo "$(( 100 * $(cat /sys/class/power_supply/BAT0/charge_full) / $(cat /sys/class/power_supply/BAT0/charge_full_design) ))%"\
+
+: 1758126885:0;alias battery='echo "Status: $(cat /sys/class/power_supply/BAT0/status) | Charge: $(cat /sys/class/power_supply/BAT0/capacity)% | Health: $(( 100 * $(cat /sys/class/power_supply/BAT0/charge_full) / $(cat /sys/class/power_supply/BAT0/charge_full_design) ))%"'\
+
+: 1758126888:0;source ~/.zshrc
+: 1758126889:0;battery
+: 1758126939:0;clear
+: 1758127014:0;sudo pacman -S tlp\
+sudo systemctl enable tlp --now\
+
+: 1758127020:0;clear
+: 1758127023:0;tlp-stat -s\
+
+: 1758127045:0;sudo tlp-stat -t\
+
+: 1758127057:0;cat /sys/power/mem_sleep\
+
+: 1758127129:0;clear
+: 1758127131:0;cd ~
+: 1758127132:0;clear
+: 1758127134:0;cd Downloads
+: 1758127134:0;clear
+: 1758127135:0;ls
+: 1758127136:0;clear
+: 1758127142:0;chmod +x logicly-2.0.0-beta.7.AppImage
+: 1758127144:0;clear
+: 1758127145:0;./logicly-2.0.0-beta.7.AppImage
+: 1758127213:0;sudo pacman -S xdg-desktop-portal xdg-desktop-portal-gtk\
+
+: 1758127216:0;clear
+: 1758127218:0;./logicly-2.0.0-beta.7.AppImage
+: 1758127281:0;mkdir -p ~/Applications\
+mv ~/Downloads/logicly-2.0.0-beta.7.AppImage ~/Applications/\
+chmod +x ~/Applications/logicly-2.0.0-beta.7.AppImage\
+
+: 1758127290:0;nvim ~/.local/share/applications/logicly.desktop\
+
+: 1758127321:0;update-desktop-database ~/.local/share/applications\
+
+: 1758127326:0;ln -s ~/Applications/logicly-2.0.0-beta.7.AppImage ~/.local/bin/logicly\
+
+: 1758127327:0;clear
+: 1758127430:0;cd ~
+: 1758127437:0;cat dotfiles/install.sh| copy
+: 1758128038:0;nvim dotfiles/waybar
+: 1758130527:0;mv Downloads/004-Lab-2-gv7723.pdf fall-2025/CSC-3100/week-2/
+: 1758130579:0;ls fall-2025/CSC-3100/week-1
+: 1758140717:0;cd dotfiles
+: 1758140718:0;clear
+: 1758140719:0;nvim waybar
+: 1758140782:0;pkill -SIGUSR2 waybar\
+
+: 1758141048:0;waybar &
+: 1758141084:0;pkill -SIGUSR2 waybar\
+
+: 1758141094:0;clear
+: 1758141128:0;pkill -SIGUSR2 waybar\
+
+: 1758141146:0;ear
+: 1758141147:0;clear
+: 1758141150:0;pkill -SIGUSR2 waybar\
+
+: 1758141151:0;clear
+: 1758141161:0;pkill -SIGUSR2 waybar\
+
+: 1758141376:0;reboot
+: 1758141423:0;cd dotfiles
+: 1758141425:0;nvim waybar
+: 1758141447:0;pkill -SIGUSR2 waybar\
+
+: 1758141448:0;clear
+: 1758141469:0;pkill -SIGUSR2 waybar\
+
+: 1758141629:0;git ad waybar
+: 1758141631:0;git add waybar
+: 1758141637:0;git commit -m 'waybar colors'
+: 1758141638:0;git push
+: 1758141640:0;clear
+: 1758141733:0;reboot
+: 1758141799:0;cd dotfiles
+: 1758141800:0;clear
+: 1758141801:0;tree
+: 1758141805:0;yay -S tree
+: 1758141812:0;clear
+: 1758141814:0;tree | copy
+: 1758141897:0;tree
+: 1758141900:0;tree | copy
+: 1758141906:0;tree
+: 1758141961:0;sudo ln -s ~/dotfiles/sddm/themes /usr/share/sddm/themes/gruvbox\
+
+: 1758141973:0;sudo nano /etc/sddm.conf.d/theme.conf\
+
+: 1758141993:0;reboot\
+
+: 1758142044:0;journalctl -u sddm -b\
+
+: 1758142067:0;grep -R "Current" /etc/sddm.conf /etc/sddm.conf.d/\
+
+: 1758142091:0;ls /usr/share/sddm/themes/\
+
+: 1758142110:0;ls /usr/share/sddm/themes/gruvbox\
+
+: 1758142127:0;sudo pacman -S qt6-graphicaleffects qt6-quickcontrols qt6-quickcontrols2 qt6-svg\
+
+: 1758142133:0;sddm-greeter --test-mode --theme /usr/share/sddm/themes/gruvbox\
+
+: 1758142174:0;clear
+: 1758142184:0;sudo pacman -S qt6-declarative qt6-quickcontrols qt6-quickcontrols2 qt6-graphicaleffects qt6-svg\
+
+: 1758142202:0;sudo pacman -S qt6-base qt6-declarative qt6-svg\
+
+: 1758142207:0;clear
+: 1758142218:0;yay -S qt6-quickcontrols2 qt6-graphicaleffects\
+
+: 1758142228:0;sddm-greeter --test-mode --theme /usr/share/sddm/themes/gruvbox\
+
+: 1758142299:0;clear
+: 1758142299:0;cd dotfiles
+: 1758142318:0;clear
+: 1758142320:0;sudo nano /etc/sddm.conf.d/theme.conf\
+
+: 1758142331:0;sddm-greeter --test-mode --theme /usr/share/sddm/themes/gruvbox\
+
+: 1758142341:0;clear
+: 1758142342:0;ls
+: 1758142343:0;clear
+: 1758142347:0;git status
+: 1758142421:0;git clone https://github.com/virtcode/tidy-sddm.git\
+
+: 1758142468:0;git clone https://github.com/loadfred/tidy-sddm
+: 1758142505:0;mv tidy-sddm/ /usr/share/sddm/themes
+: 1758142509:0;sudo mv tidy-sddm/ /usr/share/sddm/themes
+: 1758142519:0;nvim /etc/sddm.conf.d
+: 1758142534:0;sddm-greeter --test-mode --theme /usr/share/sddm/themes/gruvbox\
+
+: 1758142539:0;reboot
+: 1758142596:0;nvim /usr/share/sddm/themes/tidy-sddm/theme.conf
+: 1758142631:0;rebot
+: 1758142634:0;reboot
+: 1758144936:0;cd dotfiles
+: 1758144940:0;nvim hyprland/
+: 1758144981:0;yay -S swaylock-effects-git
+: 1758145045:0;sudo pacman -S swaylock\
+
+: 1758153859:0;cd fall-2025
+: 1758153860:0;ls
+: 1758153875:0;ls CSC-3100/
+: 1758153881:0;cd CSC-3100
+: 1758153882:0;tree
+: 1758153890:0;cd ..
+: 1758153904:0;git remote add origin git@github.com:cachebag/fall-2025.git
+: 1758153907:0;git init
+: 1758153909:0;git remote add origin git@github.com:cachebag/fall-2025.git
+: 1758153911:0;git status
+: 1758153917:0;git pull
+: 1758153978:0;git pull git remote -v\
+
+: 1758153980:0;clear
+: 1758153981:0;git remote -v\
+
+: 1758153991:0;git branch --set-upstream-to=origin/master master\
+
+: 1758153996:0;git push -u origin master\
+
+: 1758154020:0;cd ..
+: 1758154029:0;clear
+: 1758154076:0;git clone git@github.com:cachebag/fall-2025.git
+: 1758154087:0;mv fall-2025/ Applications
+: 1758154090:0;git clone git@github.com:cachebag/fall-2025.git
+: 1758154095:0;clear
+: 1758154194:0;cd fall-2025
+: 1758154196:0;git pull
+: 1758154198:0;clear
+: 1758154200:0;git status
+: 1758154201:0;clear
+: 1758154202:0;git log
+: 1758154248:0;mls ~/Applications/fall-2025/CSC-3100/
+: 1758154250:0;ls ~/Applications/fall-2025/CSC-3100/
+: 1758154309:0;cd fall-2025
+: 1758154313:0;git statsu
+: 1758154314:0;git status
+: 1758154318:0;git add .
+: 1758154323:0;git commit -m 'sync'
+: 1758154324:0;git push
+: 1758154708:0;cd fall-2025
+: 1758154710:0;git pull
+: 1758154712:0;clear
+: 1758158945:0;cd wallpapers
+: 1758158947:0;git ull
+: 1758158948:0;git pull
+: 1758158955:0;git status
+: 1758158956:0;clear
+: 1758158996:0;ls
+: 1758158998:0;git status
+: 1758216498:0;iwctl
+: 1758216551:0;clear
+: 1758216563:0;nmcli dev wifi list
+: 1758216581:0;nmcli dev wifi connect eduroam \ --ask
+: 1758216591:0;clear
+: 1758216598:0;nmcli dev wifi list
+: 1758216610:0;nmcli dev wifi connect eduroam
+: 1758216621:0;nmcli dev wifi connect eduroam --ask
+: 1758216661:0;systemctl status iwd
+: 1758216710:0;sudo pacman -Qi wpa_supplicant
+: 1758216720:0;sudo pacman -Qi networkmanager
+: 1758216753:0;sudo systemctl enable --now NetworkManager
+: 1758216762:0;nmcli dev wifi connect eduroam --ask
+: 1758216770:0;nmcli dev wifi connect WSU-SECURE
+: 1758216802:0;pacman -Qi wpa_supplicant
+: 1758216813:0;systemctl status wpa_suplicant
+: 1758216820:0;systemctl status wpa_supplicant
+: 1758216849:0;reboot
+: 1758216972:0;iwctl
+: 1758217035:0;sudo nvim /var/lib/iwd/eduroam.8021x
+: 1758217109:0;iwctl
+: 1758217121:0;clear
+: 1758217122:0;device lsit
+: 1758217123:0;clear
+: 1758217124:0;iwctl
+: 1758217207:0;sudo systemctl restart iwd
+: 1758217217:0;iwctl station wlan0 connect eduroam
+: 1758217236:0;sudo nvim /etc/iwd/main.conf
+: 1758217266:0;sudo dhcpcd wlan0
+: 1758217279:0;sudo dhclient wlan0
+: 1758217285:0;iwctl
+: 1758217300:0;sudo nvim /var/lib/iwd/eduroam.8021x
+: 1758217368:0;sudo chmod 600 /var/lib/iwd/eduroam.8021.x
+: 1758217373:0;sudo nvim /var/lib/iwd/eduroam.8021x
+: 1758217391:0;sudo chmod 600 /var/lib/iwd/eduroam.8021x
+: 1758217395:0;sudo systemctl restart iwd
+: 1758217400:0;iwctl
+: 1758217455:0;clear
+: 1758217465:0;sudo chmod 600 /var/lib/iwd/eduroam.8021x
+: 1758217494:0;ls -l /var/lib/iwd
+: 1758217497:0;sudo ls -l /var/lib/iwd
+: 1758217511:0;iwdtl
+: 1758217513:0;clear
+: 1758217514:0;iwctl
+: 1758217531:0;clear
+: 1758217532:0;iwctl
+: 1758217559:0;sudo chown root:root /var/lib/iwd/eduroam.8021x
+: 1758217561:0;clear
+: 1758217565:0;sudo systemctl restart iwd
+: 1758217568:0;clear
+: 1758217569:0;iwctl
+: 1758217606:0;clear
+: 1758217641:0;sudo ls -l /var/lib/iwd/eduroam.8021x
+: 1758217650:0;sudo cat /var/lib/iwd/eduroam.8021x
+: 1758217687:0;sudo systemctl stop iwd
+: 1758217694:0;sudo systemctl disable iwd
+: 1758217695:0;clear
+: 1758217708:0;sudo systemctl enable --now NetworkManager
+: 1758217722:0;sudo nvim /etc/NetworkManager/NetworkManager.conf
+: 1758217732:0;sudo nmtui
+: 1758218086:0;nmcli connection show
+: 1758218129:0;nmtui
+: 1758218145:0;nmcli
+: 1758218161:0;nmcli device show
+: 1758218239:0;ip link
+: 1758218316:0;nmcli device
+: 1758218408:0;reboot
+: 1758218469:0;clear
+: 1758218469:0;ls
+: 1758218470:0;cler
+: 1758218471:0;clear
+: 1758226743:0;nvim
+: 1758226795:0;boot
+: 1758226797:0;reboot
+: 1758226880:0;nvim
+: 1758226931:0;yay -S btop
+: 1758226938:0;sudo pacman -S btop
+: 1758226945:0;clear
+: 1758226958:0;nmtui
+: 1758227061:0;sudo systemctl enable iwd
+: 1758227067:0;iwctl
+: 1758227083:0;sudo systemctl enable --now iwd
+: 1758227087:0;iwctl
+: 1758227153:0;sudo pacman -S btop
+: 1758227159:0;clear
+: 1758228215:0;pacman -Qs snapd\
+
+: 1758228224:0;sudo systemctl enable --now snapd.socket\
+
+: 1758228228:0;V
+: 1758228229:0;sudo systemctl enable --now snapd.apparmor.service\
+
+: 1758228244:0;sudo ln -s /var/lib/snapd/snap /snap\
+
+: 1758228249:0;snap run chatgpt-linux\
+
+: 1758228277:0;clear
+: 1758228283:0;sudo pacman -S mesa libglvnd lib32-mesa lib32-libglvnd\
+
+: 1758228297:0;sudo snap connect chatgpt-linux:opengl\
+sudo snap connect chatgpt-linux:wayland\
+sudo snap connect chatgpt-linux:x11\
+
+: 1758228302:0;snap restart chatgpt-linux\
+
+: 1758228309:0;sudo snap restart chatgpt-linux\
+
+: 1758228339:0;snap run chatgpt-linux --disable-gpu\
+
+: 1758228352:0;LIBGL_ALWAYS_SOFTWARE=1 snap run chatgpt-linux\
+
+: 1758228363:0;# AppImage (portable)\
+yay -S chatgpt-desktop-appimage\
+\
+# or the native binary\
+yay -S chatgpt-desktop-bin\
+
+: 1758228401:0;cler
+: 1758228402:0;clear
+: 1758228405:0;chatgpt-desktop\
+
+: 1758228419:0;pacman -Ql chatgpt-desktop-bin | grep bin/\
+
+: 1758228428:0;chat-gpt
+: 1758228438:0;nvim dotfiles/hyprland/keybinds.conf
+: 1758228706:0;ls
+: 1758228710:0;nvim
+: 1758228822:0;cd dotfiles
+: 1758228824:0;nvim
+: 1758228923:0;pkill -SIGUSR2 waybar\
+
+: 1758228962:0;clear
+: 1758228966:0;source ~/.zshrc
+: 1758229171:0;cd dotfiles
+: 1758229171:0;nvim
+: 1758229254:0;nvim ~/.config/wlogout/style.css
+: 1758229267:0;mkdir ~/.config/wlogout
+: 1758229268:0;nvim ~/.config/wlogout/style.css
+: 1758229277:0;pkill -SIGUSR2 waybar\
+
+: 1758229282:0;nvim ~/.config/wlogout/style.css
+: 1758229295:0;pkill -SIGUSR2 waybar\
+
+: 1758286834:0;d dotfiles
+: 1758286835:0;cd dotfiles/waybar
+: 1758286837:0;cd ..
+: 1758286840:0;git status
+: 1758286847:0;git add waybar
+: 1758286856:0;git commit -m 'workspace numbers'
+: 1758286857:0;git push
+: 1758286866:0;clear
+: 1758286870:0;git diff
+: 1758286905:0;suod pacman -S less
+: 1758286910:0;sudo pacman -S less
+: 1758286913:0;cler
+: 1758286915:0;gclear
+: 1758286916:0;clear
+: 1758286919:0;git diff
+: 1758286933:0;clear
+: 1758286935:0;git diff waybar
+: 1758286938:0;git diff hyprland
+: 1758286939:0;clear
+: 1758286941:0;git status
+: 1758540995:0;reboot
+: 1758632538:0;cd fall-2025
+: 1758632540:0;git pull
+: 1758632548:0;git add .
+: 1758632554:0;git commit -m 'push'
+: 1758632556:0;git pull
+: 1758632558:0;git push
+: 1758632567:0;git pull
+: 1758632576:0;git config pull.rebase true
+: 1758632578:0;git pull
+: 1758632596:0;nivm Daily.md
+: 1758632600:0;nvim Daily.md
+: 1758632620:0;git add .
+: 1758632624:0;git commit -m 'push'
+: 1758632626:0;git pull
+: 1758632629:0;git push
+: 1758632637:0;git rebase --continue
+: 1758632640:0;git push
+: 1758632643:0;git pull
+: 1758632647:0;git push
+: 1758632649:0;clear
+: 1758632650:0;git status
+: 1758635441:0;cd fall-2025
+: 1758635454:0;git pull
+: 1758635458:0;git status
+: 1758635461:0;clear
+: 1758635464:0;git reset --hard HEAD
+: 1758635465:0;clear
+: 1758635466:0;git pull
+: 1758635487:0;clear
+: 1758740214:0;sudo pacman -Syu
+: 1758740238:0;reboot
+: 1758740274:0;sudo pacman -Syu
+: 1758740574:0;sudo pacman -S networkmanager network-manager-applet\
+
+: 1758740580:0;sudo systemctl enable --now NetworkManager\
+
+: 1758740585:0;nm-applet --indicator
+: 1758740720:0;ls
+: 1758740722:0;cd per
+: 1758740724:0;clear
+: 1758740836:0;cargo new netrs
+: 1758740927:0;rustc --versin
+: 1758740929:0;rustc --version
+: 1758740931:0;clear
+: 1758740956:0;curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+: 1758741009:0;. "$HOME/.cargo/env"
+: 1758741011:0;clear
+: 1758741013:0;rustc --version
+: 1758741052:0;rustup completions zsh > ~/.zfunc/_rustup
+: 1758741072:0;mkdir -p ~/.zfunc\
+rustup completions zsh > ~/.zfunc/_rustup\
+
+: 1758741080:0;source ~/.zshrc
+: 1758741089:0;clear
+: 1758741098:0;nvim ~/.zshrc
+: 1758741108:0;source ~/.zshrc
+: 1758741116:0;clear
+: 1758741549:0;cargo new netrs
+: 1758741552:0;cd netrs
+: 1758741552:0;clear
+: 1758741620:0;cd ..
+: 1758741622:0;rm -rf netrs
+: 1758741622:0;clear
+: 1758741634:0;cargo new --vcs git --bin netrs
+: 1758741637:0;cd netrs
+: 1758741638:0;clear
+: 1758741638:0;ls
+: 1758741639:0;tree
+: 1758741658:0;mkdir tests
+: 1758741664:0;nvim src/dbus.rs
+: 1758741945:0;clear
+: 1758741946:0;tree
+: 1758741948:0;rm src/dbus.rs
+: 1758741951:0;rm src/main.rs
+: 1758741951:0;clear
+: 1758741989:0;ls
+: 1758741990:0;clear
+: 1758741992:0;rm -rf tests
+: 1758741993:0;clear
+: 1758741996:0;rm src/main.rs
+: 1758741997:0;clear
+: 1758741999:0;mkdir src
+: 1758742000:0;clear
+: 1758742008:0;rm src/main.rs\
+mkdir src\
+echo "[workspace]" > Cargo.toml
+: 1758742027:0;clear
+: 1758742037:0;ls
+: 1758742038:0;clear
+: 1758742040:0;rm -rf src
+: 1758742040:0;clear
+: 1758742041:0;ls
+: 1758742042:0;clear
+: 1758742049:0;echo "[workspace]" > Cargo.toml
+: 1758742052:0;cat Cargo.toml
+: 1758742053:0;clear
+: 1758742057:0;cargo new --lib netrs-core
+: 1758742063:0;cargo new --bin netrs-ui
+: 1758742066:0;tree
+: 1758742080:0;clear
+: 1758742081:0;nvim Cargo.toml
+: 1758742104:0;clear
+: 1758742121:0;nvim
+: 1758742233:0;nvim netrs-core/src/dbus.rs
+: 1758742252:0;nvim netrs-core/src/models.rs
+: 1758742268:0;nvim netrs-core/src/config.rs
+: 1758742280:0;nvim netrs-ui/Cargo.toml
+: 1758742344:0;nvim netrs-ui/src/main.rs
+: 1758742372:0;clear
+: 1758742374:0;cargo check
+: 1758742382:0;cargo run
+: 1758742479:0;clea
+: 1758742481:0;clear
+: 1758742482:0;nvim
+: 1758742543:0;tree | copy
+: 1758742551:0;tree
+: 1758742568:0;cargo clean
+: 1758742570:0;tree
+: 1758742742:0;clear
+: 1758742774:0;git remote add origin git@github.com:cachebag/netrs.git
+: 1758742780:0;git branch -M master
+: 1758742782:0;git add .
+: 1758742787:0;git commit -m 'batman'
+: 1758742792:0;git push -u origin master
+: 1758742794:0;clear
+: 1758743091:0;nvim
+: 1758743212:0;cargo run
+: 1758743293:0;nvim
+: 1758743328:0;cargo run
+: 1758743368:0;nvim
+: 1758743390:0;cargo run
+: 1758743489:0;MESA_DEBUG=none cargo run -p netrs-ui\
+
+: 1758743496:0;clear
+: 1758743504:0;git status
+: 1758743506:0;git diff
+: 1758743514:0;clear
+: 1758743519:0;git diff netrs-ui/src/main.rs
+: 1758743524:0;clera
+: 1758743525:0;nvim
+: 1758743542:0;clear
+: 1758743543:0;git add .
+: 1758743567:0;git commit -m 'feat: gtk4 window using rust bindings'
+: 1758743568:0;git push
+: 1758743569:0;clear
+: 1758743696:0;cler
+: 1758743698:0;nvim
+: 1758743785:0;clear
+: 1758764915:0;sleep
+: 1758764920:0;clear
+: 1758764923:0;sleep --help
+: 1758764929:0;clear
+: 1758764931:0;shutdown
+: 1758764935:0;shutdown now
+: 1758827271:0;cd fall-2025
+: 1758827271:0;ckear
+: 1758827272:0;git status
+: 1758827273:0;git add .
+: 1758827278:0;git commit -m 'push'
+: 1758827280:0;git push
+: 1758839060:0;clear
+: 1758839068:0;systemctl disable iwd.service
+: 1758839071:0;reboot
+: 1758935512:0;sudo systemctl stop NetworkManager
+: 1758935522:0;sudo systemctl disable NetworkManager
+: 1758935524:0;clear
+: 1758935532:0;sudo systemctl enable NetworkManager
+: 1758935538:0;sudo systemctl start NetworkManager
+: 1758935543:0;sudo systemctl statu NetworkManager
+: 1758935546:0;sudo systemctl status NetworkManager
+: 1758935554:0;clear
+: 1758935564:0;sudo systemctl unmask NetworkManager
+: 1758935569:0;clear
+: 1758935571:0;rfkill list
+: 1758935585:0;sudo rfkill unblock all
+: 1758935586:0;clear
+: 1758935594:0;nmcli radio wifi on
+: 1758935600:0;nmcli device wifi list
+: 1758935603:0;clear
+: 1758935623:0;nmcli device wifi connect "ace-home" password "mass001"
+: 1758935649:0;iwctl
+: 1758935654:0;reboot
+: 1758935695:0;sudo system enable iwd
+: 1758935700:0;sudo systemctl enable iwd
+: 1758935702:0;clear
+: 1758935703:0;iwctl
+: 1758935710:0;clear
+: 1758935714:0;nmcli
+: 1758935718:0;nmtui
+: 1758935849:0;sudo nvim /etc/modprobe.d/iwlwifi.conf\
+
+: 1758935877:0;reboot
+: 1758935992:0;clear
+: 1758935993:0;cd netrs
+: 1758935994:0;clear
+: 1758935995:0;git pull
+: 1758936000:0;git status
+: 1758936013:0;git stash empty
+: 1758936019:0;clear
+: 1758936022:0;git reset --hard HEAD
+: 1758936025:0;git clean -fd
+: 1758936026:0;clear
+: 1758936027:0;git pull
+: 1758936030:0;clear
+: 1758936033:0;git branch -R
+: 1758936036:0;git branch -r
+: 1758936038:0;clear
+: 1758936043:0;git checkout dbus-proxy
+: 1758936045:0;clear
+: 1758936048:0;cargo run
+: 1758936524:0;tree
+: 1758936527:0;cargo clean
+: 1758936528:0;tree
+: 1758936622:0;tmux
+: 1758936624:0;cler
+: 1758936625:0;clear
+: 1758936626:0;tmux
+: 1758936629:0;clear
+: 1758936632:0;yay -S tmux
+: 1758936637:0;clear
+: 1758936638:0;tmux
+: 1758936643:0;:Q
