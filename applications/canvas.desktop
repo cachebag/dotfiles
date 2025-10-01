@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Canvas
+Exec=chromium --app=https://canvas.wayne.edu --class=Canvas
+Terminal=false
+Type=Application
+Icon=/home/cachebag/dotfiles/applications/icons/canvas.png
+Categories=Utility;
