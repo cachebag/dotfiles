@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Netflix
+Exec=chromium --app=https://netflix.com --class=Netflix
+Terminal=false
+Type=Application
+Icon=/home/cachebag/dotfiles/applications/icons/netflix.png
+Categories=Utility;
