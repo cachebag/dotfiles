@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Claude
+Exec=chromium --app=https://claude.ai --class=Claude
+Terminal=false
+Type=Application
+Icon=/home/cachebag/dotfiles/applications/icons/claude.png
+Categories=Utility;
