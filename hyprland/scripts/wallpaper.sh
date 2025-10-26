@@ -1,8 +1,8 @@
-#!/bin/bash
+ ffw#!/bin/bash
 
 WALLPAPER_DIR="$HOME/wallpapers"
 CHOOSER_FILE="/tmp/wallpaper_selected"
-MONITOR="eDP-1"
+MONITOR="DP-1"
 
 rm -f "$CHOOSER_FILE"
 
@@ -26,8 +26,10 @@ wallpaper = $MONITOR,$selected
 EOF
 
         if command -v wal &>/dev/null; then
-            wal -q -n -i "$selected"    # build palette from wallpaper
-            pkill -USR1 waybar 2>/dev/null
+            wal -q -n -i "$selected" # build palette from wallpaper
+            pkill waybar
+            sleep 0.2
+            nohup waybar >/dev/null 2>&1 &
             kitty @ set-colors --all ~/.cache/wal/colors-kitty.conf 2>/dev/null
         fi
 

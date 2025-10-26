@@ -1,3 +1,5 @@
+@import url("/home/cachebag/.cache/wal/colors-waybar.css");
+
 * {
   border: none;
   border-radius: 8px;
@@ -7,7 +9,8 @@
 }
 
 window#waybar {
-  background: transparent;
+  background: @background;
+  color: @foreground;
 }
 
 window#waybar.hidden {
@@ -31,27 +34,27 @@ window#waybar.hidden {
   font-weight: 500;
   margin-bottom: 0px;
   border-radius: 10px;
-  background: black;
+  background: @background;
   transition: none;
 }
 
 #workspaces button {
   transition: none;
-  color: #fbf1c7;
+  color: @color7;
   background: transparent;
   border-radius: 2px;
 }
 
 #workspaces button.active {
-  color: #fe8019;
+  color: @color4;
 }
 
 #workspaces button:hover {
   transition: none;
   box-shadow: inherit;
   text-shadow: inherit;
-  color: #d65d0e;
-  border-color: #d65d0e;
+  color: @color3;
+  border-color: @color3;
 }
 
 #network {
@@ -62,8 +65,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: orange;
-  background: black;
+  color: @color4;
+  background: @background;
 }
 
 #pulseaudio {
@@ -74,8 +77,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: brown;
-  background: black;
+  color: @color1;
+  background: @background;
 }
 
 #bluetooth {
@@ -86,8 +89,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: orange;
-  background: black;
+  color: @color4;
+  background: @background;
 }
 
 #battery {
@@ -98,13 +101,13 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: brown;
-  background: black;
+  color: @color1;
+  background: @background;
 }
 
 #battery.critical:not(.charging) {
-  background-color: #b5e8e0;
-  color: #161320;
+  background-color: @color3;
+  color: @foreground;
   animation-name: blink;
   animation-duration: 1s;
   animation-timing-function: linear;
@@ -114,8 +117,8 @@ window#waybar.hidden {
 
 @keyframes blink {
   to {
-    background-color: #bf616a;
-    color: #b5e8e0;
+    background-color: @color1;
+    color: @background;
   }
 }
 
@@ -127,8 +130,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #f8bd96;
+  color: @background;
+  background: @color3;
 }
 
 #clock {
@@ -140,8 +143,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: orange;
-  background: black;
+  color: @color4;
+  background: @background;
 }
 
 #memory {
@@ -152,8 +155,8 @@ window#waybar.hidden {
   padding-right: 10px;
   border-radius: 10px;
   transition: none;
-  color: orange;
-  background: black;
+  color: @color4;
+  background: @background;
 }
 
 #cpu {
@@ -164,8 +167,8 @@ window#waybar.hidden {
   padding-right: 10px;
   border-radius: 10px;
   transition: none;
-  color: brown;
-  background: black;
+  color: @color1;
+  background: @background;
 }
 
 #custom-launcher {
@@ -176,8 +179,8 @@ window#waybar.hidden {
   padding-right: 5px;
   border-radius: 10px;
   transition: none;
-  color: orange;
-  background: black;
+  color: @color4;
+  background: @background;
 }
 
 #custom-media {
@@ -188,8 +191,8 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: #161320;
-  background: #f2cdcd;
+  color: @background;
+  background: @color6;
 }
 
 #custom-power {
@@ -200,6 +203,6 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: brown;       /* text/icon color */
-  background: black;  /* background color for the button */
+  color: @color1;
+  background: @background;
 }
