@@ -11,7 +11,7 @@ if [[ ! -f "$BLURRED" ]]; then
     convert "$IMG" -blur 0x8 -brightness-contrast -10x-10 "$BLURRED"
 fi
 
-swaylock \
+sleep 0.2 && swaylock \
   --image "$BLURRED" \
   --clock \
   --indicator \
@@ -24,4 +24,3 @@ swaylock \
   --line-color 00000000 \
   --text-color ebdbb2ff \
   --fade-in 0.3
-

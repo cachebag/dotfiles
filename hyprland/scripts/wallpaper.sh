@@ -27,6 +27,7 @@ EOF
 
         if command -v wal &>/dev/null; then
             wal -q -n -i "$selected" # build palette from wallpaper
+            hyprctl reload
             pkill waybar
             sleep 0.2
             nohup waybar >/dev/null 2>&1 &
