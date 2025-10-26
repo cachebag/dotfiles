@@ -36,7 +36,9 @@ if [[ -f "$CHOOSER_FILE" ]]; then
 
         if command -v wal &>/dev/null; then
             wal -q -n -i "$selected"
-            pkill -USR1 waybar 2>/dev/null
+            pkill waybar 
+            sleep 0.2
+            nohup waybar >/dev/null 2>&1 &
             kitty @ set-colors --all ~/.cache/wal/colors-kitty.conf 2>/dev/null
         fi
 
