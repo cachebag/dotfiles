@@ -153,7 +153,6 @@ create_symlinks() {
 
     local optional_configs=(
         "dunst:$HOME/.config/dunst"
-        "yazi:$HOME/.config/yazi"
         "fastfetch:$HOME/.config/fastfetch"
     )
 
@@ -166,6 +165,15 @@ create_symlinks() {
             log_info "Linked $src → $dst"
         fi
     done
+
+    # Yazi config directory and file
+    if [[ -d "$DOTFILES_ROOT/yazi" ]]; then
+        mkdir -p "$HOME/.config/yazi"
+        if [[ -f "$DOTFILES_ROOT/yazi/yazi.toml" ]]; then
+            ln -sf "$DOTFILES_ROOT/yazi/yazi.toml" "$HOME/.config/yazi/yazi.toml"
+            log_info "Linked yazi config"
+        fi
+    fi
 
     if [[ -f "$DOTFILES_ROOT/zsh/zshrc" ]]; then
         [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]] && rm -f "$HOME/.zshrc"
