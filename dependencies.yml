@@ -61,6 +61,7 @@ system:
     - zsh
     - zsh-autosuggestions
     - zsh-syntax-highlighting
+    - python-pywal
     
     # Display manager
     - sddm
@@ -82,7 +83,6 @@ system:
     - dolphin
     - wofi
     - obsidian
-    - snapd
 
 aur_packages:
   - hyprpaper
@@ -90,10 +90,6 @@ aur_packages:
   - wlogout
   - hypridle
   - hyprshot
-
-snap_packages:
-  - chatgpt-linux
-  - whatsapp-linux-app
 
 python:
   packages:
@@ -126,9 +122,13 @@ directories:
   - ~/.local/share/fonts
   - ~/wallpapers
   - ~/Pictures/screenshots
+  - ~/.cache/wal
 
 services:
   system:
+    - bluetooth
+    - NetworkManager
+    - sddm
     - bluetooth
     - NetworkManager
     - snapd

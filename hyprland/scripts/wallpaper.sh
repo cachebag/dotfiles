@@ -6,7 +6,14 @@ WALLPAPER_DIR="$HOME/wallpapers"
 CHOOSER_FILE="/tmp/wallpaper_selected"
 CURRENT_FILE="$HOME/.config/hypr/current_wallpaper"
 
+# Get all active monitors
 MONITORS=$(hyprctl monitors -j | jq -r '.[].name')
+
+# Exit if no monitors detected
+if [ -z "$MONITORS" ]; then
+    notify-send "Error" "No monitors detected"
+    exit 1
+fi
 
 rm -f "$CHOOSER_FILE"
 yazi "$WALLPAPER_DIR" --chooser-file="$CHOOSER_FILE"
@@ -36,6 +43,12 @@ if [[ -f "$CHOOSER_FILE" ]]; then
 
         if command -v wal &>/dev/null; then
             wal -q -n -i "$selected"
+            
+            # Convert colors for Hyprland
+            if [ -f "$HOME/dotfiles/scripts/convert-pywal-colors.sh" ]; then
+                "$HOME/dotfiles/scripts/convert-pywal-colors.sh"
+            fi
+            
             pkill waybar 
             sleep 0.2
             nohup waybar >/dev/null 2>&1 &
