@@ -276,7 +276,7 @@ setup_wallpapers() {
 
 setup_services() {
     log_info "Enabling system services..."
-    sudo systemctl enable bluetooth NetworkManager snapd
+    sudo systemctl enable bluetooth NetworkManager
     sudo usermod -aG video,input,audio "$USER"
     
     if [[ -d "$DOTFILES_ROOT/hyprland/scripts" ]]; then
@@ -285,30 +285,6 @@ setup_services() {
     
     log_success "Services configured"
     save_state "services_done"
-}
-
-setup_snap_apps() {
-    log_info "Setting up snap and installing applications..."
-    
-    sudo systemctl start snapd
-    sudo ln -sf /var/lib/snapd/snap /snap 2>/dev/null || true
-    
-    local snap_apps=(
-        "chatgpt-linux"
-        "whatsapp-linux-app"
-    )
-    
-    for app in "${snap_apps[@]}"; do
-        if ! snap list | grep -q "^$app "; then
-            log_info "Installing $app via snap..."
-            sudo snap install "$app" || log_warning "Failed to install $app - may need manual installation"
-        else
-            log_info "$app already installed"
-        fi
-    done
-    
-    log_success "Snap applications installed"
-    save_state "snap_done"
 }
 
 setup_neovim() {
@@ -497,28 +473,12 @@ main() {
             setup_services
             ;&
         "services_done")
-            setup_snap_apps
-            ;&
-        "snap_done")
             setup_neovim
             ;&
         "neovim_done")
             setup_zsh
             ;&
         "zsh_done")
-            fix_paths
-            ;&
-        "paths_done")
-            post_install
-            ;;
-        *)
-            log_error "Unknown state: $current_state"
-            exit 1
-            ;;
-    esac
-}
-
-main "$@"
             fix_paths
             ;&
         "paths_done")
