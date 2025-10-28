@@ -1,15 +1,16 @@
 # Makefile for dotfiles management
 
-.PHONY: install backup update clean test help deps check-deps verify dev-setup lint
+.PHONY: install backup update clean test help deps check-deps verify dev-setup lint purge post-setup
 
 # Default target
 help:
 	@echo "╔══════════════════════════════════════╗"
-	@echo "║     Cachebag's Dotfiles Management  ║"
+	@echo "║     Cachebag's Dotfiles Management   ║"
 	@echo "╚══════════════════════════════════════╝"
 	@echo ""
 	@echo "Available targets:"
 	@echo "  install     - Full dotfiles installation"
+	@echo "  post-setup  - Configure monitor after first boot"
 	@echo "  deps        - Install only dependencies"
 	@echo "  check-deps  - Check if dependencies are installed"
 	@echo "  backup      - Backup current configurations"
@@ -19,6 +20,7 @@ help:
 	@echo "  test        - Test installation script"
 	@echo "  lint        - Lint shell scripts"
 	@echo "  dev-setup   - Setup development environment"
+	@echo "  purge       - Remove ALL dotfiles (DANGER!)"
 	@echo "  help        - Show this help message"
 
 # Full installation
@@ -70,7 +72,10 @@ verify:
 	@test -L ~/.config/nvim || (echo "[INFO] Neovim config not symlinked" && exit 1)
 	@test -L ~/.config/kitty || (echo "[INFO] Kitty config not symlinked" && exit 1)
 	@test -L ~/.zshrc || (echo "[INFO] Zshrc not symlinked" && exit 1)
+	@test -L ~/.local/share/applications || (echo "[INFO] Applications not symlinked" && exit 1)
 	@test -d ~/wallpapers || (echo "[INFO] Wallpapers directory missing" && exit 1)
+	@test -d ~/.cache/wal || (echo "[INFO] Pywal cache directory missing" && exit 1)
+	@test -f ~/.cache/wal/colors-hyprland.conf || (echo "[WARNING] Pywal colors not converted, run: ./scripts/convert-pywal-colors.sh")
 	@echo "[SUCCESS] Installation verified"
 
 # Test installation script
@@ -110,3 +115,14 @@ status:
 	@echo -n "Waybar: "; command -v waybar >/dev/null && echo "[SUCCESS]" || echo "[ERROR]"
 	@echo -n "Neovim: "; command -v nvim >/dev/null && echo "[SUCCESS]" || echo "[ERROR]"
 	@echo -n "Configs symlinked: "; test -L ~/.config/hypr && echo "[SUCCESS]" || echo "[ERROR]"
+
+purge:
+	@echo "⚠️  WARNING: This will remove ALL dotfiles!"
+	@chmod +x scripts/purge.sh
+	@./scripts/purge.sh
+
+# Post-install setup - run after first boot
+post-setup:
+	@echo "Starting post-install setup..."
+	@chmod +x scripts/post-install-setup.sh
+	@./scripts/post-install-setup.sh
