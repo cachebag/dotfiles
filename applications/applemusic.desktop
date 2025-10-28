@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Apple-Music
+Exec=chromium --app=https://music.apple.com/us/home --class=Apple-Music
+Terminal=false
+Type=Application
+Icon=/home/cachebag/dotfiles/applications/icons/AM.png
+Categories=Utility;

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Zoom
+Exec=chromium --app=https://app.zoom.us --class=Zoom
+Terminal=false
+Type=Application
+Icon=/home/cachebag/dotfiles/applications/icons/zoom.png
+Categories=Utility;
