@@ -445,19 +445,6 @@ post_install() {
     fi
 }
 
-# At the very end, before final messages:
-echo ""
-echo "Installation complete."
-echo ""
-echo "NEXT STEPS:"
-echo "1. Reboot your system"
-echo "2. Log into Hyprland from SDDM"
-echo "3. Open terminal (SUPER+ENTER)"
-echo "4. Run: cd ~/dotfiles && make post-setup"
-echo ""
-read -p "Press Enter to reboot, or Ctrl+C to cancel..."
-sudo reboot
-
 main() {
     echo -e "${BLUE}╔══════════════════════════════════════╗${NC}"
     echo -e "${BLUE}║    Cachebag's Dotfiles Installer     ║${NC}"
@@ -532,4 +519,16 @@ main() {
 }
 
 main "$@"
+            fix_paths
+            ;&
+        "paths_done")
+            post_install
+            ;;
+        *)
+            log_error "Unknown state: $current_state"
+            exit 1
+            ;;
+    esac
+}
 
+main "$@"
