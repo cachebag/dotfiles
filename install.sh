@@ -368,6 +368,13 @@ fix_paths() {
         fi
     done
     
+    # Make conversion script executable
+    if [[ -f "$DOTFILES_ROOT/scripts/convert-pywal-colors.sh" ]]; then
+        chmod +x "$DOTFILES_ROOT/scripts/convert-pywal-colors.sh"
+        # Run it once to create initial colors
+        "$DOTFILES_ROOT/scripts/convert-pywal-colors.sh" || log_warning "Failed to generate initial colors"
+    fi
+    
     log_success "Paths updated"
     save_state "paths_done"
 }
