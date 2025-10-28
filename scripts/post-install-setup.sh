@@ -82,7 +82,11 @@ echo "Updated monitors.conf"
 echo ""
 echo -e "${GREEN}Step 4: Initializing color scheme${NC}"
 
-# Check if wallpapers directory exists and has content
+# First, make sure the conversion script is executable
+if [ -f "$DOTFILES_DIR/scripts/convert-pywal-colors.sh" ]; then
+    chmod +x "$DOTFILES_DIR/scripts/convert-pywal-colors.sh"
+fi
+
 if [ -d "$HOME/wallpapers" ]; then
     # If it's a git repo, pull latest
     if [ -d "$HOME/wallpapers/.git" ]; then
@@ -97,11 +101,9 @@ if [ -d "$HOME/wallpapers" ]; then
         echo "Generating color scheme from wallpaper..."
         wal -q -n -i "$FIRST_WALLPAPER"
         
-        # Convert colors for Hyprland
-        if [ -f "$DOTFILES_DIR/scripts/convert-pywal-colors.sh" ]; then
-            chmod +x "$DOTFILES_DIR/scripts/convert-pywal-colors.sh"
-            "$DOTFILES_DIR/scripts/convert-pywal-colors.sh"
-        fi
+        # Automatically convert colors for Hyprland
+        echo "Converting colors for Hyprland..."
+        "$DOTFILES_DIR/scripts/convert-pywal-colors.sh"
         
         # Set initial wallpaper
         cat > "$HOME/.config/hypr/hyprpaper.conf" << EOF
@@ -117,7 +119,7 @@ EOF
         "$DOTFILES_DIR/scripts/convert-pywal-colors.sh"
     fi
 else
-    echo "Wallpapers directory not found, creating default colors..."
+    echo "No wallpapers directory, creating default colors..."
     "$DOTFILES_DIR/scripts/convert-pywal-colors.sh"
 fi
 
