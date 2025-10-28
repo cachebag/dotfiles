@@ -52,6 +52,7 @@ install_dependencies() {
         hyprland waybar rofi-wayland dunst kitty neovim
         git curl wget ripgrep fd fzf fastfetch yazi
         nodejs npm python python-pip python-virtualenv python-pynvim
+        python-pywal jq
         ttf-fira-code ttf-font-awesome ttf-jetbrains-mono-nerd
         wl-clipboard grim slurp swappy
         xdg-desktop-portal-hyprland qt5-wayland qt6-wayland
@@ -65,9 +66,7 @@ install_dependencies() {
         base-devel cmake make gcc unzip
     )
     
-    if ! pacman -Qi "${pacman_pkgs[@]}" &>/dev/null; then
-        sudo pacman -Syu --needed --noconfirm "${pacman_pkgs[@]}"
-    fi
+    sudo pacman -Syu --needed --noconfirm "${pacman_pkgs[@]}"
 
     if ! command -v yay &>/dev/null; then
         log_info "Installing yay AUR helper..."
@@ -77,10 +76,8 @@ install_dependencies() {
         cd "$DOTFILES_ROOT"
     fi
 
-    local aur_pkgs=(hyprpaper swaylock-effects wlogout hypridle hyprshot snapd)
-    if ! yay -Qi "${aur_pkgs[@]}" &>/dev/null; then
-        yay -S --needed --noconfirm "${aur_pkgs[@]}"
-    fi
+    local aur_pkgs=(hyprpaper swaylock-effects wlogout hypridle hyprshot)
+    yay -S --needed --noconfirm "${aur_pkgs[@]}"
     
     log_success "Dependencies installed"
     save_state "dependencies_done"
@@ -93,7 +90,7 @@ create_directories() {
         "$HOME/.config/nvim" "$HOME/.config/kitty" "$HOME/.config/dunst"
         "$HOME/.config/yazi" "$HOME/.config/fastfetch" "$HOME/.config/sddm"
         "$HOME/.local/share/applications" "$HOME/.local/bin" "$HOME/.local/share/fonts"
-        "$HOME/wallpapers" "$HOME/Pictures/screenshots"
+        "$HOME/Pictures/screenshots" "$HOME/.cache/wal"
     )
     for d in "${dirs[@]}"; do 
         mkdir -p "$d"
@@ -249,14 +246,31 @@ setup_fonts() {
 
 setup_wallpapers() {
     log_info "Setting up wallpapers..."
-    mkdir -p "$HOME/wallpapers"
+    
+    if [[ ! -d "$HOME/wallpapers" ]]; then
+        log_info "Cloning wallpapers repository..."
+        git clone https://github.com/cachebag/wallpapers.git "$HOME/wallpapers" || {
+            log_warning "Failed to clone wallpapers repo, creating empty directory"
+            mkdir -p "$HOME/wallpapers"
+        }
+    elif [[ -d "$HOME/wallpapers/.git" ]]; then
+        log_info "Updating wallpapers repository..."
+        cd "$HOME/wallpapers" && git pull --quiet || log_warning "Failed to update wallpapers"
+        cd "$DOTFILES_ROOT"
+    fi
+    
     if [[ -z "$(ls -A "$HOME/wallpapers" 2>/dev/null)" ]]; then
+        log_warning "No wallpapers found, downloading sample..."
         cd /tmp
         wget -q -O sample-wallpaper.jpg "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2560&h=1440&fit=crop" || \
-        wget -q -O sample-wallpaper.jpg "https://picsum.photos/2560/1440"
-        mv sample-wallpaper.jpg "$HOME/wallpapers/"
-        log_info "Downloaded sample wallpaper"
+        wget -q -O sample-wallpaper.jpg "https://picsum.photos/2560/1440" || {
+            log_warning "Failed to download sample wallpaper"
+        }
+        [[ -f sample-wallpaper.jpg ]] && mv sample-wallpaper.jpg "$HOME/wallpapers/"
+        cd "$DOTFILES_ROOT"
     fi
+    
+    log_success "Wallpapers setup complete"
     save_state "wallpapers_done"
 }
 
@@ -390,56 +404,44 @@ post_install() {
         echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
     fi
     
-    log_info "Installation complete!"
+    log_info "Installation complete"
+    echo ""
     echo -e "${GREEN}=== INSTALLATION SUMMARY ===${NC}"
     echo "✓ Dependencies installed"
     echo "✓ Configurations symlinked" 
     echo "✓ Fonts installed"
+    echo "✓ Wallpapers repository cloned"
     echo "✓ SDDM theme configured"
     echo "✓ Services enabled"
-    echo "✓ Snap applications installed"
     echo "✓ Neovim plugins installed"
     echo "✓ Zsh configured as default shell"
     echo ""
-    echo -e "${YELLOW}INSTALLED APPLICATIONS:${NC}"
-    echo "• Firefox (Super+B)"
-    echo "• Dolphin file manager (Super+E)"
-    echo "• ChatGPT (Super+G)"
-    echo "• WhatsApp (Super+F)"
-    echo "• Obsidian (Super+O)"
-    echo ""
-    echo -e "${YELLOW}NEXT STEPS:${NC}"
-    echo "1. Reboot your system to apply all changes"
-    echo "2. Select 'Hyprland' from your display manager"
-    echo "3. Press Super+A to launch applications"
-    echo "4. Use Super+W to select wallpapers"
-    echo ""
-    echo -e "${BLUE}KEYBINDS:${NC}"
+    echo -e "${YELLOW}KEYBINDS:${NC}"
     echo "Super+Return: Terminal"
     echo "Super+A: App launcher (Rofi)"
-    echo "Super+R: Alternative launcher (Wofi)"
     echo "Super+Q: Close window"
-    echo "Super+E: File manager (Dolphin)"
+    echo "Super+E: File manager"
     echo "Super+W: Wallpaper picker"
+    echo "Super+Shift+W: Change wallpaper"
     echo "Super+S: Screenshot"
     echo "Super+P: Power menu"
     echo "Super+L: Lock screen"
     echo ""
+    echo -e "${YELLOW}NEXT STEPS:${NC}"
+    echo "1. Reboot your system"
+    echo "2. Log into Hyprland from SDDM"
+    echo "3. Post-install setup will run automatically"
+    echo "4. Select your monitor and configuration"
+    echo ""
     
     rm -f "$STATE_FILE"
     
-    echo -e "${YELLOW}IMPORTANT - MONITOR CONFIGURATION:${NC}"
-    echo "Before rebooting, you may need to configure your displays:"
-    echo "1. Run 'hyprctl monitors' to see your current monitor setup"
-    echo "2. Edit ~/.config/hypr/monitors.conf to match your display configuration"
-    echo "3. This ensures proper resolution and positioning on first boot"
-    echo ""
-    
-    echo -e "${GREEN}Reboot recommended to complete setup.${NC}"
     read -p "Reboot now? (y/N): " -n1 reboot_choice
     echo
     if [[ $reboot_choice =~ ^[Yy]$ ]]; then
         sudo reboot
+    else
+        log_info "Remember to reboot before using Hyprland"
     fi
 }
 
@@ -469,7 +471,6 @@ main() {
     echo "• Neovim (Editor with plugins)"
     echo "• SDDM (Display manager theme)"
     echo "• Firefox, Dolphin, Obsidian"
-    echo "• Snap apps (ChatGPT, WhatsApp)"
     echo "• Various utilities and fonts"
     echo ""
     
