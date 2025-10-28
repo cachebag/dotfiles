@@ -1,7 +1,7 @@
 configuration {
     display-ssh:    "";
     display-run:    "";
-    display-drun:   "";
+    display-drun:   ">";
     display-window: "";
     display-combi:  "";
     show-icons:     true;

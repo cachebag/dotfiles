@@ -1,0 +1,7 @@
+[Desktop Entry]
+Type=Application
+Name=Balena Etcher
+Exec=/home/cachebag/Downloads/balenaEtcher-linux-x64/balena-etcher
+Icon=/home/cachebag/dotfiles/applications/icons/etcher.png
+Terminal=false
+Categories=Utility;

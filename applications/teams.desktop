@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Teams
+Exec=chromium --app=https://teams.microsoft.com/v2/ --class=Teams
+Terminal=false
+Type=Application
+Icon=/home/cachebag/dotfiles/applications/icons/teams.png
+Categories=Utility;
