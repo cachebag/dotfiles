@@ -49,11 +49,8 @@ window#waybar.hidden {
 }
 
 #workspaces button:hover {
-  transition: none;
-  box-shadow: inherit;
-  text-shadow: inherit;
-  color: @color3;
-  border-color: @color3;
+  color: @background;
+  background: @color3;
 }
 
 #network {
@@ -68,6 +65,11 @@ window#waybar.hidden {
   background: @background;
 }
 
+#network:hover {
+  color: @background;
+  background: @color4;
+}
+
 #pulseaudio {
   margin-top: 6px;
   margin-left: 8px;
@@ -78,6 +80,11 @@ window#waybar.hidden {
   transition: none;
   color: @color1;
   background: @background;
+}
+
+#pulseaudio:hover {
+  color: @background;
+  background: @color1;
 }
 
 #bluetooth {
@@ -92,6 +99,11 @@ window#waybar.hidden {
   background: @background;
 }
 
+#bluetooth:hover {
+  color: @background;
+  background: @color4;
+}
+
 #battery {
   margin-top: 6px;
   margin-left: 8px;
@@ -102,6 +114,11 @@ window#waybar.hidden {
   transition: none;
   color: @color1;
   background: @background;
+}
+
+#battery:hover {
+  color: @background;
+  background: @color1;
 }
 
 #battery.critical:not(.charging) {
@@ -133,6 +150,11 @@ window#waybar.hidden {
   background: @color3;
 }
 
+#backlight:hover {
+  color: @color3;
+  background: @background;
+}
+
 #clock {
   margin-top: 6px;
   margin-left: 8px;
@@ -144,6 +166,11 @@ window#waybar.hidden {
   transition: none;
   color: @color4;
   background: @background;
+}
+
+#clock:hover {
+  color: @background;
+  background: @color4;
 }
 
 #memory {
@@ -158,6 +185,11 @@ window#waybar.hidden {
   background: @background;
 }
 
+#memory:hover {
+  color: @background;
+  background: @color4;
+}
+
 #cpu {
   margin-top: 6px;
   margin-left: 8px;
@@ -168,6 +200,11 @@ window#waybar.hidden {
   transition: none;
   color: @color1;
   background: @background;
+}
+
+#cpu:hover {
+  color: @background;
+  background: @color1;
 }
 
 #custom-launcher {
@@ -182,6 +219,11 @@ window#waybar.hidden {
   background: @background;
 }
 
+#custom-launcher:hover {
+  color: @background;
+  background: @color4;
+}
+
 #custom-media {
   margin-top: 6px;
   margin-left: 8px;
@@ -194,6 +236,11 @@ window#waybar.hidden {
   background: @color6;
 }
 
+#custom-media:hover {
+  color: @color6;
+  background: @background;
+}
+
 #custom-power {
   margin-top: 6px;
   margin-left: 8px;
@@ -204,4 +251,9 @@ window#waybar.hidden {
   transition: none;
   color: @color1;
   background: @background;
+}
+
+#custom-power:hover {
+  color: @background;
+  background: @color1;
 }
