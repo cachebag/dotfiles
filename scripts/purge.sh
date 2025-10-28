@@ -86,7 +86,15 @@ safe_remove "$HOME/.cache/wal"
 
 echo ""
 if [ -d "$HOME/wallpapers" ]; then
-    if [ -z "$(ls -A $HOME/wallpapers)" ]; then
+    if [ -d "$HOME/wallpapers/.git" ]; then
+        read -p "Remove wallpapers git repository? (y/n): " remove_wallpapers
+        if [ "$remove_wallpapers" = "y" ] || [ "$remove_wallpapers" = "Y" ]; then
+            echo "Removing wallpapers repository..."
+            rm -rf "$HOME/wallpapers"
+        else
+            echo "Keeping wallpapers repository."
+        fi
+    elif [ -z "$(ls -A $HOME/wallpapers)" ]; then
         echo "Removing empty wallpapers directory..."
         rmdir "$HOME/wallpapers"
     else

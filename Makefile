@@ -74,6 +74,7 @@ verify:
 	@test -L ~/.zshrc || (echo "[INFO] Zshrc not symlinked" && exit 1)
 	@test -L ~/.local/share/applications || (echo "[INFO] Applications not symlinked" && exit 1)
 	@test -d ~/wallpapers || (echo "[INFO] Wallpapers directory missing" && exit 1)
+	@test -d ~/wallpapers/.git || (echo "[WARNING] Wallpapers not a git repository")
 	@test -d ~/.cache/wal || (echo "[INFO] Pywal cache directory missing" && exit 1)
 	@test -f ~/.cache/wal/colors-hyprland.conf || (echo "[WARNING] Pywal colors not converted, run: ./scripts/convert-pywal-colors.sh")
 	@echo "[SUCCESS] Installation verified"

@@ -120,17 +120,17 @@ directories:
   - ~/.local/share/applications
   - ~/.local/bin
   - ~/.local/share/fonts
-  - ~/wallpapers
   - ~/Pictures/screenshots
   - ~/.cache/wal
+
+repositories:
+  - name: "wallpapers"
+    url: "https://github.com/cachebag/wallpapers.git"
+    destination: "~/wallpapers"
 
 services:
   system:
     - bluetooth
     - NetworkManager
-    - sddm
-    - bluetooth
-    - NetworkManager
-    - snapd
     - sddm
   - ~/.local/share/fonts

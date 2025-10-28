@@ -27,6 +27,24 @@ A minimal Arch config
 
 3. Log out and select Hyprland as your session.
 
+The installation will automatically:
+- Clone wallpapers from `github.com/cachebag/wallpapers.git` to `~/wallpapers`
+- Install all dependencies
+- Set up pywal color scheme from wallpapers
+- Configure monitor settings
+
+## Wallpapers
+
+Wallpapers are automatically cloned from the [wallpapers repository](https://github.com/cachebag/wallpapers).
+
+To update wallpapers:
+```bash
+cd ~/wallpapers
+git pull
+```
+
+To change wallpaper: `SUPER+SHIFT+W`
+
 ## Manual Installation
 
 ### Dependencies

@@ -82,7 +82,15 @@ echo "Updated monitors.conf"
 echo ""
 echo -e "${GREEN}Step 4: Initializing color scheme${NC}"
 
-if [ -d "$HOME/wallpapers" ] && [ "$(ls -A $HOME/wallpapers)" ]; then
+# Check if wallpapers directory exists and has content
+if [ -d "$HOME/wallpapers" ]; then
+    # If it's a git repo, pull latest
+    if [ -d "$HOME/wallpapers/.git" ]; then
+        echo "Updating wallpapers repository..."
+        cd "$HOME/wallpapers" && git pull --quiet
+        cd - > /dev/null
+    fi
+    
     FIRST_WALLPAPER=$(find "$HOME/wallpapers" -type f \( -iname "*.jpg" -o -iname "*.png" \) | head -n 1)
     
     if [ -n "$FIRST_WALLPAPER" ]; then
@@ -109,7 +117,7 @@ EOF
         "$DOTFILES_DIR/scripts/convert-pywal-colors.sh"
     fi
 else
-    echo "No wallpapers directory, creating default colors..."
+    echo "Wallpapers directory not found, creating default colors..."
     "$DOTFILES_DIR/scripts/convert-pywal-colors.sh"
 fi
 

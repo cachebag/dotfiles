@@ -3,6 +3,8 @@
 # Backup script for dotfiles
 # Creates a timestamped backup of current configurations
 
+# This is very outdated - needs to be improved
+
 set -e
 
 BACKUP_DIR="$HOME/.config/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
