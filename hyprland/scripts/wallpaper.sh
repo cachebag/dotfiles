@@ -1,4 +1,4 @@
- ffw#!/bin/bash
+#!/bin/bash
 
 WALLPAPER_DIR="$HOME/wallpapers"
 CHOOSER_FILE="/tmp/wallpaper_selected"
