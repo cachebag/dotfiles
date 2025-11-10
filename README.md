@@ -30,48 +30,6 @@ My arch config
 
 3. Log out and select Hyprland as your session.
 
-## Manual Installation
-
-### Dependencies
-
-```bash
-# Core packages
-sudo pacman -S hyprland waybar rofi-wayland neovim git curl ripgrep fd nodejs npm python python-pip python-virtualenv ttf-fira-code ttf-font-awesome wl-clipboard
-
-# AUR packages (install yay first if needed)
-yay -S hyprpaper swaylock-effects wlogout
-```
-
-### Configuration
-
-```bash
-# Backup existing configs
-mkdir -p ~/.config/dotfiles_backup_$(date +%Y%m%d)
-mv ~/.config/{hypr,waybar,rofi,nvim} ~/.config/dotfiles_backup_$(date +%Y%m%d)/ 2>/dev/null || true
-
-# Create symlinks
-ln -sf ~/.dotfiles/hypr ~/.config/hypr
-ln -sf ~/.dotfiles/waybar ~/.config/waybar
-ln -sf ~/.dotfiles/rofi ~/.config/rofi
-ln -sf ~/.dotfiles/nvim ~/.config/nvim
-```
-
-### Neovim Setup
-
-```bash
-# Python environment
-python -m venv ~/.config/nvim/env
-source ~/.config/nvim/env/bin/activate
-pip install pynvim
-deactivate
-
-# Node.js support
-npm install -g neovim
-
-# Install plugins
-nvim --headless "+Lazy! sync" +qa
-```
-
 ## Keybindings
 
 ### Applications
@@ -83,13 +41,25 @@ nvim --headless "+Lazy! sync" +qa
 | `Super + R` | Alternative launcher (Wofi) |
 | `Super + B` | Firefox |
 | `Super + E` | File manager (Dolphin) |
-| `Super + G` | ChatGPT |
-| `Super + F` | WhatsApp |
+| `Super + D` | ChatGPT |
+| `Super + I` | WhatsApp |
 | `Super + O` | Obsidian |
 | `Super + W` | Wallpaper picker |
 | `Super + S` | Screenshot |
 | `Super + P` | Power menu |
 | `Super + L` | Lock screen |
+
+### Screenshots
+
+ ##### **Rofi**
+ <img width="802" height="781" alt="image" src="https://github.com/user-attachments/assets/94f2ad65-d693-4723-aa63-5fe63eee940f" />
+
+ ##### **Wallpaper picker (pywal)**
+ <img width="1508" height="1084" alt="image" src="https://github.com/user-attachments/assets/1e219214-4840-4587-9713-6c79a7f6298a" />
+
+ ##### **ChatGPT**
+ <img width="1387" height="1037" alt="image" src="https://github.com/user-attachments/assets/307baa26-8447-47ea-acb8-ecfee84ec21f" />
+
 
 ### Window Management
 
@@ -117,23 +87,6 @@ nvim --headless "+Lazy! sync" +qa
 | `gd` | Go to definition |
 | `K` | Show documentation |
 
-## Troubleshooting
-
-### Hyprland startup issues
-- Check GPU drivers: `lspci -k | grep -A 2 -E "(VGA|3D)"`
-- Verify Wayland: `echo $XDG_SESSION_TYPE`
-
-### Font issues
-- Install fonts: `sudo pacman -S ttf-fira-code`
-- Refresh cache: `fc-cache -fv`
-
-### Neovim problems
-- Reinstall plugins: `:Lazy sync`
-- Check health: `:checkhealth`
-
-### Waybar not visible
-- Restart: `killall waybar && waybar &`
-- Check syntax: `waybar -t`
 
 ---
 
