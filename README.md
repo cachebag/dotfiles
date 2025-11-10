@@ -1,6 +1,9 @@
 # Cachebag's Dotfiles
 
-A minimal Arch config
+My arch config
+
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/d86b14d9-5960-4a45-9c54-5b4193f9a846" />
+
 
 ## Components
 
