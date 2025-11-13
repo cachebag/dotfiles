@@ -5,27 +5,13 @@ return {
     config = function()
       require("nvim-treesitter.configs").setup({
         ensure_installed = {
-          "c",
-          "lua",
-          "vim",
-          "vimdoc",
-          "rust",
-          "go",
-          "cpp",
-          "javascript",
-          "html",
-          "toml",
-          "json",
-          "markdown",
-          "python",
-          "yaml",
-          "bash",
-          "astro",
-          "java",
+          "c", "lua", "vim", "vimdoc", "rust", "go", "cpp",
+          "javascript", "html", "toml", "json", "markdown",
+          "python", "yaml", "bash", "astro", "java",
         },
         sync_install = false,
         auto_install = true,
-        highlight = { 
+        highlight = {
           enable = true,
           additional_vim_regex_highlighting = false,
         },
@@ -42,10 +28,15 @@ return {
       })
     end,
   },
+
   {
     "cachebag/nvim-tcss",
     config = true,
   },
+
+  ---------------------------------------------------------------------------
+  -- LSP (NEW API)
+  ---------------------------------------------------------------------------
   {
     "neovim/nvim-lspconfig",
     dependencies = {
@@ -60,36 +51,68 @@ return {
       "williamboman/mason-lspconfig.nvim",
     },
     config = function()
+      -----------------------------------------------------------------------
+      -- Mason
+      -----------------------------------------------------------------------
       require("mason").setup({
         ui = {
           icons = {
             package_installed = "✓",
             package_pending = "➜",
-            package_uninstalled = "✗"
+            package_uninstalled = "✗",
           }
         }
       })
+
       require("mason-lspconfig").setup({
         ensure_installed = {
-          "clangd",           -- C++
-          "lua_ls",           -- Lua
-          "pyright",          -- Python
-          "rust_analyzer",    -- Rust
-          "astro",            -- Astro LSP
-          "jdtls",            -- Java LSP 
+          "clangd",
+          "lua_ls",
+          "pyright",
+          "rust_analyzer",
+          "astro",
+          "jdtls",
         },
         automatic_installation = true,
       })
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
-      local lspconfig = require('lspconfig')
-      -- Generic LSP setups
-      lspconfig.clangd.setup({ capabilities = capabilities })
-      lspconfig.lua_ls.setup({
+
+      -----------------------------------------------------------------------
+      -- Capabilities
+      -----------------------------------------------------------------------
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+      -----------------------------------------------------------------------
+      -- Helper: automatically start LSP on filetype
+      -----------------------------------------------------------------------
+      local function auto_start(server, opts)
+        vim.lsp.config(server, opts)
+
+        vim.api.nvim_create_autocmd("FileType", {
+          pattern = opts.filetypes,
+          callback = function()
+            vim.lsp.start(vim.lsp.config(server))
+          end,
+        })
+      end
+
+      -----------------------------------------------------------------------
+      -- CLANGD
+      -----------------------------------------------------------------------
+      auto_start("clangd", {
         capabilities = capabilities,
+        filetypes = { "c", "cpp", "objc", "objcpp" },
+      })
+
+      -----------------------------------------------------------------------
+      -- LUA LS
+      -----------------------------------------------------------------------
+      auto_start("lua_ls", {
+        capabilities = capabilities,
+        filetypes = { "lua" },
         settings = {
           Lua = {
-            runtime = { version = 'LuaJIT' },
-            diagnostics = { globals = { 'vim' } },
+            runtime = { version = "LuaJIT" },
+            diagnostics = { globals = { "vim" } },
             workspace = {
               library = vim.api.nvim_get_runtime_file("", true),
               checkThirdParty = false,
@@ -98,26 +121,52 @@ return {
           },
         },
       })
-      require("lspconfig").jdtls.setup({
+
+      -----------------------------------------------------------------------
+      -- PYRIGHT
+      -----------------------------------------------------------------------
+      auto_start("pyright", {
         capabilities = capabilities,
+        filetypes = { "python" },
       })
-      lspconfig.pyright.setup({ capabilities = capabilities })
-      lspconfig.rust_analyzer.setup({
+
+      -----------------------------------------------------------------------
+      -- RUST ANALYZER
+      -----------------------------------------------------------------------
+      auto_start("rust_analyzer", {
         capabilities = capabilities,
-        cmd = { "rustup", "run", "stable", "rust-analyzer"},
+        filetypes = { "rust" },
+        cmd = { "rustup", "run", "stable", "rust-analyzer" },
       })
-      -- Astro LSP
-      lspconfig.astro.setup({
+
+      -----------------------------------------------------------------------
+      -- ASTRO
+      -----------------------------------------------------------------------
+      auto_start("astro", {
         capabilities = capabilities,
+        filetypes = { "astro" },
         init_options = {
           typescript = {
-            tsdk = vim.fn.stdpath("data") .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
+            tsdk = vim.fn.stdpath("data")
+              .. "/mason/packages/typescript-language-server/node_modules/typescript/lib"
           }
         }
       })
-      -- nvim-cmp setup
-      local cmp = require('cmp')
-      local luasnip = require('luasnip')
+
+      -----------------------------------------------------------------------
+      -- JDTLS (Java)
+      -----------------------------------------------------------------------
+      auto_start("jdtls", {
+        capabilities = capabilities,
+        filetypes = { "java" },
+      })
+
+      -----------------------------------------------------------------------
+      -- CMP setup
+      -----------------------------------------------------------------------
+      local cmp = require("cmp")
+      local luasnip = require("luasnip")
+
       cmp.setup({
         snippet = {
           expand = function(args) luasnip.lsp_expand(args.body) end,
@@ -127,29 +176,29 @@ return {
           documentation = cmp.config.window.bordered(),
         },
         mapping = cmp.mapping.preset.insert({
-          ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-          ['<C-f>'] = cmp.mapping.scroll_docs(4),
-          ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-e>'] = cmp.mapping.abort(),
-          ['<CR>'] = cmp.mapping.confirm({ select = true }),
-          ['<Tab>'] = cmp.mapping(function(fallback)
+          ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+          ["<C-f>"] = cmp.mapping.scroll_docs(4),
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<C-e>"] = cmp.mapping.abort(),
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          ["<Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then cmp.select_next_item()
             elseif luasnip.expand_or_jumpable() then luasnip.expand_or_jump()
             else fallback() end
-          end, { 'i', 's' }),
-          ['<S-Tab>'] = cmp.mapping(function(fallback)
+          end, { "i", "s" }),
+          ["<S-Tab>"] = cmp.mapping(function(fallback)
             if cmp.visible() then cmp.select_prev_item()
             elseif luasnip.jumpable(-1) then luasnip.jump(-1)
             else fallback() end
-          end, { 'i', 's' }),
+          end, { "i", "s" }),
         }),
         sources = cmp.config.sources({
-          { name = 'nvim_lsp', priority = 1000 },
-          { name = 'luasnip', priority = 750 },
-          { name = 'crates', priority = 700 },
+          { name = "nvim_lsp", priority = 1000 },
+          { name = "luasnip", priority = 750 },
+          { name = "crates", priority = 700 },
         }, {
-          { name = 'buffer', priority = 500 },
-          { name = 'path', priority = 250 },
+          { name = "buffer", priority = 500 },
+          { name = "path", priority = 250 },
         }),
         formatting = {
           format = function(entry, vim_item)
@@ -165,18 +214,25 @@ return {
         },
         experimental = { ghost_text = true },
       })
-      -- Cmdline completion
-      cmp.setup.cmdline({ '/', '?' }, {
+
+      cmp.setup.cmdline({ "/", "?" }, {
         mapping = cmp.mapping.preset.cmdline(),
-        sources = { { name = 'buffer' } }
+        sources = { { name = "buffer" } },
       })
-      cmp.setup.cmdline(':', {
+
+      cmp.setup.cmdline(":", {
         mapping = cmp.mapping.preset.cmdline(),
-        sources = cmp.config.sources({ { name = 'path' } }, { { name = 'cmdline' } })
+        sources = cmp.config.sources(
+          { { name = "path" } },
+          { { name = "cmdline" } }
+        ),
       })
     end,
   },
-  -- Rust tools (unchanged)
+
+  ---------------------------------------------------------------------------
+  -- Rust tools
+  ---------------------------------------------------------------------------
   {
     "simrat39/rust-tools.nvim",
     ft = "rust",
@@ -187,7 +243,8 @@ return {
     },
     config = function()
       local rt = require("rust-tools")
-      local capabilities = require('cmp_nvim_lsp').default_capabilities()
+      local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
       rt.setup({
         server = {
           cmd = { "rustup", "run", "stable", "rust-analyzer" },
@@ -197,16 +254,16 @@ return {
               vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
             end
             local opts = { buffer = bufnr, silent = true }
-            vim.keymap.set('n', '<leader>rh', rt.hover_actions.hover_actions, opts)
-            vim.keymap.set('n', '<leader>ra', rt.code_action_group.code_action_group, opts)
+            vim.keymap.set("n", "<leader>rh", rt.hover_actions.hover_actions, opts)
+            vim.keymap.set("n", "<leader>ra", rt.code_action_group.code_action_group, opts)
           end,
           settings = {
             ["rust-analyzer"] = {
               cargo = { allFeatures = true },
               procMacro = { enable = true },
               checkOnSave = { enable = true, command = "clippy" },
-            }
-          }
+            },
+          },
         },
         tools = {
           hover_actions = { auto_focus = true },
@@ -219,7 +276,10 @@ return {
       })
     end,
   },
-  -- Crates.nvim (unchanged)
+
+  ---------------------------------------------------------------------------
+  -- crates.nvim
+  ---------------------------------------------------------------------------
   {
     "saecki/crates.nvim",
     event = { "BufRead Cargo.toml" },
@@ -230,6 +290,7 @@ return {
         lsp = { enabled = true, actions = true, completion = true, hover = true },
         popup = { autofocus = true },
       })
+
       vim.api.nvim_create_autocmd("BufRead", {
         group = vim.api.nvim_create_augroup("CmpSourceCargo", { clear = true }),
         pattern = "Cargo.toml",
@@ -240,4 +301,3 @@ return {
     end,
   },
 }
-
