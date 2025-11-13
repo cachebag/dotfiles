@@ -30,7 +30,6 @@ require("lazy").setup("cachebag.plugins")
 
 -- Basic editor settings
 vim.opt.background = "dark"
-vim.cmd([[colorscheme gruvbox-material]])
 vim.opt.clipboard = 'unnamedplus'
 vim.opt.number = true
 vim.opt.relativenumber = true
