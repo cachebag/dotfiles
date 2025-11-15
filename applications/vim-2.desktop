@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=vim
+MimeType=application/json;
+Name=vim
+NoDisplay=true
+Type=Application

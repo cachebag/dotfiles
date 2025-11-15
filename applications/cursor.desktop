@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Cursor
+Exec=/home/cachebag/dotfiles/applications/Cursor-2.0.75-x86_64.AppImage
+Icon=/home/cachebag/dotfiles/applications/icons/cursor.png
+Terminal=false
+Categories=Development;
+

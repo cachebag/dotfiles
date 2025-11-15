@@ -85,3 +85,5 @@ zinit light zdharma-continuum/history-search-multi-word
 if [[ $TERM_PROGRAM != "vscode" ]]; then
   fastfetch
 fi
+
+. "$HOME/.local/bin/env"
