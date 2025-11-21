@@ -1,0 +1,233 @@
+window {
+  background-color: #2e3440; /* Nord0 */
+  color: #d8dee9; /* Nord4 */
+}
+
+scrollbar,
+scrollbar slider,
+scrollbar trough {
+  background: transparent;
+  border: none;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Headerbar */
+headerbar {
+  background: #3b4252; /* Nord1 */
+  color: #eceff4; /* Nord6 */
+  border-bottom: 1px solid #4c566a; /* Nord3 */
+}
+
+/* Switch */
+switch {
+  background-color: #434c5e; /* Nord2 */
+  padding: 2px;
+}
+switch slider {
+  background-color: #eceff4; /* Nord6 */
+}
+switch:checked {
+  background-color: #81a1c1; /* Nord8 */
+}
+switch:checked slider {
+  background-color: #eceff4;
+}
+
+/* Wi-Fi labels */
+.wifi-label {
+  font-weight: 600;
+  color: #e5e9f0; /* Nord5 */
+}
+
+/* List Styling */
+list {
+  background: #2e3440;
+  border: none;
+}
+list > row {
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+list > row:selected {
+  background: #81a1c1; /* Nord8 */
+  color: #ffffff;
+}
+
+/* Password entry */
+.pw-entry {
+  background-color: transparent;
+  color: #eceff4;
+  border-color: transparent;
+}
+
+/* Network selection rows */
+.network-selection {
+  padding: 6px 10px;
+  margin: 2px 0;
+  background: #3b4252; /* Nord1 */
+  border: 1px solid #4c566a; /* Nord3 */
+}
+.network-selection:hover {
+  background: #434c5e; /* Nord2 */
+  border-color: #4c566a;
+  transition: background 150ms ease, border-color 150ms ease;
+}
+
+.network-selection.connected {
+  background: rgba(163, 190, 140, 0.15); /* Nord14 green tint */
+  border-color: rgba(163, 190, 140, 0.3);
+}
+.network-selection.connected:hover {
+  background: rgba(163, 190, 140, 0.22);
+  border-color: rgba(163, 190, 140, 0.4);
+}
+
+.network-selection label {
+  font-size: 14px;
+  color: #e5e9f0;
+}
+
+.connected-label {
+  font-size: 12px;
+  color: #a3be8c; /* Nord14 */
+  font-style: italic;
+  margin-left: 8px;
+  opacity: 0.9;
+}
+
+/* Signal quality colors */
+label.network-good { color: #a3be8c; } /* green */
+label.network-okay { color: #ebcb8b; } /* yellow */
+label.network-poor { color: #bf616a; } /* red */
+
+/* Network page */
+.network-page {
+  background: #2e3440;
+  padding: 16px 20px;
+  border: none;
+  color: #d8dee9;
+}
+
+/* Back button */
+.back-button {
+  background: none;
+  border: none;
+  color: #d8dee9;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 4px 0;
+}
+.back-button:hover { color: #eceff4; }
+
+/* Icons */
+.network-icon {
+  color: #eceff4;
+  filter: brightness(1.4);
+}
+.network-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #eceff4;
+  margin-bottom: 4px;
+}
+
+.network-arrow {
+  color: #eceff4;
+}
+
+/* Info section */
+.network-info {
+  margin-top: 14px;
+  padding-left: 6px;
+}
+.info-row { padding: 2px 0; }
+.info-value {
+  color: #eceff4;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Section headers */
+.section-header {
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #4c566a;
+  padding-bottom: 4px;
+  margin-bottom: 6px;
+  color: #d8dee9;
+  letter-spacing: 0.5px;
+}
+
+/* Key/value formatting */
+.advanced-section,
+.basic-section {
+  padding-left: 0;
+  margin-left: 0;
+}
+
+.basic-key,
+.info-label {
+  font-weight: 600;
+  font-size: 13px;
+  color: #d8dee9;
+  margin-bottom: 2px;
+  text-decoration: underline;
+}
+
+.basic-value,
+.info-value {
+  font-size: 14px;
+  color: #eceff4;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+/* Divider */
+.divider {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  opacity: 0.25;
+  border-bottom: 1px solid #4c566a;
+}
+
+/* Wi-Fi security indicators */
+.wifi-secure {
+  color: #eceff4;
+}
+
+.wifi-open {
+  color: #eceff4;
+}
+
+/* Loading spinner */
+.loading-spinner {
+  margin-top: 12px;
+  margin-bottom: 12px;
+  opacity: 0.6;
+}
+
+/* Forget button */
+.forget-button {
+  font-size: 0.85em;
+  opacity: 0.7;
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+.forget-button:hover {
+  opacity: 1;
+}
+
+/* Refresh button */
+.refresh-btn {
+  background: none;
+  border: none;
+  color: #d8dee9;
+  font-weight: 500;
+  font-size: 13px;
+  padding: 4px 0;
+}
+.refresh-btn:hover { color: #eceff4; }
+
