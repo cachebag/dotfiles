@@ -19,4 +19,5 @@ user-dirs.dirs
 user-dirs.locale
 .gsd-keyboard.settings-ported
 lazy-lock.json
-applications/Cursor-2.0.75-x86_64.AppImage
+applications/*.AppImage*
+*.AppImage*
