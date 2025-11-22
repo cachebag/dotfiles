@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=/bin/firefox
+MimeType=application/pdf;
+Name=firefox
+NoDisplay=true
+Type=Application

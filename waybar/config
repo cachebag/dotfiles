@@ -17,7 +17,7 @@
     "tooltip": false,
     "format-wifi": "  {essid}",
     "format-ethernet": "",
-    "on-click": "kitty -- nmtui"
+    "on-click": "nmrs"
   },
 
   "bluetooth": {

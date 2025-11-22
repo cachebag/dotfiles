@@ -19,3 +19,5 @@ user-dirs.dirs
 user-dirs.locale
 .gsd-keyboard.settings-ported
 lazy-lock.json
+applications/*.AppImage*
+*.AppImage*
