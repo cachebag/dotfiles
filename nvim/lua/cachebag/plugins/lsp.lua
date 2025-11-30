@@ -51,6 +51,16 @@ return {
         capabilities = capabilities,
         filetypes = { "rust" },
         cmd = { "rustup", "run", "stable", "rust-analyzer" },
+        settings = {
+          ["rust-analyzer"] = {
+            check = {
+              command = "clippy",
+            },
+            inlayHints = {
+              enable = true,
+            },
+          },
+        },
       })
 
       vim.lsp.enable("astro", {

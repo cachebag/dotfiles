@@ -1,0 +1,6 @@
+[Desktop Entry]
+Exec=/bin/vlc
+MimeType=video/x-matroska;
+Name=vlc
+NoDisplay=true
+Type=Application
