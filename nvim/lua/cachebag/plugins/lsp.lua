@@ -1,31 +1,38 @@
 return {
   {
     "neovim/nvim-lspconfig",
+
     dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "hrsh7th/nvim-cmp",
-      "L3MON4D3/LuaSnip",
-      "saadparwaiz1/cmp_luasnip",
+      "hrsh7th/cmp-nvim-lsp",  -- needed for capabilities
     },
+
     config = function()
-      require("mason").setup({})
+      -- mason
+      require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = { "clangd", "lua_ls", "pyright", "rust_analyzer", "astro", "jdtls" },
-        automatic_installation = true,
+        ensure_installed = {
+          "clangd",
+          "lua_ls",
+          "pyright",
+          "rust_analyzer",
+          "astro",
+          "jdtls",
+        },
       })
 
       local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-      vim.lsp.enable("clangd", {
+      local cfg = vim.lsp.config
+
+      cfg["clangd"] = {
         capabilities = capabilities,
         filetypes = { "c", "cpp", "objc", "objcpp" },
-      })
+      }
 
-      vim.lsp.enable("lua_ls", {
+      cfg["lua_ls"] = {
         capabilities = capabilities,
-        filetypes = { "lua" },
         settings = {
           Lua = {
             runtime = { version = "LuaJIT" },
@@ -37,64 +44,37 @@ return {
               },
               checkThirdParty = false,
             },
-            telemetry = { enable = false },
           },
         },
-      })
+      }
 
-      vim.lsp.enable("pyright", {
+      cfg["pyright"] = {
         capabilities = capabilities,
-        filetypes = { "python" },
-      })
+      }
 
-      vim.lsp.enable("rust_analyzer", {
+      cfg["rust_analyzer"] = {
         capabilities = capabilities,
-        filetypes = { "rust" },
         cmd = { "rustup", "run", "stable", "rust-analyzer" },
         settings = {
           ["rust-analyzer"] = {
-            check = {
-              command = "clippy",
-            },
-            inlayHints = {
-              enable = true,
-            },
+            check = { command = "clippy" },
+            inlayHints = { enable = true },
           },
         },
-      })
+      }
 
-      vim.lsp.enable("astro", {
+      cfg["astro"] = {
         capabilities = capabilities,
-        filetypes = { "astro" },
-        init_options = {
-          typescript = {
-            tsdk = vim.fn.stdpath("data")
-              .. "/mason/packages/typescript-language-server/node_modules/typescript/lib",
-          },
-        },
-      })
+      }
 
-      vim.lsp.enable("jdtls", {
+      cfg["jdtls"] = {
         capabilities = capabilities,
-        filetypes = { "java" },
-      })
+      }
 
-      local cmp = require("cmp")
-      local luasnip = require("luasnip")
-
-      cmp.setup({
-        snippet = {
-          expand = function(args) luasnip.lsp_expand(args.body) end,
-        },
-        mapping = cmp.mapping.preset.insert({
-          ["<CR>"] = cmp.mapping.confirm({ select = true }),
-        }),
-        sources = {
-          { name = "nvim_lsp" },
-          { name = "buffer" },
-          { name = "path" },
-        },
-      })
+      -- enable all configured servers
+      for name, _ in pairs(cfg) do
+        vim.lsp.enable(name)
+      end
     end,
   },
 }

@@ -62,11 +62,10 @@ return {
           ".venv",
           "env",
           ".env",
-          -- Add any custom patterns you commonly use
           "virtualenv",
         },
-        search_from = "root", -- or "workspace"
-        dap_enabled = true, -- Enable debugger support
+        search_from = "root",
+        dap_enabled = true,
       })
     end,
     event = "VeryLazy",

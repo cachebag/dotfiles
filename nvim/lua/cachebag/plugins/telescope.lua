@@ -27,7 +27,6 @@ return {
 				}
 			},
 			pickers = {
-				-- note: remove the 'builtin.' prefix.
 				["lsp_references"] = { wrap_results = true, },
 				["lsp_definitions"] = { wrap_results = true, },
 				["diagnostics"] = { wrap_results = true, },
@@ -38,7 +37,6 @@ return {
 	end,
 
 	keys = {
-		-- See :help telescope.builtin
 		{ '<leader>fo', function()
 			require("telescope.builtin").oldfiles {
 				prompt_title = 'Recent files',

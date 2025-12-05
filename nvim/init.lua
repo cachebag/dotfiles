@@ -109,7 +109,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if vim.lsp.inlay_hint then
       vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
     end
-    
     local opts = { buffer = ev.buf }
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
@@ -122,7 +121,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>f', function()
       vim.lsp.buf.format { async = true }
     end, opts)
-    
     -- Rust-specific keybindings
     if vim.bo[ev.buf].filetype == 'rust' then
       vim.keymap.set('n', '<leader>rr', ':!cargo run<CR>', opts)
