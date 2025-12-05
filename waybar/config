@@ -1,5 +1,5 @@
 {
-  "modules-left": ["custom/launcher", "pulseaudio", "bluetooth"],
+  "modules-left": ["custom/launcher", "pulseaudio", "bluetooth", "custom/bluelight"],
   "modules-center": ["hyprland/workspaces"],
   "modules-right": ["custom/power", "network", "cpu", "memory", "battery", "clock"],
 
@@ -26,6 +26,12 @@
     "format-disabled": " Off",
     "on-click": "blueman-manager",
     "interval": 30
+  },
+
+  "custom/bluelight": {
+    "exec": "echo '⎚'",
+    "on-click": "/home/cachebag/.local/bin/bluelight-toggle",
+    "interval": 0,
   },
 
   "battery": {
