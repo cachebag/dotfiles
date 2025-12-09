@@ -36,6 +36,7 @@ alias ga='git add'
 alias gc='git commit'
 alias gp='git pull'
 alias gr='git rebase'
+alias gd='git diff'
 
 # Set Spaceship options BEFORE loading the prompt
 SPACESHIP_PROMPT_ORDER=(
