@@ -1,48 +1,64 @@
+/* Gruvbox palette (dark, hard contrast) */
+:root,
+window,
+window.dark-theme {
+  --bg-primary: #1d2021;
+  --bg-secondary: #282828;
+  --bg-tertiary: #3c3836;
+  --text-primary: #ebdbb2;
+  --text-secondary: #d5c4a1;
+  --text-tertiary: #bdae93;
+  --border-color: #3c3836;
+  --border-color-hover: #504945;
+
+  --accent-color: #458588;
+  --success-color: #98971a;
+  --warning-color: #d79921;
+  --error-color: #cc241d;
+}
+
+/* Gruvbox light variant */
+window.light-theme {
+  --bg-primary: #fbf1c7;
+  --bg-secondary: #ebdbb2;
+  --bg-tertiary: #d5c4a1;
+  --text-primary: #3c3836;
+  --text-secondary: #504945;
+  --text-tertiary: #665c54;
+  --border-color: #bdae93;
+  --border-color-hover: #a89984;
+
+  --accent-color: #076678;
+  --success-color: #79740e;
+  --warning-color: #b57614;
+  --error-color: #9d0006;
+}
+
 window {
-  background-color: #2e3440; /* Nord0 */
-  color: #d8dee9; /* Nord4 */
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
 }
 
-scrollbar,
-scrollbar slider,
-scrollbar trough {
-  background: transparent;
-  border: none;
-  min-width: 0;
-  min-height: 0;
-}
-
-/* Headerbar */
 headerbar {
-  background: #3b4252; /* Nord1 */
-  color: #eceff4; /* Nord6 */
-  border-bottom: 1px solid #4c566a; /* Nord3 */
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
 }
 
-/* Switch */
 switch {
-  background-color: #434c5e; /* Nord2 */
-  padding: 2px;
-}
-switch slider {
-  background-color: #eceff4; /* Nord6 */
+  background-color: var(--bg-tertiary);
 }
 switch:checked {
-  background-color: #81a1c1; /* Nord8 */
-}
-switch:checked slider {
-  background-color: #eceff4;
+  background-color: var(--accent-color);
 }
 
-/* Wi-Fi labels */
 .wifi-label {
   font-weight: 600;
-  color: #e5e9f0; /* Nord5 */
+  color: var(--text-primary);
 }
 
-/* List Styling */
 list {
-  background: #2e3440;
+  background: var(--bg-primary);
   border: none;
 }
 list > row {
@@ -51,117 +67,105 @@ list > row {
   padding: 0;
 }
 list > row:selected {
-  background: #81a1c1; /* Nord8 */
-  color: #ffffff;
+  background: var(--accent-color);
+  color: var(--bg-primary);
 }
 
-/* Password entry */
 .pw-entry {
   background-color: transparent;
-  color: #eceff4;
+  color: var(--text-primary);
   border-color: transparent;
 }
 
-/* Network selection rows */
 .network-selection {
   padding: 6px 10px;
   margin: 2px 0;
-  background: #3b4252; /* Nord1 */
-  border: 1px solid #4c566a; /* Nord3 */
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
 }
 .network-selection:hover {
-  background: #434c5e; /* Nord2 */
-  border-color: #4c566a;
+  background: var(--bg-tertiary);
+  border-color: var(--border-color-hover);
   transition: background 150ms ease, border-color 150ms ease;
 }
-
 .network-selection.connected {
-  background: rgba(163, 190, 140, 0.15); /* Nord14 green tint */
-  border-color: rgba(163, 190, 140, 0.3);
+  background: color-mix(in srgb, var(--success-color) 15%, transparent);
+  border-color: color-mix(in srgb, var(--success-color) 30%, transparent);
 }
 .network-selection.connected:hover {
-  background: rgba(163, 190, 140, 0.22);
-  border-color: rgba(163, 190, 140, 0.4);
+  background: color-mix(in srgb, var(--success-color) 20%, transparent);
+  border-color: color-mix(in srgb, var(--success-color) 40%, transparent);
 }
 
 .network-selection label {
   font-size: 14px;
-  color: #e5e9f0;
+  color: var(--text-primary);
 }
-
 .connected-label {
   font-size: 12px;
-  color: #a3be8c; /* Nord14 */
+  color: var(--success-color);
   font-style: italic;
   margin-left: 8px;
   opacity: 0.9;
 }
 
-/* Signal quality colors */
-label.network-good { color: #a3be8c; } /* green */
-label.network-okay { color: #ebcb8b; } /* yellow */
-label.network-poor { color: #bf616a; } /* red */
+label.network-good { color: var(--success-color); }
+label.network-okay { color: var(--warning-color); }
+label.network-poor { color: var(--error-color); }
 
-/* Network page */
 .network-page {
-  background: #2e3440;
+  background: var(--bg-primary);
   padding: 16px 20px;
   border: none;
-  color: #d8dee9;
+  color: var(--text-primary);
 }
 
-/* Back button */
 .back-button {
   background: none;
   border: none;
-  color: #d8dee9;
+  color: var(--text-tertiary);
   font-weight: 500;
   font-size: 13px;
   padding: 4px 0;
 }
-.back-button:hover { color: #eceff4; }
+.back-button:hover { color: var(--text-primary); }
 
-/* Icons */
 .network-icon {
-  color: #eceff4;
-  filter: brightness(1.4);
+  color: var(--text-primary);
 }
 .network-title {
   font-size: 18px;
   font-weight: 600;
-  color: #eceff4;
+  color: var(--text-primary);
   margin-bottom: 4px;
 }
 
 .network-arrow {
-  color: #eceff4;
+  color: var(--text-primary);
 }
 
-/* Info section */
 .network-info {
   margin-top: 14px;
   padding-left: 6px;
 }
 .info-row { padding: 2px 0; }
 .info-value {
-  color: #eceff4;
+  color: var(--text-primary);
   font-size: 14px;
   font-weight: 500;
 }
 
-/* Section headers */
 .section-header {
   font-weight: 600;
   font-size: 13px;
   text-transform: uppercase;
-  border-bottom: 1px solid #4c566a;
+  border-bottom: 1px solid var(--border-color);
   padding-bottom: 4px;
   margin-bottom: 6px;
-  color: #d8dee9;
+  color: var(--text-secondary);
   letter-spacing: 0.5px;
 }
 
-/* Key/value formatting */
 .advanced-section,
 .basic-section {
   padding-left: 0;
@@ -172,7 +176,7 @@ label.network-poor { color: #bf616a; } /* red */
 .info-label {
   font-weight: 600;
   font-size: 13px;
-  color: #d8dee9;
+  color: var(--text-tertiary);
   margin-bottom: 2px;
   text-decoration: underline;
 }
@@ -180,36 +184,32 @@ label.network-poor { color: #bf616a; } /* red */
 .basic-value,
 .info-value {
   font-size: 14px;
-  color: #eceff4;
+  color: var(--text-primary);
   font-weight: 500;
   margin-bottom: 8px;
 }
 
-/* Divider */
 .divider {
   margin-top: 10px;
   margin-bottom: 10px;
   opacity: 0.25;
-  border-bottom: 1px solid #4c566a;
+  border-bottom: 1px solid var(--border-color);
 }
 
-/* Wi-Fi security indicators */
 .wifi-secure {
-  color: #eceff4;
+  color: var(--text-primary);
 }
 
 .wifi-open {
-  color: #eceff4;
+  color: var(--text-primary);
 }
 
-/* Loading spinner */
 .loading-spinner {
   margin-top: 12px;
   margin-bottom: 12px;
   opacity: 0.6;
 }
 
-/* Forget button */
 .forget-button {
   font-size: 0.85em;
   opacity: 0.7;
@@ -220,13 +220,25 @@ label.network-poor { color: #bf616a; } /* red */
   opacity: 1;
 }
 
-/* Refresh button */
 .refresh-btn {
   background: none;
   border: none;
-  color: #d8dee9;
+  color: var(--text-tertiary);
   font-weight: 500;
   font-size: 13px;
   padding: 4px 0;
 }
-.refresh-btn:hover { color: #eceff4; }
+.refresh-btn:hover { color: var(--text-primary); }
+
+.theme-toggle-btn {
+  background: none;
+  border: none;
+  color: var(--text-tertiary);
+  padding: 4px 8px;
+  opacity: 0.7;
+  transition: opacity 150ms ease, color 150ms ease;
+}
+.theme-toggle-btn:hover {
+  opacity: 1;
+  color: var(--text-primary);
+}
