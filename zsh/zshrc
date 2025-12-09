@@ -21,10 +21,21 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
+# ssh
+alias cb='ssh -J tunnel@144.202.56.87 -p 2222 cachebag@127.0.0.1'
+
 # Aliases
 alias ls='ls -1 --color=auto'
 alias vim='nvim'
 alias copy='xclip -selection clipboard'
+alias uz='rm -rf ~/Downloads/task && mkdir -p ~/Downloads/task && unzip -d ~/Downloads/task'
+
+# Git aliases
+alias gs='git status'
+alias ga='git add'
+alias gc='git commit'
+alias gp='git pull'
+alias gr='git rebase'
 
 # Set Spaceship options BEFORE loading the prompt
 SPACESHIP_PROMPT_ORDER=(
