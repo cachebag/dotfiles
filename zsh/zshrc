@@ -32,8 +32,8 @@ alias uz='rm -rf ~/Downloads/task && mkdir -p ~/Downloads/task && unzip -d ~/Dow
 
 # Git aliases
 alias gs='git status'
-alias ga='git add'
-alias gc='git commit'
+alias ga='git add .'
+alias gc='git checkout'
 alias gp='git pull'
 alias gr='git rebase'
 alias gd='git diff'
