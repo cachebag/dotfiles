@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Discord
+Exec=chromium --app=https://discord.com/channels/@me --class=Discord
+Terminal=false
+Type=Application
+Icon=/home/cachebag/dotfiles/applications/icons/discord.png
+Categories=Utility;
