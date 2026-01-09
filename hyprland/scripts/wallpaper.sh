@@ -20,9 +20,14 @@ if [[ -f "$CHOOSER_FILE" ]]; then
         echo "$selected" > ~/.config/hypr/current_wallpaper
 
         cat > ~/.config/hypr/hyprpaper.conf <<EOF
-ipc = on
-preload = $selected
-wallpaper = $MONITOR,$selected
+ipc = on 
+splash = false 
+
+wallpaper {
+  monitor = $MONITOR
+  path = $selected 
+  fit_mode = cover 
+}
 EOF
 
         if command -v wal &>/dev/null; then
