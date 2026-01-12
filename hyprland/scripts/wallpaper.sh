@@ -1,55 +1,54 @@
 #!/bin/bash
 
-# Simple Hyprland wallpaper selector for one or more monitors
-
 WALLPAPER_DIR="$HOME/wallpapers"
 CHOOSER_FILE="/tmp/wallpaper_selected"
-CURRENT_FILE="$HOME/.config/hypr/current_wallpaper"
-
-# Get all active monitors
-MONITORS=$(hyprctl monitors -j | jq -r '.[].name')
-
-# Exit if no monitors detected
-if [ -z "$MONITORS" ]; then
-    notify-send "Error" "No monitors detected"
-    exit 1
-fi
 
 rm -f "$CHOOSER_FILE"
+
 yazi "$WALLPAPER_DIR" --chooser-file="$CHOOSER_FILE"
 
 if [[ -f "$CHOOSER_FILE" ]]; then
     selected=$(<"$CHOOSER_FILE")
 
     if [[ -n "$selected" && -f "$selected" ]]; then
+        # Get all active monitors
+        monitors=$(hyprctl monitors -j | jq -r '.[].name')
+
         hyprctl hyprpaper preload "$selected"
         sleep 0.5
 
-        for mon in $MONITORS; do
-            hyprctl hyprpaper wallpaper "$mon,$selected"
+        # Set wallpaper on all monitors
+        for monitor in $monitors; do
+            hyprctl hyprpaper wallpaper "$monitor,$selected"
         done
 
         notify-send "Wallpaper Changed" "$(basename "$selected")" -i "$selected"
-        echo "$selected" > "$CURRENT_FILE"
 
-        # Update hyprpaper.conf
-        {
-            echo "ipc = on"
-            echo "preload = $selected"
-            for mon in $MONITORS; do
-                echo "wallpaper = $mon,$selected"
-            done
-        } > ~/.config/hypr/hyprpaper.conf
+        echo "$selected" > ~/.config/hypr/current_wallpaper
+
+        # Generate hyprpaper.conf with all active monitors
+        cat > ~/.config/hypr/hyprpaper.conf <<EOF
+ipc = on
+splash = false
+
+EOF
+
+        # Add wallpaper entry for each monitor
+        for monitor in $monitors; do
+            cat >> ~/.config/hypr/hyprpaper.conf <<EOF
+wallpaper {
+  monitor = $monitor
+  path = $selected
+  fit_mode = cover
+}
+
+EOF
+        done
 
         if command -v wal &>/dev/null; then
-            wal -q -n -i "$selected"
-            
-            # Convert colors for Hyprland
-            if [ -f "$HOME/dotfiles/scripts/convert-pywal-colors.sh" ]; then
-                "$HOME/dotfiles/scripts/convert-pywal-colors.sh"
-            fi
-            
-            pkill waybar 
+            wal -q -n -i "$selected" # build palette from wallpaper
+            hyprctl reload
+            pkill waybar
             sleep 0.2
             nohup waybar >/dev/null 2>&1 &
             kitty @ set-colors --all ~/.cache/wal/colors-kitty.conf 2>/dev/null
@@ -59,5 +58,5 @@ if [[ -f "$CHOOSER_FILE" ]]; then
         notify-send "Wallpaper not applied" "Invalid file selected."
     fi
 else
-    notify-send "No wallpaper selected" "No file chosen in yazi."
+    notify-send "Wallpaper picker cancelled" "No file was selected."
 fi
