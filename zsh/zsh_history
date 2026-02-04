@@ -2123,3 +2123,11 @@ hyprctl dispatch workspace 1\
 : 1770216299:0;git config --global user.name "Akrm Al-Hakimi"
 : 1770216301:0;git push
 : 1770216308:0;git add .
+: 1770216309:0;git commit -m 'fix a buncha things'
+: 1770216311:0;git push
+: 1770216314:0;clear
+: 1770216317:0;yay -S nmrs
+: 1770216416:0;clear
+: 1770216416:0;nmrs
+: 1770216446:0;gs
+: 1770216447:0;git add .
