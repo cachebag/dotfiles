@@ -2021,3 +2021,105 @@ echo "[workspace]" > Cargo.toml
 : 1758936637:0;clear
 : 1758936638:0;tmux
 : 1758936643:0;:Q
+: 1770214629:0;cd dotfiles
+: 1770214632:0;cd hyprland
+: 1770214650:0;ls
+: 1770214654:0;cat appearance.conf| copy
+: 1770214702:0;clear
+: 1770214703:0;nvim
+: 1770214791:0;wal -i /home/cachebag/wallpapers/View_of_Vent_in_the_Ventertal.jpg\
+
+: 1770214816:0;sudo pacman -S --needed python-pywal\
+
+: 1770214821:0;clear
+: 1770214826:0;wal -i /home/cachebag/wallpapers/View_of_Vent_in_the_Ventertal.jpg\
+
+: 1770214854:0;file /home/cachebag/wallpapers/View_of_Vent_in_the_Ventertal.jpg\
+
+: 1770214866:0;head -n 20 /home/cachebag/wallpapers/View_of_Vent_in_the_Ventertal.jpg\
+
+: 1770214881:0;cd ..
+: 1770214882:0;cd .
+: 1770214885:0;cd wallpapers
+: 1770214888:0;cd ..
+: 1770214889:0;cd wallpapers
+: 1770214891:0;git lfs pull\
+
+: 1770214945:0;git lfs instal
+: 1770214947:0;git lfs install
+: 1770214950:0;git lfs pull\
+
+: 1770214952:0;clear
+: 1770214953:0;cd .
+: 1770214953:0;clear
+: 1770214955:0;wal -i /home/cachebag/wallpapers/View_of_Vent_in_the_Ventertal.jpg\
+
+: 1770214965:0;clear
+: 1770214970:0;hyprctl reload
+: 1770215013:0;cd dotfiles
+: 1770215014:0;clear
+: 1770215021:0;nvim
+: 1770215051:0;hyprctl reload
+: 1770215062:0;cd ..
+: 1770215066:0;nvim .config/hypr/appearance.conf
+: 1770215081:0;cd dotfiles
+: 1770215083:0;cd hyprland
+: 1770215084:0;cat appearance.conf| copy
+: 1770215125:0;cat ~/.cache/wal/colors-hyprland.conf
+: 1770215133:0;clear
+: 1770215170:0;nvim .config/hypr/appearance.conf
+: 1770215174:0;nvim appearance.conf
+: 1770215186:0;hyprctl reload
+: 1770215201:0;cat ~/.cache/wal/colors.conf
+: 1770215207:0;ls ~/.cache/wal/
+: 1770215241:0;mkdir -p ~/.config/wal/templates\
+
+: 1770215243:0;nvim ~/.config/wal/templates/colors-hyprland.conf\
+
+: 1770215251:0;wal -i /home/cachebag/wallpapers/View_of_Vent_in_the_Ventertal.jpg\
+
+: 1770215257:0;~/.cache/wal/colors-hyprland.conf\
+
+: 1770215259:0;ls ~/.cache/wal/colors-hyprland.conf\
+
+: 1770215263:0;cat ~/.cache/wal/colors-hyprland.conf\
+
+: 1770215269:0;nvim appearance.conf
+: 1770215292:0;ls
+: 1770215317:0;cd dotfiles/hyprland
+: 1770215318:0;nvim
+: 1770215355:0;hyprctl reload
+: 1770215488:0;nvim ~/.config/wal/templates/colors-hyprland.conf\
+
+: 1770215522:0;hyprctl reload
+: 1770215679:0;nvim ~/.config/wal/templates/colors-hyprland.conf\
+
+: 1770215725:0;hyprctl reload
+: 1770215735:0;nvim dotfiles/hyprland/appearance.conf
+: 1770215754:0;cat ~/.cache/wal/colors-hyprland.conf\
+
+: 1770215765:0;cat ~/.cache/wal/colors-hyprland.conf | copy\
+
+: 1770215781:0;nvim ~/.cache/wal/colors-hyprland.conf
+: 1770215877:0;hyprctl monitors
+: 1770215884:0;nvim dotfiles/hyprland
+: 1770216089:0;hyprctl dispatch moveworkspacetomonitor 1 DP-1\
+hyprctl dispatch focusmonitor DP-1\
+hyprctl dispatch workspace 1\
+
+: 1770216097:0;nvim
+: 1770216199:0;gs
+: 1770216205:0;nvim ~/.zshrc
+: 1770216254:0;source ~/.zshrc
+: 1770216255:0;clear
+: 1770216255:0;gs
+: 1770216257:0;cd dotfiles
+: 1770216257:0;gs
+: 1770216261:0;git add .
+: 1770216267:0;nvim hyprland/keybinds.conf
+: 1770216276:0;git add .
+: 1770216285:0;git commit -m 'fix a buncha things'
+: 1770216290:0;git config --global user.email "alhakimiakrmj@gmail.com"
+: 1770216299:0;git config --global user.name "Akrm Al-Hakimi"
+: 1770216301:0;git push
+: 1770216308:0;git add .

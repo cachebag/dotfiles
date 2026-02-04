@@ -27,6 +27,13 @@ alias vim='nvim'
 alias copy='wl-copy'
 alias free='df -h --output=source,size,used,avail,target | grep -E "Filesystem|/dev/nvme|/dev/sd" | grep -v "/dev/nvme0n1p1"'
 
+# Git aliases
+alias gs='git status'
+alias gd='git diff'
+alias gp='gp'
+alias gl='git log'
+alias gc='git checkout'
+
 # Set Spaceship options BEFORE loading the prompt
 SPACESHIP_PROMPT_ORDER=(
   user          # Username section
