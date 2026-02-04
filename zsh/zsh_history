@@ -2131,3 +2131,57 @@ hyprctl dispatch workspace 1\
 : 1770216416:0;nmrs
 : 1770216446:0;gs
 : 1770216447:0;git add .
+: 1770222046:0;git clean -fd
+: 1770222048:0;cat > lua/cachebag/plugins/markdown.lua <<'LUA'\
+return {\
+  "iamcco/markdown-preview.nvim",\
+  ft = { "markdown" },\
+  build = "cd app && npm install",\
+}\
+LUA\
+\
+cat > lua/cachebag/plugins/neorg.lua <<'LUA'\
+return {\
+  "nvim-neorg/neorg",\
+  ft = "norg",\
+  dependencies = { "nvim-lua/plenary.nvim" },\
+  config = true,\
+}\
+LUA\
+\
+cat > lua/cachebag/plugins/neorg-telescope.lua <<'LUA'\
+return {\
+  "nvim-neorg/neorg-telescope",\
+  dependencies = {\
+    "nvim-neorg/neorg",\
+    "nvim-telescope/telescope.nvim",\
+  },\
+}\
+LUA\
+\
+cat > lua/cachebag/plugins/autopairs.lua <<'LUA'\
+return {\
+  "windwp/nvim-autopairs",\
+  event = "InsertEnter",\
+  config = true,\
+}\
+LUA\
+\
+cat > lua/cachebag/plugins/tmux-navigator.lua <<'LUA'\
+return {\
+  "christoomey/vim-tmux-navigator",\
+  lazy = false,\
+}\
+LUA\
+\
+rm -f lua/cachebag/plugins/tcss.lua\
+
+: 1770222049:0;nvim
+: 1770222109:0;nvim main.c
+: 1770222152:0;nvim init.lua
+: 1770222161:0;nvim
+: 1770222209:0;cd ..
+: 1770222211:0;gs
+: 1770222212:0;git add .
+: 1770222215:0;nvim
+: 1770222230:0;git add .
