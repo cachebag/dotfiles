@@ -33,6 +33,7 @@ alias gd='git diff'
 alias gp='gp'
 alias gl='git log'
 alias gc='git checkout'
+alias gp='git pull'
 
 # Set Spaceship options BEFORE loading the prompt
 SPACESHIP_PROMPT_ORDER=(

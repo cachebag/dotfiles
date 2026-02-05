@@ -2185,3 +2185,533 @@ rm -f lua/cachebag/plugins/tcss.lua\
 : 1770222212:0;git add .
 : 1770222215:0;nvim
 : 1770222230:0;git add .
+: 1770222237:0;git commit -m 'fix: nvim config'
+: 1770222238:0;git pus
+: 1770222240:0;git push
+: 1770222241:0;clear
+: 1770222242:0;gs
+: 1770222263:0;nvim waybar
+: 1770222362:0;sudo pacman -S --needed noto-fonts noto-fonts-cjk noto-fonts-emoji ttf-dejavu\
+
+: 1770222399:0;fc-cache -fv\
+
+: 1770223034:0;chmod +x scripts/wal.sh scripts/wal-watch.sh
+: 1770223040:0;ls scripts
+: 1770223070:0;chmod +x waybar/scripts/power_menu.sh
+: 1770223080:0;nvim
+: 1770223083:0;gs
+: 1770223318:0;nvim dotfiles/hyprland
+: 1770223362:0;nvim
+: 1770223659:0;clear
+: 1770223676:0;sudo pacman -S ttf-iosevka\
+
+: 1770223681:0;pacman -Ss iosevka\
+
+: 1770223684:0;sudo pacman -S ttf-iosevka\
+
+: 1770223690:0;yay -S ttf-iosevka\
+
+: 1770223875:0;fc-cache -fv\
+
+: 1770223884:0;clear
+: 1770223922:0;yay -Ss iosevka\
+
+: 1770223945:0;fc-cache -fv\
+
+: 1770223990:0;yay -S ttf-iosevka ttf-iosevka-term ttf-iosevka-fixed ttf-iosevka-etoile ttf-iosevka-aile ttf-iosevka-slab\
+
+: 1770224124:0;fc-cache -fv\
+
+: 1770224506:0;cd Downloads
+: 1770224506:0;ls
+: 1770224511:0;yay -S cursor-bin
+: 1770224612:0;cursor
+: 1770224638:0;cd ..
+: 1770224639:0;cd dotfiles
+: 1770224639:0;clear
+: 1770224640:0;ls
+: 1770224642:0;cd applications
+: 1770224642:0;ls
+: 1770224648:0;nvim cursor.desktop
+: 1770224662:0;which cursor
+: 1770224807:0;ls
+: 1770224810:0;ls notes
+: 1770224811:0;ls
+: 1770224817:0;rm -rf Pictures
+: 1770224858:0;ls
+: 1770224861:0;mkdir personal
+: 1770224863:0;cd personal
+: 1770224870:0;git clone git@github.com:cachebag/zerobrew.git
+: 1770224873:0;clear
+: 1770224876:0;cd zerobrew
+: 1770224879:0;cd ..
+: 1770224880:0;clear
+: 1770224880:0;cd .
+: 1770224883:0;cd ..
+: 1770224883:0;clear
+: 1770224933:0;curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+: 1770224973:0;. "$HOME/.cargo/env"
+: 1770224977:0;which rustup
+: 1770224980:0;which rust
+: 1770224989:0;source ~/.zshrc
+: 1770224991:0;which rustup
+: 1770224992:0;which rust
+: 1770225026:0;clear
+: 1770225027:0;rustup show
+: 1770225049:0;ls -l ~/.cargo/bin/rustc\
+
+: 1770225063:0;which rustc
+: 1770225069:0;readlink -f ~/.cargo/bin/rustc
+: 1770225072:0;~/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/rustc
+: 1770225077:0;rustc -version
+: 1770225079:0;rustc --version
+: 1770225080:0;clear
+: 1770225085:0;cargo --version
+: 1770225087:0;clear
+: 1770225090:0;cd personal/zerobrew
+: 1770225091:0;clear
+: 1770225092:0;nvim
+: 1770225096:0;clear
+: 1770225149:0;cd personal/zerobrew
+: 1770225150:0;clear
+: 1770225323:0;gp
+: 1770225329:0;nvim ~/.zshrc
+: 1770225341:0;source ~/.zshrc
+: 1770225342:0;clear
+: 1770225342:0;gp
+: 1770225344:0;clear
+: 1770225430:0;gs
+: 1770225432:0;clear
+: 1770225436:0;cargo +nightly gmt
+: 1770225439:0;cargo +nightly fmt
+: 1770225501:0;cargo fmt
+: 1770225504:0;cargo +nightly fmt
+: 1770225505:0;clear
+: 1770225506:0;gs
+: 1770225513:0;cargo clippy
+: 1770225535:0;clear
+: 1770225537:0;cargo check
+: 1770225547:0;gs
+: 1770225549:0;clear
+: 1770225563:0;gc -b macos-patching
+: 1770225577:0;git push --set-upstream origin macos-patching
+: 1770225581:0;git status
+: 1770225582:0;git add .
+: 1770225660:0;git commit -m 'fix(zb_io): fix macOS git HTTPS remotes by patching hardcoded Homebrew paths in Mach-O binaries'
+: 1770225662:0;git push
+: 1770225664:0;clear
+: 1770225907:0;cargo +nightly fmt
+: 1770225910:0;git add .
+: 1770225913:0;git commit --amend
+: 1770225919:0;git commit --amend -F
+: 1770225921:0;git commit --amend -f
+: 1770225924:0;git commit -f --amend
+: 1770225925:0;clear
+: 1770225926:0;gs
+: 1770225931:0;git commit --amend
+: 1770225938:0;gs
+: 1770225940:0;got add .
+: 1770225943:0;git add .
+: 1770225947:0;git commit --amend
+: 1770225955:0;git config --list
+: 1770226023:0;git config --global core.editor nvim\
+
+: 1770226025:0;git commit --amend
+: 1770226029:0;git push -f
+: 1770226031:0;clear
+: 1770226167:0;sudo pacman -S less\
+
+: 1770226170:0;clear
+: 1770226176:0;git config --list
+: 1770226180:0;clear
+: 1770245022:0;gp
+: 1770245029:0;git config pull.rebase true
+: 1770245031:0;gp
+: 1770245032:0;clear
+: 1770245033:0;gs
+: 1770245034:0;clear
+: 1770245069:0;git rebase -i HEAD~2
+: 1770245175:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770245266:0;clear
+: 1770245268:0;cargo +nightly fmt
+: 1770245269:0;cargo test
+: 1770245293:0;clear
+: 1770245294:0;gs
+: 1770245366:0;cargo +nightly fmt
+: 1770245368:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770245370:0;cargo test
+: 1770245375:0;clear
+: 1770245469:0;gs
+: 1770245470:0;clear
+: 1770245472:0;gs
+: 1770245474:0;clear
+: 1770245481:0;cargo +nightly fmt
+: 1770245482:0;clear
+: 1770245541:0;cargo +nightly fmt
+: 1770245542:0;clear
+: 1770245544:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770245563:0;gs
+: 1770245564:0;clear
+: 1770245574:0;git status
+: 1770245576:0;clear
+: 1770245578:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770245580:0;cargo cehck
+: 1770245582:0;cargo check
+: 1770245584:0;cargo test
+: 1770245589:0;clear
+: 1770245595:0;gs
+: 1770245598:0;git add .
+: 1770245601:0;git commit --amend
+: 1770245649:0;git rebase --continue
+: 1770245651:0;git push -f
+: 1770245652:0;clear
+: 1770245724:0;git rebase -i HEAD~2
+: 1770245732:0;git stash
+: 1770245733:0;git rebase -i HEAD~2
+: 1770245742:0;git stash pop
+: 1770245747:0;cargo +nightly fmt
+: 1770245750:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770245753:0;cargo check
+: 1770245755:0;git add .
+: 1770245758:0;git commit --amend
+: 1770245766:0;git push -f
+: 1770245877:0;gh review 168
+: 1770245886:0;gh pr review 168
+: 1770245889:0;gh auth login
+: 1770246032:0;clear
+: 1770246035:0;gc main
+: 1770246050:0;gp
+: 1770246052:0;clear
+: 1770246056:0;gh pr review 168
+: 1770246066:0;gh repo set-default
+: 1770246069:0;clear
+: 1770246072:0;gh pr review 168
+: 1770247038:0;cd personal/zerobrew
+: 1770247042:0;gc pr-template
+: 1770247046:0;gc -b pr-template
+: 1770247202:0;gs
+: 1770247203:0;git add .
+: 1770247216:0;git commit -m 'chore: PR template for contributors'
+: 1770247217:0;git push
+: 1770247225:0;git push --set-upstream origin pr-template
+: 1770247226:0;clear
+: 1770247284:0;gc main
+: 1770247284:0;clea
+: 1770247288:0;gc -b orbstack
+: 1770247293:0;git push --set-upstream origin orbstack
+: 1770247295:0;clear
+: 1770247501:0;gc main
+: 1770247510:0;git branch -D orbstack
+: 1770247511:0;clear
+: 1770247533:0;cargo check
+: 1770247536:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770247540:0;cargo +nightly fmt
+: 1770247542:0;cargo test
+: 1770247666:0;clear
+: 1770247667:0;cloc .
+: 1770247670:0;yay -S cloc
+: 1770247674:0;clear
+: 1770247676:0;cloc zb_io
+: 1770247681:0;clear
+: 1770247728:0;cargo test
+: 1770247744:0;clear
+: 1770247763:0;gs
+: 1770247765:0;clear
+: 1770247767:0;gs
+: 1770247771:0;cargo +nightly fmt
+: 1770247772:0;gs
+: 1770247773:0;clear
+: 1770247773:0;gs
+: 1770247814:0;gc -b ssl
+: 1770247819:0;git push --set-upstream origin ssl
+: 1770247820:0;clear
+: 1770247823:0;git add zb_io
+: 1770247868:0;git commit -m 'fix(zb_io): better CA cert discovery \
+also extends `link.rs` to link "etc" directories for cert files'
+: 1770247871:0;git add zb_cli
+: 1770247907:0;git commit -m 'fix(zb_cli): export SSL env vars with fallback paths\
+also updated `run.rs` to dynamicaly discover CA certs using ssl\
+functions'
+: 1770247908:0;git push
+: 1770247909:0;celar
+: 1770248516:0;gc main
+: 1770248623:0;yay -Syu cursor
+: 1770248626:0;yay -Syu cursor-bin
+: 1770248678:0;clear
+: 1770248684:0;cd personal
+: 1770248687:0;git clone git@github.com:cachebag/nmrs.git
+: 1770248783:0;cd personal/nmrs
+: 1770248783:0;celar
+: 1770248784:0;gs
+: 1770248785:0;clear
+: 1770248786:0;git add .
+: 1770248808:0;git commit -m 'ci: tell git to push current HEAD of any arbitrary branch'
+: 1770248811:0;git push
+: 1770248813:0;clear
+: 1770249268:0;cd personal/nmrs
+: 1770249269:0;git add .
+: 1770249288:0;git commit -m 'ci: bot commits for fixsha, amend for humans'
+: 1770249289:0;git push
+: 1770249292:0;gp
+: 1770249301:0;git config pull.rebase true
+: 1770249301:0;gp
+: 1770249306:0;git push -f
+: 1770249307:0;clear
+: 1770250883:0;cd ..
+: 1770250885:0;cd zerobrew
+: 1770250891:0;cargo build --release
+: 1770250970:0;./target/release/zb info
+: 1770250972:0;./target/release/zb info git
+: 1770250984:0;./target/release/zb install fish
+: 1770251000:0;./target/release/zb info fish
+: 1770259727:0;gc pr-template
+: 1770259728:0;clear
+: 1770259732:0;ls .github
+: 1770259744:0;mv .github/workflows/pull_request_template.md .github
+: 1770259745:0;ls
+: 1770259748:0;ls .github
+: 1770259750:0;git add .
+: 1770259755:0;git commit --amend
+: 1770259757:0;git push -f
+: 1770259758:0;clear
+: 1770259828:0;nvim .github/pull_request_template.md
+: 1770259896:0;git add .
+: 1770259899:0;git commit --amend
+: 1770259903:0;git push -f
+: 1770259916:0;nvim .github/pull_request_template.md
+: 1770259922:0;git add .
+: 1770259924:0;git commit --amend
+: 1770259926:0;git push -f
+: 1770259926:0;clear
+: 1770260403:0;nvim
+: 1770260574:0;cd personal/zerobrew
+: 1770260575:0;clear
+: 1770260576:0;gc main
+: 1770260576:0;clear
+: 1770260758:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770260761:0;cargo +nightly fmt
+: 1770260763:0;cargo check
+: 1770260764:0;gs
+: 1770260794:0;gc -b suggest-homebrew
+: 1770260797:0;git add .
+: 1770260801:0;git commit -m "fix(zb_cli): restore homebrew installation suggestion on install errors"
+: 1770260809:0;git push --set-upstream origin suggest-homebrew
+: 1770260811:0;clear
+: 1770261069:0;gc -b emacs
+: 1770261070:0;clear
+: 1770261071:0;gs
+: 1770261074:0;gc main
+: 1770261079:0;git branch -D emacs
+: 1770261080:0;clear
+: 1770261084:0;git branch -l
+: 1770261098:0;git branch -D ssl macos-patching
+: 1770261294:0;git branch -l
+: 1770261510:0;gc -b zb_io
+: 1770261513:0;git push --set-upstream origin suggest-homebrew
+: 1770261518:0;git push --set-upstream origin zb_io
+: 1770261520:0;clear
+: 1770261754:0;cargo check
+: 1770261780:0;sclear
+: 1770261781:0;clear
+: 1770261782:0;cargo check
+: 1770261791:0;clear
+: 1770261829:0;cargo check
+: 1770261832:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770261866:0;clear
+: 1770261867:0;cargo check
+: 1770261870:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770261873:0;cargo +nightly fmt
+: 1770261877:0;cargo test
+: 1770261923:0;clear
+: 1770261923:0;gs
+: 1770261925:0;clear
+: 1770261927:0;git add .
+: 1770261945:0;git commit -m 'refactor(zb_io): structural re-organization;
+: 1770261946:0;git commit -m 'refactor(zb_io): structural re-organization'
+: 1770261947:0;git push
+: 1770261984:0;git rebase -i HEAD~1
+: 1770261999:0;git reset --soft HEAD
+: 1770262000:0;gs
+: 1770262027:0;git rebase --abort
+: 1770262028:0;clear
+: 1770262029:0;gs
+: 1770262035:0;rm issue-27-hardcoded-paths.md issue-40-bottle-selection.md
+: 1770262037:0;git commit --amend
+: 1770262041:0;git push -f
+: 1770262042:0;clear
+: 1770262083:0;git rebase main
+: 1770262084:0;gs
+: 1770262088:0;git add .
+: 1770262090:0;git commit --amend
+: 1770262093:0;git push -f
+: 1770262094:0;clear
+: 1770262096:0;git rebase main
+: 1770262146:0;gc main
+: 1770262147:0;gp
+: 1770262149:0;gc zb_io
+: 1770262150:0;clear
+: 1770262153:0;git rebase main
+: 1770262272:0;gs
+: 1770262281:0;git rebase --continue
+: 1770262285:0;git push -f
+: 1770262286:0;clear
+: 1770262333:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770262337:0;cargo +nightly fmt
+: 1770262340:0;cargo test
+: 1770262348:0;git add .
+: 1770262351:0;git commit --amend
+: 1770262353:0;git push -f
+: 1770262355:0;clear
+: 1770262360:0;gs
+: 1770262483:0;gc main
+: 1770262483:0;clear
+: 1770262488:0;gc -b ssl
+: 1770262489:0;clear
+: 1770262489:0;gs
+: 1770262496:0;clear
+: 1770262529:0;cargo build --release
+: 1770262585:0;gs
+: 1770262603:0;./target/release/zb init
+: 1770262605:0;source ~/.zshrc
+: 1770262619:0;curl https://google.com
+: 1770262753:0;clear
+: 1770262755:0;cargo check
+: 1770262756:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770262758:0;cargo +nightly fmt
+: 1770262761:0;cargo test
+: 1770262831:0;clear
+: 1770262834:0;cargo test
+: 1770262883:0;gs
+: 1770262887:0;cargo fmt
+: 1770262889:0;git add .
+: 1770262917:0;git commit -m 'fix(zb_cli): conditional shell exports for setting SSL env vars'
+: 1770262918:0;git push
+: 1770262924:0;git push --set-upstream origin ssl
+: 1770263034:0;clear
+: 1770263062:0;cargo +nightly fmt
+: 1770263067:0;git commit --amend
+: 1770263069:0;git push -f
+: 1770263070:0;clear
+: 1770263298:0;cargo test --lib -p zb_cli
+: 1770263314:0;clear
+: 1770263317:0;mkdir -p /tmp/zb-test-prefix /tmp/zb-test-root
+: 1770263329:0;rm -rf /tmp/zb-test-prefix /tmp/zb-test-root
+: 1770263330:0;clear
+: 1770263336:0;cargo test --lib -p zb_cli shell_config_output_is_well_formatted -- --nocapture
+: 1770263368:0;nvim test.sh
+: 1770263396:0;clear
+: 1770263419:0;cargo test
+: 1770263428:0;clear
+: 1770263430:0;cargo +nightly fmt
+: 1770263431:0;clear
+: 1770263434:0;cargo check
+: 1770263436:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770263438:0;cargo +nightly fmt
+: 1770263439:0;cargo test
+: 1770263445:0;gs
+: 1770263447:0;git add .
+: 1770263448:0;git commit --amend
+: 1770263450:0;git push -f
+: 1770263452:0;clear
+: 1770263515:0;cargo test
+: 1770263520:0;clear
+: 1770263523:0;cargo +nightly fmt
+: 1770263526:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770263528:0;cargo check
+: 1770263530:0;cargo test
+: 1770263550:0;clear
+: 1770263552:0;cargo test
+: 1770263557:0;cargo +nightly fmt
+: 1770263560:0;cargo check
+: 1770263561:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770263563:0;git add .
+: 1770263564:0;git commit --amend
+: 1770263566:0;git push -f
+: 1770263568:0;clear
+: 1770263794:0;gc zb_io
+: 1770263795:0;clear
+: 1770264046:0;cargo checl
+: 1770264047:0;clear
+: 1770264049:0;cargo check
+: 1770264050:0;cargo clippy --all-targets --all-features -- -D warnings
+: 1770264052:0;cargo +nightly fmt
+: 1770264054:0;cargo test
+: 1770264080:0;clear
+: 1770264082:0;cargo test
+: 1770264094:0;gs
+: 1770264097:0;clear
+: 1770264103:0;cargo test
+: 1770264109:0;git add .
+: 1770264111:0;git commit --amend
+: 1770264114:0;git push -f
+: 1770264115:0;clear
+: 1770264122:0;gc main
+: 1770264123:0;clear
+: 1770264136:0;gp
+: 1770264137:0;clear
+: 1770264163:0;rm -rf ~/.local/share/zerobrew ~/.zerobrew
+: 1770264167:0;sed -i '/# zerobrew/,/^$/d' ~/.zshrc
+: 1770264169:0;cargo build --release
+: 1770264196:0;cargo install --path zb_cli
+: 1770264208:0;zb init
+: 1770264212:0;source ~/.zshrc
+: 1770264215:0;curl https://google.com
+: 1770264222:0;curl github.com
+: 1770264228:0;curl github.com/githubstatus
+: 1770264233:0;cat ~/.zshrc | grep -A 20 "# zerobrew"
+: 1770264241:0;# Check the actual shell config\
+cat ~/.zshrc | grep -A 15 "# SSL/TLS"
+: 1770264255:0;clear
+: 1770264257:0;cat ~/.zshrc | tail -50
+: 1770264289:0;clear
+: 1770264313:0;# Check if .zshrc exists and is writable\
+ls -la ~/.zshrc\
+test -w ~/.zshrc && echo "writable" || echo "not writable"\
+\
+# Check if zerobrew directories exist (they might skip init)\
+ls -la ~/.local/share/zerobrew\
+ls -la ~/.zerobrew\
+\
+# Try forcing a re-init\
+rm -rf ~/.local/share/zerobrew ~/.zerobrew\
+zb init
+: 1770264395:0;# Check if maybe it went to .zshenv instead of .zshrc\
+cat ~/.zshenv 2>/dev/null\
+\
+# Or check ZDOTDIR\
+echo $ZDOTDIR\
+ls -la $ZDOTDIR/.zshrc $ZDOTDIR/.zshenv 2>/dev/null\
+\
+# Check all shell configs\
+for f in ~/.zshenv ~/.zshrc ~/.bashrc ~/.profile; do \
+ echo "=== $f ==="\
+ grep -A 5 "zerobrew" "$f" 2>/dev/null || echo "not found"\
+done
+: 1770264420:0;clear
+: 1770264425:0;# Remove old zerobrew config from .zshenv\
+sed -i '/# zerobrew/,/_zb_path_append.*prefix\/bin/d' ~/.zshenv\
+\
+# Verify it's gone\
+grep "zerobrew" ~/.zshenv\
+\
+# Now re-init to get the new config with SSL fixes\
+zb init\
+\
+# Source it\
+source ~/.zshenv\
+\
+# Check the new config has SSL conditionals\
+cat ~/.zshenv | grep -A 20 "# zerobrew"\
+
+: 1770264433:0;clear
+: 1770264434:0;sed -i '/# zerobrew/,/_zb_path_append.*prefix\/bin/d' ~/.zshenv
+: 1770264437:0;grep "zerobrew" ~/.zshenv
+: 1770264439:0;zb init\
+
+: 1770264440:0;source ~/.zshenv
+: 1770264443:0;cat ~/.zshenv | grep -A 20 "# zerobrew"
+: 1770301447:0;nvim dotfiles/waybar/style.css
+: 1770301664:0;cp ~/dotfiles/waybar/style-dark.css ~/dotfiles/waybar/style.css
+: 1770301714:0;cd dotfiles
+: 1770301716:0;gs
+: 1770301749:0;git add hyprland/ zsh/
