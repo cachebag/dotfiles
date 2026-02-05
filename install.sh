@@ -77,7 +77,7 @@ install_dependencies() {
         cd "$DOTFILES_ROOT"
     fi
 
-    local aur_pkgs=(hyprpaper swaylock-effects wlogout hypridle hyprshot snapd)
+    local aur_pkgs=(hyprpaper swaylock-effects wlogout hypridle hyprshot)
     if ! yay -Qi "${aur_pkgs[@]}" &>/dev/null; then
         yay -S --needed --noconfirm "${aur_pkgs[@]}"
     fi
@@ -262,7 +262,7 @@ setup_wallpapers() {
 
 setup_services() {
     log_info "Enabling system services..."
-    sudo systemctl enable bluetooth NetworkManager snapd
+    sudo systemctl enable bluetooth NetworkManager
     sudo usermod -aG video,input,audio "$USER"
     
     if [[ -d "$DOTFILES_ROOT/hyprland/scripts" ]]; then
@@ -271,30 +271,6 @@ setup_services() {
     
     log_success "Services configured"
     save_state "services_done"
-}
-
-setup_snap_apps() {
-    log_info "Setting up snap and installing applications..."
-    
-    sudo systemctl start snapd
-    sudo ln -sf /var/lib/snapd/snap /snap 2>/dev/null || true
-    
-    local snap_apps=(
-        "chatgpt-linux"
-        "whatsapp-linux-app"
-    )
-    
-    for app in "${snap_apps[@]}"; do
-        if ! snap list | grep -q "^$app "; then
-            log_info "Installing $app via snap..."
-            sudo snap install "$app" || log_warning "Failed to install $app - may need manual installation"
-        else
-            log_info "$app already installed"
-        fi
-    done
-    
-    log_success "Snap applications installed"
-    save_state "snap_done"
 }
 
 setup_neovim() {
@@ -397,15 +373,12 @@ post_install() {
     echo "✓ Fonts installed"
     echo "✓ SDDM theme configured"
     echo "✓ Services enabled"
-    echo "✓ Snap applications installed"
     echo "✓ Neovim plugins installed"
     echo "✓ Zsh configured as default shell"
     echo ""
     echo -e "${YELLOW}INSTALLED APPLICATIONS:${NC}"
     echo "• Firefox (Super+B)"
     echo "• Dolphin file manager (Super+E)"
-    echo "• ChatGPT (Super+G)"
-    echo "• WhatsApp (Super+F)"
     echo "• Obsidian (Super+O)"
     echo ""
     echo -e "${YELLOW}NEXT STEPS:${NC}"
@@ -456,7 +429,6 @@ main() {
     echo "• Neovim (Editor with plugins)"
     echo "• SDDM (Display manager theme)"
     echo "• Firefox, Dolphin, Obsidian"
-    echo "• Snap apps (ChatGPT, WhatsApp)"
     echo "• Various utilities and fonts"
     echo ""
     
@@ -496,9 +468,6 @@ main() {
             setup_services
             ;&
         "services_done")
-            setup_snap_apps
-            ;&
-        "snap_done")
             setup_neovim
             ;&
         "neovim_done")

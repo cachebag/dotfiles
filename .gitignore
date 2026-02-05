@@ -21,3 +21,4 @@ user-dirs.locale
 lazy-lock.json
 applications/*.AppImage*
 *.AppImage*
+zsh/zsh_history

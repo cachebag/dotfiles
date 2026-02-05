@@ -29,9 +29,9 @@
   },
 
   "custom/bluelight": {
-    "exec": "echo '⎚'",
-    "on-click": "/home/cachebag/.local/bin/bluelight-toggle",
-    "interval": 0,
+    "exec": "/home/cachebag/dotfiles/scripts/bluelight-toggle.sh --status",
+    "on-click": "/home/cachebag/dotfiles/scripts/bluelight-toggle.sh",
+    "interval": 5
   },
 
   "battery": {
@@ -84,7 +84,7 @@
   },
 
   "custom/power": {
-    "format": "",
+    "format": "",
     "on-click": "~/dotfiles/scripts/power_menu.sh"
   },
 

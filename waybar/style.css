@@ -33,24 +33,24 @@ window#waybar.hidden {
   font-weight: 500;
   margin-bottom: 0px;
   border-radius: 10px;
-  background: @background;
+  background: @color0;
   transition: none;
 }
 
 #workspaces button {
   transition: none;
-  color: @color7;
+  color: @foreground;
   background: transparent;
   border-radius: 2px;
 }
 
 #workspaces button.active {
-  color: @color4;
+  color: @color6;
 }
 
 #workspaces button:hover {
   color: @background;
-  background: @color3;
+  background: @foreground;
 }
 
 #network {
@@ -61,13 +61,13 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: @color4;
-  background: @background;
+  color: @foreground;
+  background: @color0;
 }
 
 #network:hover {
   color: @background;
-  background: @color4;
+  background: @color6;
 }
 
 #pulseaudio {
@@ -78,13 +78,13 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: @color1;
-  background: @background;
+  color: @foreground;
+  background: @color0;
 }
 
 #pulseaudio:hover {
   color: @background;
-  background: @color1;
+  background: @color5;
 }
 
 #bluetooth {
@@ -95,13 +95,13 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: @color4;
-  background: @background;
+  color: @foreground;
+  background: @color0;
 }
 
 #bluetooth:hover {
   color: @background;
-  background: @color4;
+  background: @color6;
 }
 
 #custom-bluelight {
@@ -112,13 +112,13 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: @color1;
-  background: @background;
+  color: @foreground;
+  background: @color0;
 }
 
 #custom-bluelight:hover {
   color: @background;
-  background: @color4;
+  background: @color6;
 }
 
 #battery {
@@ -129,18 +129,18 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: @color1;
-  background: @background;
+  color: @foreground;
+  background: @color0;
 }
 
 #battery:hover {
   color: @background;
-  background: @color1;
+  background: @color5;
 }
 
 #battery.critical:not(.charging) {
-  background-color: @color3;
-  color: @foreground;
+  background-color: @color1;
+  color: @background;
   animation-name: blink;
   animation-duration: 1s;
   animation-timing-function: linear;
@@ -150,7 +150,7 @@ window#waybar.hidden {
 
 @keyframes blink {
   to {
-    background-color: @color1;
+    background-color: @color3;
     color: @background;
   }
 }
@@ -163,13 +163,13 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: @background;
-  background: @color3;
+  color: @foreground;
+  background: @color0;
 }
 
 #backlight:hover {
-  color: @color3;
-  background: @background;
+  color: @background;
+  background: @color6;
 }
 
 #clock {
@@ -181,13 +181,13 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: @color4;
-  background: @background;
+  color: @foreground;
+  background: @color0;
 }
 
 #clock:hover {
   color: @background;
-  background: @color4;
+  background: @color6;
 }
 
 #memory {
@@ -198,13 +198,13 @@ window#waybar.hidden {
   padding-right: 10px;
   border-radius: 10px;
   transition: none;
-  color: @color4;
-  background: @background;
+  color: @foreground;
+  background: @color0;
 }
 
 #memory:hover {
   color: @background;
-  background: @color4;
+  background: @color6;
 }
 
 #cpu {
@@ -215,13 +215,13 @@ window#waybar.hidden {
   padding-right: 10px;
   border-radius: 10px;
   transition: none;
-  color: @color1;
-  background: @background;
+  color: @foreground;
+  background: @color0;
 }
 
 #cpu:hover {
   color: @background;
-  background: @color1;
+  background: @color5;
 }
 
 #custom-launcher {
@@ -232,13 +232,13 @@ window#waybar.hidden {
   padding-right: 5px;
   border-radius: 10px;
   transition: none;
-  color: @color4;
-  background: @background;
+  color: @foreground;
+  background: @color0;
 }
 
 #custom-launcher:hover {
   color: @background;
-  background: @color4;
+  background: @color6;
 }
 
 #custom-media {
@@ -249,13 +249,13 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: @background;
-  background: @color6;
+  color: @foreground;
+  background: @color0;
 }
 
 #custom-media:hover {
-  color: @color6;
-  background: @background;
+  color: @background;
+  background: @color6;
 }
 
 #custom-power {
@@ -266,11 +266,11 @@ window#waybar.hidden {
   margin-bottom: 0px;
   border-radius: 10px;
   transition: none;
-  color: @color1;
-  background: @background;
+  color: @foreground;
+  background: @color0;
 }
 
 #custom-power:hover {
   color: @background;
-  background: @color1;
+  background: @color5;
 }
