@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
 Name=Cursor
-Exec=/home/cachebag/dotfiles/applications/Cursor-2.0.77-x86_64.AppImage
+Exec=/usr/bin/cursor
 Icon=/home/cachebag/dotfiles/applications/icons/cursor.png
 Terminal=false
 Categories=Development;
