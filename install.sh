@@ -214,7 +214,12 @@ setup_sddm() {
             sudo cp "$DOTFILES_ROOT/sddm/theme.conf" /etc/sddm.conf.d/
         fi
         
-        sudo systemctl enable sddm
+        if ! systemctl is-enabled display-manager.service &>/dev/null; then
+          sudo systemctl enable sddm
+        else
+          log_warning "Display manager already configured, skipping SDDM enable"
+        fi
+        
         log_success "SDDM theme installed"
     else
         log_warning "SDDM theme directory not found, skipping theme setup"
