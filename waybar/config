@@ -1,114 +1,202 @@
 {
-  "modules-left": ["custom/launcher", "pulseaudio", "bluetooth", "custom/bluelight"],
-  "modules-center": ["hyprland/workspaces"],
-  "modules-right": ["custom/power", "network", "cpu", "memory", "battery", "clock"],
+  "position": "bottom",
+  "height": 38,
+  "margin-bottom": 8,
+  "margin-left": 12,
+  "margin-right": 12,
+  "spacing": 0,
+
+  "modules-left": ["custom/launcher", "hyprland/workspaces"],
+  "modules-center": ["custom/media", "clock"],
+  "modules-right": ["backlight", "pulseaudio", "bluetooth", "custom/bluelight", "network", "cpu", "temperature", "memory", "battery", "custom/power"],
+
+  "hyprland/workspaces": {
+    "format": "{name}",
+    "on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
+    "all-outputs": true,
+    "sort-by-number": true,
+    "persistent-workspaces": {
+      "*": 5
+    }
+  },
+
+  "hyprland/window": {
+    "format": "  {}",
+    "max-length": 50,
+    "separate-outputs": true,
+    "rewrite": {
+      "(.*) — Mozilla Firefox": "󰈹  $1",
+      "(.*) - fish": "  $1",
+      "(.*) - zsh": "  $1",
+      "(.*) - nvim": "  $1",
+      "nvim": "  nvim",
+      "kitty": "  kitty",
+      "": "  desktop"
+    }
+  },
+
+  "tray": {
+    "icon-size": 16,
+    "spacing": 6,
+    "show-passive-items": false
+  },
+
+  "clock": {
+    "format": "󰥔  {:%H:%M}",
+    "format-alt": "  {:%a, %d %b %Y}",
+    "tooltip-format": "<tt><small>{calendar}</small></tt>",
+    "calendar": {
+      "mode": "month",
+      "weeks-pos": "right",
+      "on-scroll": 1,
+      "format": {
+        "months": "<span color='#cdd6f4'><b>{}</b></span>",
+        "days": "<span color='#cdd6f4'>{}</span>",
+        "weeks": "<span color='#89b4fa'>W{}</span>",
+        "weekdays": "<span color='#a6e3a1'><b>{}</b></span>",
+        "today": "<span color='#f38ba8'><b>{}</b></span>"
+      }
+    }
+  },
+
+  "custom/media": {
+    "format": "{icon}  {}",
+    "return-type": "json",
+    "max-length": 35,
+    "exec": "playerctl metadata --format '{\"text\": \"{{artist}} — {{title}}\", \"tooltip\": \"{{playerName}}: {{artist}} — {{title}}\", \"alt\": \"{{playerName}}\", \"class\": \"{{playerName}}\"}' 2>/dev/null",
+    "exec-if": "playerctl status 2>/dev/null | grep -qE 'Playing|Paused'",
+    "on-click": "playerctl play-pause",
+    "on-click-right": "playerctl next",
+    "on-scroll-up": "playerctl next",
+    "on-scroll-down": "playerctl previous",
+    "interval": 2,
+    "format-icons": {
+      "spotify": "󰓇",
+      "firefox": "󰈹",
+      "chromium": "",
+      "default": "󰎇"
+    },
+    "escape": true
+  },
 
   "pulseaudio": {
-    "format": "{icon} {volume}%",
-    "format-muted": "󰝟 {volume}%",
+    "format": "{icon}  {volume}%",
+    "format-muted": "󰝟  muted",
+    "format-bluetooth": "󰂯  {volume}%",
+    "format-bluetooth-muted": "󰂲  muted",
     "scroll-step": 5,
     "on-click": "pavucontrol",
+    "on-click-right": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
+    "tooltip-format": "{desc} — {volume}%",
     "format-icons": {
-      "default": ["", "", ""]
+      "headphone": "󰋋",
+      "hands-free": "󰋋",
+      "headset": "󰋋",
+      "phone": "",
+      "portable": "",
+      "car": "",
+      "default": ["󰕿", "󰖀", "󰕾"]
     }
   },
 
   "network": {
-    "tooltip": false,
-    "format-wifi": "  {essid}",
-    "format-ethernet": "🖧",
-    "on-click": "nmrs"
+    "format-wifi": "󰤨  {essid} ({signalStrength}%)",
+    "format-ethernet": "󰈀  {ipaddr}",
+    "format-disconnected": "󰤭  offline",
+    "tooltip-format-wifi": "󰤨  {essid}\nSignal: {signalStrength}%\nFreq: {frequency}MHz\nIP: {ipaddr}",
+    "tooltip-format-ethernet": "󰈀  {ifname}\nIP: {ipaddr}",
+    "on-click": "nmrs",
+    "interval": 10
   },
 
   "bluetooth": {
-    "format": " {status}",
-    "format-connected": " {device_alias}",
-    "format-disabled": " Off",
+    "format": "󰂯  {status}",
+    "format-connected": "󰂱  {device_alias}",
+    "format-connected-battery": "󰂱  {device_alias} ({device_battery_percentage}%)",
+    "format-disabled": "󰂲  off",
+    "tooltip-format": "{controller_alias}\n{num_connections} connected",
+    "tooltip-format-connected": "{device_enumerate}",
+    "tooltip-format-enumerate-connected": "{device_alias}",
     "on-click": "blueman-manager",
-    "interval": 30
+    "interval": 10
   },
 
   "custom/bluelight": {
+    "format": "{}",
     "exec": "/home/cachebag/dotfiles/scripts/bluelight-toggle.sh --status",
-    "on-click": "/home/cachebag/dotfiles/scripts/bluelight-toggle.sh",
+    "on-click": "/home/cachebag/dotfiles/scripts/bluelight-toggle.sh && pkill -RTMIN+8 waybar",
+    "signal": 8,
+    "tooltip": "Toggle blue light filter",
     "interval": 5
   },
 
   "battery": {
     "states": {
       "full": 100,
-      "good": 95,
-      "decent": 50,
+      "good": 80,
       "warning": 30,
-      "critical": 20
+      "critical": 15
     },
-    "format": "{icon} {capacity}%",
-    "format-time": "{H} h {M} min",
-    "format-alt": "{icon} {time}",
-    "format-icons": {
-      "charging": " ",
-      "default": [" ", " ", " ", " ", " "]
-    }
-  },
-
-  "clock": {
-    "format": "{:%H:%M}",
-    "format-alt": "{:%A, %d %B %Y}"
+    "format": "{icon}  {capacity}%",
+    "format-charging": "󰂄  {capacity}%",
+    "format-plugged": "󰚥  {capacity}%",
+    "format-full": "󰁹  full",
+    "format-alt": "{icon}  {time}",
+    "tooltip-format": "{timeTo}\nPower: {power}W",
+    "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
   },
 
   "cpu": {
-    "interval": 15,
-    "format": "  {}%",
-    "max-length": 10,
-    "on-click": "kitty -- btop"
+    "interval": 5,
+    "format": "󰻠  {usage}%",
+    "tooltip-format": "CPU: {usage}%\nLoad: {load}",
+    "on-click": "kitty -- btop",
+    "states": {
+      "warning": 70,
+      "critical": 90
+    }
+  },
+
+  "temperature": {
+    "critical-threshold": 80,
+    "interval": 5,
+    "format": "{icon}  {temperatureC}°C",
+    "format-critical": "󰸁  {temperatureC}°C",
+    "tooltip-format": "Temperature: {temperatureC}°C",
+    "format-icons": ["󱃃", "󰔏", "󱃂"]
   },
 
   "memory": {
-    "interval": 30,
-    "format": "  {}%",
-    "max-length": 10
+    "interval": 10,
+    "format": "󰍛  {percentage}%",
+    "tooltip-format": "RAM: {used:0.1f}G / {total:0.1f}G\nSwap: {swapUsed:0.1f}G / {swapTotal:0.1f}G",
+    "on-click": "kitty -- btop",
+    "states": {
+      "warning": 70,
+      "critical": 90
+    }
   },
 
-  "custom/media": {
-    "interval": 30,
-    "format": "{icon} {}",
-    "return-type": "json",
-    "max-length": 20,
-    "format-icons": {
-      "spotify": " ",
-      "default": " "
-    },
-    "escape": true,
-    "exec": "$HOME/.config/system_scripts/mediaplayer.py 2> /dev/null",
-    "on-click": "playerctl play-pause"
+  "backlight": {
+    "format": "{icon}  {percent}%",
+    "format-icons": ["󰌶", "󱩎", "󱩏", "󱩐", "󱩑", "󱩒", "󱩓", "󱩔", "󰛨"],
+    "on-scroll-up": "brightnessctl set 5%+",
+    "on-scroll-down": "brightnessctl set 5%-",
+    "tooltip-format": "Brightness: {percent}%"
   },
 
   "custom/power": {
-    "format": "",
+    "format": "󰐥",
+    "tooltip": "Power menu",
     "on-click": "~/dotfiles/scripts/power_menu.sh"
   },
 
   "custom/launcher": {
-    "format": " ",
+    "format": "󰣇",
+    "tooltip": "App launcher",
     "on-click": "rofi -show drun ~/.config/rofi/config.rasi",
     "on-click-right": "killall rofi"
-  },
-
-  "hyprland/workspaces": {
-    "format": "{icon}",
-    "on-click": "activate",
-    "format-icons": {
-      "1": "𝟙",
-      "2": "𝟚",
-      "3": "𝟛",
-      "4": "𝟜",
-      "5": "𝟝",
-      "6": "𝟞",
-      "7": "𝟟",
-      "8": "𝟠",
-      "9": "𝟡"
-    },
-    "active": "",
-    "sort-by-number": true
   }
 }

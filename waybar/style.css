@@ -2,187 +2,107 @@
 
 * {
   border: none;
+  border-radius: 0;
   font-family: "JetBrainsMono Nerd Font", "Noto Sans CJK SC", sans-serif;
-  font-size: 16px;
-  min-height: 20px;
+  font-size: 13px;
+  min-height: 0;
 }
 
 window#waybar {
-  background: @background;
+  background: alpha(@background, 0.88);
   color: @foreground;
+  border-radius: 14px;
+  border: 1px solid alpha(@color8, 0.25);
+  transition: none;
 }
 
 window#waybar.hidden {
-  opacity: 0.2;
+  opacity: 0.1;
 }
 
-#window {
-  margin-top: 6px;
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 10px;
-  transition: none;
-  color: transparent;
-  background: transparent;
-}
+/* ── Workspaces ──────────────────────────────────────────── */
 
 #workspaces {
-  margin-top: 6px;
-  margin-left: 12px;
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 0px;
-  border-radius: 10px;
-  background: @color0;
-  transition: none;
+  background: transparent;
+  margin: 4px 4px 4px 6px;
+  padding: 0 2px;
 }
 
 #workspaces button {
-  transition: none;
-  color: @foreground;
+  padding: 2px 10px;
+  margin: 4px 3px;
+  border-radius: 8px;
+  color: #ffffff;
   background: transparent;
-  border-radius: 2px;
+  transition: none;
+  font-size: 14px;
+  font-weight: bold;
+  min-width: 20px;
 }
 
 #workspaces button.active {
   color: @color6;
+  background: transparent;
+  font-size: 14px;
+  margin: 4px 3px;
+}
+
+#workspaces button.urgent {
+  color: @color1;
+  font-size: 13px;
 }
 
 #workspaces button:hover {
-  color: @background;
-  background: @foreground;
+  color: alpha(@color6, 0.7);
+  background: transparent;
+  box-shadow: none;
 }
 
-#network {
-  margin-top: 6px;
-  margin-left: 8px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-bottom: 0px;
+/* ── Active window title ─────────────────────────────────── */
+
+#window {
+  margin: 4px 2px;
+  padding: 1px 12px;
   border-radius: 10px;
-  transition: none;
-  color: @foreground;
-  background: @color0;
+  background: alpha(@color0, 0.5);
+  color: alpha(@foreground, 0.65);
+  font-style: italic;
+  font-size: 12px;
 }
 
-#network:hover {
-  color: @background;
-  background: @color6;
-}
 
-#pulseaudio {
-  margin-top: 6px;
-  margin-left: 8px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-bottom: 0px;
+/* ── Shared module base ──────────────────────────────────── */
+
+#clock,
+#battery,
+#cpu,
+#memory,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#bluetooth,
+#tray,
+#custom-power,
+#custom-bluelight,
+#custom-media {
+  padding: 1px 12px;
+  margin: 4px 2px;
   border-radius: 10px;
-  transition: none;
+  background: alpha(@color0, 0.65);
   color: @foreground;
-  background: @color0;
-}
-
-#pulseaudio:hover {
-  color: @background;
-  background: @color5;
-}
-
-#bluetooth {
-  margin-top: 6px;
-  margin-left: 5px;
-  padding-left: 10px;
-  padding-right: 8px;
-  margin-bottom: 0px;
-  border-radius: 10px;
   transition: none;
-  color: @foreground;
-  background: @color0;
 }
 
-#bluetooth:hover {
-  color: @background;
-  background: @color6;
-}
-
-#custom-bluelight {
-  margin-top: 6px;
-  font-size: 24px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-bottom: 0px;
-  border-radius: 10px;
-  transition: none;
-  color: @foreground;
-  background: @color0;
-}
-
-#custom-bluelight:hover {
-  color: @background;
-  background: @color6;
-}
-
-#battery {
-  margin-top: 6px;
-  margin-left: 8px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-bottom: 0px;
-  border-radius: 10px;
-  transition: none;
-  color: @foreground;
-  background: @color0;
-}
-
-#battery:hover {
-  color: @background;
-  background: @color5;
-}
-
-#battery.critical:not(.charging) {
-  background-color: @color1;
-  color: @background;
-  animation-name: blink;
-  animation-duration: 1s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  animation-direction: alternate;
-}
-
-@keyframes blink {
-  to {
-    background-color: @color3;
-    color: @background;
-  }
-}
-
-#backlight {
-  margin-top: 6px;
-  margin-left: 8px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-bottom: 0px;
-  border-radius: 10px;
-  transition: none;
-  color: @foreground;
-  background: @color0;
-}
-
-#backlight:hover {
-  color: @background;
-  background: @color6;
-}
+/* ── Clock ───────────────────────────────────────────────── */
 
 #clock {
-  margin-top: 6px;
-  margin-left: 8px;
-  margin-right: 8px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-bottom: 0px;
-  border-radius: 10px;
-  transition: none;
-  color: @foreground;
-  background: @color0;
+  font-size: 14px;
+  font-weight: bold;
+  color: @color6;
+  letter-spacing: 1px;
+  padding: 1px 18px;
+  background: alpha(@color0, 0.75);
 }
 
 #clock:hover {
@@ -190,50 +110,209 @@ window#waybar.hidden {
   background: @color6;
 }
 
-#memory {
-  margin-top: 6px;
-  margin-left: 8px;
-  padding-left: 10px;
-  margin-bottom: 0px;
-  padding-right: 10px;
-  border-radius: 10px;
-  transition: none;
-  color: @foreground;
-  background: @color0;
+/* ── Media player ────────────────────────────────────────── */
+
+#custom-media {
+  color: @color3;
+  margin-right: 6px;
+  font-style: italic;
 }
 
-#memory:hover {
+#custom-media:hover {
   color: @background;
-  background: @color6;
+  background: @color3;
 }
 
-#cpu {
-  margin-top: 6px;
-  margin-left: 8px;
-  padding-left: 10px;
-  margin-bottom: 0px;
-  padding-right: 10px;
-  border-radius: 10px;
-  transition: none;
-  color: @foreground;
-  background: @color0;
+#custom-media.spotify {
+  color: #1db954;
 }
 
-#cpu:hover {
+#custom-media.firefox {
+  color: @color4;
+}
+
+/* ── System tray ─────────────────────────────────────────── */
+
+#tray {
+  padding: 1px 8px;
+}
+
+#tray > .passive {
+  -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+  -gtk-icon-effect: highlight;
+  background: alpha(@color1, 0.5);
+  border-radius: 8px;
+}
+
+/* ── Backlight ───────────────────────────────────────────── */
+
+#backlight {
+  color: @color3;
+}
+
+#backlight:hover {
+  color: @background;
+  background: @color3;
+}
+
+/* ── Audio ───────────────────────────────────────────────── */
+
+#pulseaudio {
+  color: @color5;
+}
+
+#pulseaudio.muted {
+  color: alpha(@foreground, 0.35);
+}
+
+#pulseaudio:hover {
   color: @background;
   background: @color5;
 }
 
+/* ── Bluetooth ───────────────────────────────────────────── */
+
+#bluetooth {
+  color: @color4;
+}
+
+#bluetooth.connected {
+  color: @color6;
+}
+
+#bluetooth.disabled,
+#bluetooth.off {
+  color: alpha(@foreground, 0.35);
+}
+
+#bluetooth:hover {
+  color: @background;
+  background: @color4;
+}
+
+/* ── Blue light filter ───────────────────────────────────── */
+
+#custom-bluelight {
+  color: @color3;
+  font-size: 15px;
+}
+
+#custom-bluelight:hover {
+  color: @background;
+  background: @color3;
+}
+
+/* ── Network ─────────────────────────────────────────────── */
+
+#network {
+  color: @color4;
+}
+
+#network.disconnected {
+  color: @color1;
+}
+
+#network:hover {
+  color: @background;
+  background: @color4;
+}
+
+/* ── CPU ─────────────────────────────────────────────────── */
+
+#cpu {
+  color: @color2;
+}
+
+#cpu.warning {
+  color: @color3;
+}
+
+#cpu.critical {
+  color: @color1;
+}
+
+#cpu:hover {
+  color: @background;
+  background: @color2;
+}
+
+/* ── Temperature ─────────────────────────────────────────── */
+
+#temperature {
+  color: @color3;
+}
+
+#temperature.critical {
+  color: @background;
+  background: @color1;
+  animation: blink 1s linear infinite alternate;
+}
+
+#temperature:hover {
+  color: @background;
+  background: @color3;
+}
+
+/* ── Memory ──────────────────────────────────────────────── */
+
+#memory {
+  color: @color5;
+}
+
+#memory.warning {
+  color: @color3;
+}
+
+#memory.critical {
+  color: @color1;
+}
+
+#memory:hover {
+  color: @background;
+  background: @color5;
+}
+
+/* ── Battery ─────────────────────────────────────────────── */
+
+#battery {
+  color: @color2;
+}
+
+#battery.good {
+  color: @color2;
+}
+
+#battery.warning {
+  color: @color3;
+}
+
+#battery.critical:not(.charging) {
+  color: @background;
+  background: @color1;
+  animation: blink 1s linear infinite alternate;
+}
+
+#battery.charging {
+  color: @color4;
+}
+
+#battery:hover {
+  color: @background;
+  background: @color2;
+}
+
+/* ── Launcher ────────────────────────────────────────────── */
+
 #custom-launcher {
   font-size: 24px;
-  margin-top: 6px;
-  margin-left: 8px;
-  padding-left: 10px;
-  padding-right: 5px;
+  color: @color6;
+  padding: 1px 14px;
+  margin: 4px 2px 4px 8px;
   border-radius: 10px;
   transition: none;
-  color: @foreground;
-  background: @color0;
 }
 
 #custom-launcher:hover {
@@ -241,36 +320,26 @@ window#waybar.hidden {
   background: @color6;
 }
 
-#custom-media {
-  margin-top: 6px;
-  margin-left: 8px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-bottom: 0px;
-  border-radius: 10px;
-  transition: none;
-  color: @foreground;
-  background: @color0;
-}
-
-#custom-media:hover {
-  color: @background;
-  background: @color6;
-}
+/* ── Power ───────────────────────────────────────────────── */
 
 #custom-power {
-  margin-top: 6px;
-  margin-left: 8px;
-  padding-left: 10px;
-  padding-right: 10px;
-  margin-bottom: 0px;
-  border-radius: 10px;
-  transition: none;
-  color: @foreground;
-  background: @color0;
+  font-size: 16px;
+  color: @color1;
+  padding: 1px 14px;
+  margin: 4px 8px 4px 2px;
+  background: alpha(@color1, 0.18);
 }
 
 #custom-power:hover {
   color: @background;
-  background: @color5;
+  background: @color1;
+}
+
+/* ── Blink animation ─────────────────────────────────────── */
+
+@keyframes blink {
+  to {
+    background: @color3;
+    color: @background;
+  }
 }

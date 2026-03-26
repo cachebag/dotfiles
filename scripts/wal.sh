@@ -26,7 +26,7 @@ if [[ ! -f "$WALL" ]]; then
 fi
 
 # Run pywal to generate colors (use python -m pywal to avoid recursion)
-python -m pywal -q -n -i "$WALL"
+python -m pywal -q -n --saturate 0.8 -i "$WALL"
 
 # Wait for pywal to finish generating files
 sleep 0.3
