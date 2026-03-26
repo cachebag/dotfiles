@@ -58,29 +58,29 @@ install_dependencies() {
         pipewire pipewire-alsa pipewire-pulse pavucontrol
         polkit-gnome brightnessctl playerctl
         zsh zsh-autosuggestions zsh-syntax-highlighting
-        sddm qt5-graphicaleffects qt5-quickcontrols2
+        sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg
         network-manager-applet bluez bluez-utils
         thunar thunar-archive-plugin file-roller
-        firefox dolphin wofi obsidian
-        base-devel cmake make gcc unzip
+        firefox dolphin wofi
+        tmux base-devel cmake make gcc unzip
     )
-    
-    if ! pacman -Qi "${pacman_pkgs[@]}" &>/dev/null; then
-        sudo pacman -Syu --needed --noconfirm "${pacman_pkgs[@]}"
-    fi
+
+    sudo pacman -Syu --needed --noconfirm "${pacman_pkgs[@]}" || {
+        log_warning "Some pacman packages failed to install — check output above"
+    }
 
     if ! command -v yay &>/dev/null; then
         log_info "Installing yay AUR helper..."
-        cd /tmp
-        git clone https://aur.archlinux.org/yay.git
-        cd yay && makepkg -si --noconfirm
+        rm -rf /tmp/yay
+        git clone https://aur.archlinux.org/yay.git /tmp/yay
+        cd /tmp/yay && makepkg -si --noconfirm
         cd "$DOTFILES_ROOT"
     fi
 
-    local aur_pkgs=(hyprpaper swaylock-effects wlogout hypridle hyprshot)
-    if ! yay -Qi "${aur_pkgs[@]}" &>/dev/null; then
-        yay -S --needed --noconfirm "${aur_pkgs[@]}"
-    fi
+    local aur_pkgs=(hyprpaper swaylock-effects wlogout hypridle hyprshot obsidian cursor-bin)
+    yay -S --needed --noconfirm "${aur_pkgs[@]}" || {
+        log_warning "Some AUR packages failed to install — check output above"
+    }
     
     log_success "Dependencies installed"
     save_state "dependencies_done"
@@ -126,7 +126,9 @@ backup_configs() {
         fi
     done
     
-    [[ "$backup_needed" == false ]] && [[ -d "$backup_dir" ]] && rmdir "$backup_dir"
+    if [[ "$backup_needed" == false ]] && [[ -d "$backup_dir" ]]; then
+        rmdir "$backup_dir" 2>/dev/null || true
+    fi
     log_success "Backup completed"
     save_state "backup_done"
 }
@@ -182,6 +184,12 @@ create_symlinks() {
         log_info "Linked zsh_history"
     fi
 
+    if [[ -f "$DOTFILES_ROOT/tmux/tmux.conf" ]]; then
+        [[ -f "$HOME/.tmux.conf" && ! -L "$HOME/.tmux.conf" ]] && rm -f "$HOME/.tmux.conf"
+        ln -sf "$DOTFILES_ROOT/tmux/tmux.conf" "$HOME/.tmux.conf"
+        log_info "Linked tmux.conf"
+    fi
+
     if [[ -d "$DOTFILES_ROOT/scripts" ]]; then
         chmod +x "$DOTFILES_ROOT/scripts/"*.sh
         for script in "$DOTFILES_ROOT/scripts/"*.sh; do
@@ -201,79 +209,110 @@ create_symlinks() {
 }
 
 setup_sddm() {
-    log_info "Setting up SDDM theme..."
-    if [[ -d "$DOTFILES_ROOT/sddm/themes" ]]; then
-        sudo mkdir -p /usr/share/sddm/themes/cachebag-theme
-        sudo cp -r "$DOTFILES_ROOT/sddm/themes/"* /usr/share/sddm/themes/cachebag-theme/
-        
-        if [[ -f "$DOTFILES_ROOT/sddm/conf.d/theme.conf" ]]; then
-            sudo mkdir -p /etc/sddm.conf.d/
-            sudo cp "$DOTFILES_ROOT/sddm/conf.d/theme.conf" /etc/sddm.conf.d/
-        elif [[ -f "$DOTFILES_ROOT/sddm/theme.conf" ]]; then
-            sudo mkdir -p /etc/sddm.conf.d/
-            sudo cp "$DOTFILES_ROOT/sddm/theme.conf" /etc/sddm.conf.d/
-        fi
-        
-        if ! systemctl is-enabled display-manager.service &>/dev/null; then
-          sudo systemctl enable sddm
+    log_info "Setting up SDDM..."
+
+    if [[ ! -d /usr/share/sddm/themes/silent ]]; then
+        log_info "Installing Silent SDDM theme..."
+        local tmp_dir
+        tmp_dir=$(mktemp -d)
+        if git clone --depth 1 https://github.com/uiriansan/SilentSDDM.git "$tmp_dir/silent"; then
+            sudo mkdir -p /usr/share/sddm/themes/silent
+            sudo cp -rf "$tmp_dir/silent/." /usr/share/sddm/themes/silent/
+            sudo cp -r /usr/share/sddm/themes/silent/fonts/{redhat,redhat-vf} /usr/share/fonts/ 2>/dev/null || true
+            log_success "Silent theme installed"
         else
-          log_warning "Display manager already configured, skipping SDDM enable"
+            log_warning "Failed to clone Silent SDDM theme — SDDM will use default theme"
         fi
-        
-        log_success "SDDM theme installed"
+        rm -rf "$tmp_dir"
     else
-        log_warning "SDDM theme directory not found, skipping theme setup"
-        sudo systemctl enable sddm
-        log_info "SDDM enabled with default theme"
+        log_info "Silent SDDM theme already installed"
     fi
+
+    if [[ -f "$DOTFILES_ROOT/sddm/conf.d/theme.conf" ]]; then
+        sudo mkdir -p /etc/sddm.conf.d/
+        sudo cp "$DOTFILES_ROOT/sddm/conf.d/theme.conf" /etc/sddm.conf.d/
+        log_info "Copied SDDM config to /etc/sddm.conf.d/"
+    fi
+
+    if [[ ! -f /etc/sddm.conf ]] || ! grep -q 'Current=silent' /etc/sddm.conf 2>/dev/null; then
+        sudo tee /etc/sddm.conf > /dev/null <<'SDDMCONF'
+[General]
+InputMethod=qtvirtualkeyboard
+GreeterEnvironment=QML2_IMPORT_PATH=/usr/share/sddm/themes/silent/components/,QT_IM_MODULE=qtvirtualkeyboard
+
+[Theme]
+Current=silent
+SDDMCONF
+        log_info "Wrote /etc/sddm.conf"
+    fi
+
+    if ! systemctl is-enabled display-manager.service &>/dev/null; then
+        sudo systemctl enable sddm
+    else
+        log_warning "Display manager already configured, skipping SDDM enable"
+    fi
+
+    log_success "SDDM configured"
     save_state "sddm_done"
 }
 
 setup_fonts() {
     log_info "Installing fonts..."
     local font_dir="$HOME/.local/share/fonts"
-    
+    mkdir -p "$font_dir"
+
     if [[ ! -f "$font_dir/FiraCodeNerdFont-Regular.ttf" ]]; then
-        cd /tmp
-        wget -q https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip
-        unzip -q -o FiraCode.zip -d "$font_dir"
-        rm -f FiraCode.zip
+        if wget -q -O /tmp/FiraCode.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip; then
+            unzip -q -o /tmp/FiraCode.zip -d "$font_dir"
+            rm -f /tmp/FiraCode.zip
+        else
+            log_warning "Failed to download FiraCode Nerd Font — install manually later"
+        fi
     fi
-    
+
     if [[ ! -f "$font_dir/JetBrainsMonoNerdFont-Regular.ttf" ]]; then
-        cd /tmp
-        wget -q https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip
-        unzip -q -o JetBrainsMono.zip -d "$font_dir"
-        rm -f JetBrainsMono.zip
+        if wget -q -O /tmp/JetBrainsMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip; then
+            unzip -q -o /tmp/JetBrainsMono.zip -d "$font_dir"
+            rm -f /tmp/JetBrainsMono.zip
+        else
+            log_warning "Failed to download JetBrainsMono Nerd Font — install manually later"
+        fi
     fi
-    
-    fc-cache -fv > /dev/null 2>&1
+
+    fc-cache -fv > /dev/null 2>&1 || true
     log_success "Fonts installed"
     save_state "fonts_done"
 }
 
 setup_wallpapers() {
     log_info "Setting up wallpapers..."
-    mkdir -p "$HOME/wallpapers"
-    if [[ -z "$(ls -A "$HOME/wallpapers" 2>/dev/null)" ]]; then
-        cd /tmp
-        wget -q -O sample-wallpaper.jpg "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=2560&h=1440&fit=crop" || \
-        wget -q -O sample-wallpaper.jpg "https://picsum.photos/2560/1440"
-        mv sample-wallpaper.jpg "$HOME/wallpapers/"
-        log_info "Downloaded sample wallpaper"
+    if [[ -d "$HOME/wallpapers/.git" ]]; then
+        log_info "Wallpapers repo already cloned, pulling latest..."
+        git -C "$HOME/wallpapers" pull || log_warning "Failed to pull wallpapers — using existing copy"
+    else
+        [[ -d "$HOME/wallpapers" ]] && rm -rf "$HOME/wallpapers"
+        if ! git clone git@github.com:cachebag/wallpapers.git "$HOME/wallpapers" 2>/dev/null; then
+            log_warning "SSH clone failed, trying HTTPS..."
+            if ! git clone https://github.com/cachebag/wallpapers.git "$HOME/wallpapers"; then
+                log_warning "Failed to clone wallpapers repo — create ~/wallpapers manually later"
+                mkdir -p "$HOME/wallpapers"
+            fi
+        fi
     fi
+    log_success "Wallpapers set up"
     save_state "wallpapers_done"
 }
 
 setup_services() {
     log_info "Enabling system services..."
-    sudo systemctl enable bluetooth NetworkManager
-    sudo usermod -aG video,input,audio "$USER"
-    
+    sudo systemctl enable NetworkManager || log_warning "Failed to enable NetworkManager"
+    sudo systemctl enable bluetooth 2>/dev/null || log_warning "Bluetooth service not found — skipping"
+    sudo usermod -aG video,input,audio "$USER" || log_warning "Failed to add user to groups"
+
     if [[ -d "$DOTFILES_ROOT/hyprland/scripts" ]]; then
         chmod +x "$DOTFILES_ROOT/hyprland/scripts/"*.sh
     fi
-    
+
     log_success "Services configured"
     save_state "services_done"
 }
@@ -338,8 +377,11 @@ setup_zsh() {
     log_info "Configuring Zsh..."
     if [[ "$SHELL" != "/usr/bin/zsh" && "$SHELL" != "/bin/zsh" ]]; then
         log_info "Changing default shell to Zsh..."
-        chsh -s /usr/bin/zsh
-        log_warning "Shell changed - logout/login required for full effect"
+        if chsh -s /usr/bin/zsh; then
+            log_warning "Shell changed — logout/login required for full effect"
+        else
+            log_warning "Failed to change shell — run 'chsh -s /usr/bin/zsh' manually"
+        fi
     fi
     save_state "zsh_done"
 }
@@ -366,10 +408,7 @@ fix_paths() {
 post_install() {
     log_info "Running post-installation tasks..."
     
-    if [[ ! -d "$HOME/.local/bin" ]]; then
-        mkdir -p "$HOME/.local/bin"
-        echo 'export PATH="$HOME/.local/bin:$PATH"' >> "$HOME/.bashrc"
-    fi
+    mkdir -p "$HOME/.local/bin"
     
     log_info "Installation complete!"
     echo -e "${GREEN}=== INSTALLATION SUMMARY ===${NC}"

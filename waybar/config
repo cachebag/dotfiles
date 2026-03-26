@@ -62,24 +62,22 @@
   },
 
   "custom/media": {
-    "format": "{icon}  {}",
+    "format": "{icon}  {text}",
     "return-type": "json",
     "max-length": 35,
-    "exec": "playerctl metadata --format '{\"text\": \"{{artist}} — {{title}}\", \"tooltip\": \"{{playerName}}: {{artist}} — {{title}}\", \"alt\": \"{{playerName}}\", \"class\": \"{{playerName}}\"}' 2>/dev/null",
-    "exec-if": "playerctl status 2>/dev/null | grep -qE 'Playing|Paused'",
-    "on-click": "playerctl play-pause",
-    "on-click-right": "playerctl next",
-    "on-scroll-up": "playerctl next",
-    "on-scroll-down": "playerctl previous",
-    "interval": 2,
+    "exec": "playerctl -p chromium metadata --format '{\"text\": \"{{artist}} — {{title}}\", \"tooltip\": \"{{album}}\", \"class\": \"custom-chromium\"}' 2>/dev/null | awk 'NF && !seen[$0]++'",
+    "exec-if": "playerctl -p chromium status 2>/dev/null | grep -qE 'Playing|Paused'",
+    "on-click": "playerctl -p chromium play-pause",
+    "on-click-right": "playerctl -p chromium next",
+    "on-scroll-up": "playerctl -p chromium next",
+    "on-scroll-down": "playerctl -p chromium previous",
+    "interval": 1,
     "format-icons": {
-      "spotify": "󰓇",
-      "firefox": "󰈹",
-      "chromium": "",
-      "default": "󰎇"
+        "chromium": "󰊯",
+        "default": "󰎇"
     },
     "escape": true
-  },
+    },
 
   "pulseaudio": {
     "format": "{icon}  {volume}%",

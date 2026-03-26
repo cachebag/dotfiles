@@ -4,8 +4,11 @@ return {
     tag = "0.1.8",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
+      local previewers = require("telescope.previewers")
       require("telescope").setup({
         defaults = {
+          file_previewer = previewers.cat.new,
+          grep_previewer = previewers.vimgrep.new,
           layout_config = {
             horizontal = {
               prompt_position = "top",
