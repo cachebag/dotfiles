@@ -1,8 +1,14 @@
-# Cachebag's Dotfiles
+# cachebag's dotfiles
 
-My arch config
+<p align="center">
+  <strong>my personal arch + hyprland config </strong>
+</p>
 
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/d86b14d9-5960-4a45-9c54-5b4193f9a846" />
+
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/bd617a5f-924e-474d-bdef-f29fd93e7695" />
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/4093b85e-07a2-4071-b795-f1cbdbb1aa57" />
+
+# 
 
 
 ## Components
@@ -52,14 +58,13 @@ My arch config
 ### Screenshots
 
  ##### **Rofi**
- <img width="802" height="781" alt="image" src="https://github.com/user-attachments/assets/94f2ad65-d693-4723-aa63-5fe63eee940f" />
+ <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/7a66ed3a-1f57-46a7-ab4a-083ff216176b" />   
 
- ##### **Wallpaper picker (pywal)**
- <img width="1508" height="1084" alt="image" src="https://github.com/user-attachments/assets/1e219214-4840-4587-9713-6c79a7f6298a" />
+ ##### **Wallpaper picker (yazi)**
+ <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/5898fd8d-5500-4560-a7a9-50dd91ae3ba3" />
 
  ##### **ChatGPT**
- <img width="1387" height="1037" alt="image" src="https://github.com/user-attachments/assets/307baa26-8447-47ea-acb8-ecfee84ec21f" />
-
+ <img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/a108d069-aac0-4019-8fd8-cf4e90505bb7" />
 
 ### Window Management
 
@@ -69,8 +74,8 @@ My arch config
 | `Super + M` | Exit Hyprland |
 | `Super + V` | Toggle floating |
 | `Super + J` | Toggle split |
-| `Super + 1-5` | Switch workspace |
-| `Super + Shift + 1-5` | Move window to workspace |
+| `Super + 1-9` | Switch workspace |
+| `Super + Shift + 1-9` | Move window to workspace |
 | `Super + Ctrl + Left/Right` | Previous/Next workspace |
 | `Super + Left/Right` | Move focus |
 | `Super + Shift + Arrows` | Resize window |
@@ -90,4 +95,4 @@ My arch config
 
 ---
 
-**Note**: This configuration is optimized for my personal workflow.
+**Note**: This configuration is optimized for my personal workflow. I am not responsible for anything that happens to your machine if you use these dotfiles.
