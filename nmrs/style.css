@@ -1,244 +1,331 @@
-/* Gruvbox palette (dark, hard contrast) */
-:root,
-window,
-window.dark-theme {
-  --bg-primary: #1d2021;
-  --bg-secondary: #282828;
-  --bg-tertiary: #3c3836;
-  --text-primary: #ebdbb2;
-  --text-secondary: #d5c4a1;
-  --text-tertiary: #bdae93;
-  --border-color: #3c3836;
-  --border-color-hover: #504945;
+@import url("/home/cachebag/.cache/wal/colors-waybar.css");
 
-  --accent-color: #458588;
-  --success-color: #98971a;
-  --warning-color: #d79921;
-  --error-color: #cc241d;
-}
+/* Derived colors — surfaces go DARKER than background */
+@define-color surface darker(@background);
+@define-color surface_hover shade(@background, 0.85);
+@define-color border_base alpha(@color8, 0.15);
+@define-color border_hover alpha(@color1, 0.4);
 
-/* Gruvbox light variant */
-window.light-theme {
-  --bg-primary: #fbf1c7;
-  --bg-secondary: #ebdbb2;
-  --bg-tertiary: #d5c4a1;
-  --text-primary: #3c3836;
-  --text-secondary: #504945;
-  --text-tertiary: #665c54;
-  --border-color: #bdae93;
-  --border-color-hover: #a89984;
-
-  --accent-color: #076678;
-  --success-color: #79740e;
-  --warning-color: #b57614;
-  --error-color: #9d0006;
-}
-
+/* Window */
 window {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background-color: @background;
+  color: @foreground;
 }
 
+/* Header */
 headerbar {
-  background: var(--bg-secondary);
-  color: var(--text-primary);
-  border-bottom: 1px solid var(--border-color);
+  background: @surface;
+  color: @foreground;
+  border-bottom: 1px solid @border_base;
+  padding: 6px 12px;
 }
 
+/* Switch — pill shape */
 switch {
-  background-color: var(--bg-tertiary);
+  background-color: @surface;
+  border-radius: 999px;
+  border: 1px solid @border_base;
+  min-width: 42px;
+  min-height: 22px;
 }
 switch:checked {
-  background-color: var(--accent-color);
+  background-color: @color1;
+  border-color: alpha(@color1, 0.6);
 }
 
+/* Wi-Fi label */
 .wifi-label {
   font-weight: 600;
-  color: var(--text-primary);
+  color: @foreground;
 }
 
+/* List */
 list {
-  background: var(--bg-primary);
+  background: transparent;
   border: none;
 }
 list > row {
   background: transparent;
   border: none;
   padding: 0;
+  border-radius: 10px;
 }
 list > row:selected {
-  background: var(--accent-color);
-  color: var(--bg-primary);
+  background: alpha(@color1, 0.25);
+  color: @foreground;
+  border-radius: 10px;
 }
 
+/* Entry fields */
 .pw-entry {
-  background-color: transparent;
-  color: var(--text-primary);
-  border-color: transparent;
+  background-color: @surface;
+  color: @foreground;
+  border: 1px solid @border_base;
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+.pw-entry:focus {
+  border-color: alpha(@color1, 0.6);
 }
 
+/* Network selection — rounded cards */
 .network-selection {
-  padding: 6px 10px;
-  margin: 2px 0;
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-}
-.network-selection:hover {
-  background: var(--bg-tertiary);
-  border-color: var(--border-color-hover);
+  padding: 10px 14px;
+  margin: 3px 0;
+  background: @surface;
+  border: 1px solid @border_base;
+  border-radius: 10px;
   transition: background 150ms ease, border-color 150ms ease;
 }
+.network-selection:hover {
+  background: @surface_hover;
+  border-color: @border_hover;
+}
 .network-selection.connected {
-  background: color-mix(in srgb, var(--success-color) 15%, transparent);
-  border-color: color-mix(in srgb, var(--success-color) 30%, transparent);
+  background: alpha(@color1, 0.10);
+  border-color: alpha(@color1, 0.35);
+  border-left: 3px solid @color1;
 }
 .network-selection.connected:hover {
-  background: color-mix(in srgb, var(--success-color) 20%, transparent);
-  border-color: color-mix(in srgb, var(--success-color) 40%, transparent);
+  background: alpha(@color1, 0.18);
+  border-color: alpha(@color1, 0.5);
+  border-left: 3px solid @color1;
 }
-
 .network-selection label {
   font-size: 14px;
-  color: var(--text-primary);
+  color: @foreground;
 }
 .connected-label {
   font-size: 12px;
-  color: var(--success-color);
+  color: @color1;
   font-style: italic;
   margin-left: 8px;
   opacity: 0.9;
 }
 
-label.network-good { color: var(--success-color); }
-label.network-okay { color: var(--warning-color); }
-label.network-poor { color: var(--error-color); }
+/* Network quality labels */
+label.network-good { color: @color1; }
+label.network-okay { color: @color3; }
+label.network-poor { color: @color5; }
 
+/* Network page */
 .network-page {
-  background: var(--bg-primary);
+  background: @background;
   padding: 16px 20px;
+  color: @foreground;
   border: none;
-  color: var(--text-primary);
 }
 
+/* Back button */
 .back-button {
-  background: none;
-  border: none;
-  color: var(--text-tertiary);
+  background: @surface;
+  border: 1px solid @border_base;
+  border-radius: 8px;
+  color: @color8;
   font-weight: 500;
   font-size: 13px;
-  padding: 4px 0;
+  padding: 6px 12px;
+  transition: background 150ms ease, color 150ms ease;
 }
-.back-button:hover { color: var(--text-primary); }
+.back-button:hover {
+  color: @foreground;
+  background: @surface_hover;
+  border-color: @border_hover;
+}
 
+/* Network details */
 .network-icon {
-  color: var(--text-primary);
+  color: @color1;
 }
 .network-title {
   font-size: 18px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: @foreground;
   margin-bottom: 4px;
 }
-
 .network-arrow {
-  color: var(--text-primary);
+  color: @color8;
 }
-
 .network-info {
   margin-top: 14px;
-  padding-left: 6px;
+  padding: 12px;
+  background: @surface;
+  border-radius: 10px;
+  border: 1px solid @border_base;
 }
-.info-row { padding: 2px 0; }
-.info-value {
-  color: var(--text-primary);
-  font-size: 14px;
-  font-weight: 500;
-}
+.info-row { padding: 3px 0; }
 
+/* Section headers */
 .section-header {
   font-weight: 600;
-  font-size: 13px;
+  font-size: 11px;
   text-transform: uppercase;
-  border-bottom: 1px solid var(--border-color);
-  padding-bottom: 4px;
-  margin-bottom: 6px;
-  color: var(--text-secondary);
-  letter-spacing: 0.5px;
+  border-bottom: 1px solid alpha(@color1, 0.2);
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  color: @color1;
+  letter-spacing: 1px;
 }
 
-.advanced-section,
-.basic-section {
-  padding-left: 0;
-  margin-left: 0;
-}
-
+/* Info keys and values */
 .basic-key,
 .info-label {
   font-weight: 600;
-  font-size: 13px;
-  color: var(--text-tertiary);
+  font-size: 12px;
+  color: @color8;
   margin-bottom: 2px;
-  text-decoration: underline;
 }
-
 .basic-value,
 .info-value {
   font-size: 14px;
-  color: var(--text-primary);
+  color: @foreground;
   font-weight: 500;
   margin-bottom: 8px;
 }
 
+/* Divider */
 .divider {
-  margin-top: 10px;
-  margin-bottom: 10px;
-  opacity: 0.25;
-  border-bottom: 1px solid var(--border-color);
+  margin-top: 12px;
+  margin-bottom: 12px;
+  opacity: 0.15;
+  border-bottom: 1px solid @color8;
 }
 
-.wifi-secure {
-  color: var(--text-primary);
-}
+/* Wi-Fi secure/open */
+.wifi-secure { color: @color1; }
+.wifi-open { color: @color8; }
 
-.wifi-open {
-  color: var(--text-primary);
-}
-
+/* Loading spinner */
 .loading-spinner {
   margin-top: 12px;
   margin-bottom: 12px;
   opacity: 0.6;
 }
 
+/* Forget button */
 .forget-button {
   font-size: 0.85em;
-  opacity: 0.7;
-  padding: 2px 6px;
-  border-radius: 6px;
+  opacity: 0.6;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: alpha(@color5, 0.12);
+  border: 1px solid alpha(@color5, 0.25);
+  color: @color5;
+  transition: opacity 150ms ease, background 150ms ease;
 }
 .forget-button:hover {
   opacity: 1;
+  background: alpha(@color5, 0.22);
 }
 
+/* Refresh button */
 .refresh-btn {
-  background: none;
-  border: none;
-  color: var(--text-tertiary);
+  background: @surface;
+  border: 1px solid @border_base;
+  border-radius: 8px;
+  color: @color8;
   font-weight: 500;
   font-size: 13px;
-  padding: 4px 0;
+  padding: 6px 12px;
+  transition: background 150ms ease, color 150ms ease;
 }
-.refresh-btn:hover { color: var(--text-primary); }
+.refresh-btn:hover {
+  color: @foreground;
+  background: @surface_hover;
+  border-color: @border_hover;
+}
 
+/* Theme toggle */
 .theme-toggle-btn {
-  background: none;
-  border: none;
-  color: var(--text-tertiary);
-  padding: 4px 8px;
+  background: @surface;
+  border: 1px solid @border_base;
+  border-radius: 8px;
+  color: @color8;
+  padding: 0px 6px;
+  min-height: 0;
+  min-width: 0;
   opacity: 0.7;
-  transition: opacity 150ms ease, color 150ms ease;
+  transition: opacity 150ms ease, color 150ms ease, background 150ms ease;
 }
 .theme-toggle-btn:hover {
   opacity: 1;
-  color: var(--text-primary);
+  color: @foreground;
+  background: @surface_hover;
+}
+
+/* Dropdown */
+.dropdown {
+  background: @surface;
+  border: 1px solid @border_base;
+  border-radius: 8px;
+  color: @foreground;
+  padding: 6px 12px;
+  font-size: 13px;
+}
+.dropdown button {
+  background: @surface;
+  border: none;
+  color: @foreground;
+  padding: 6px 12px;
+  font-size: 13px;
+  border-radius: 8px;
+}
+.dropdown button label {
+  color: @foreground;
+}
+.dropdown button:hover {
+  background: @surface_hover;
+  border-radius: 8px;
+}
+
+/* Popover */
+popover.background,
+popover contents {
+  background: @surface;
+  border-radius: 12px;
+  border: 1px solid @border_base;
+}
+popover row {
+  background: transparent;
+  color: @foreground;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin: 2px 4px;
+}
+popover row:hover {
+  background: @surface_hover;
+}
+popover row:selected {
+  background: alpha(@color1, 0.25);
+  color: @foreground;
+}
+popover row label {
+  color: @foreground;
+}
+
+/* Wired device styles */
+.wired-section-header,
+.wireless-section-header {
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  color: @color1;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+.wired-devices-list {
+  background: transparent;
+  margin-bottom: 8px;
+}
+
+.wired-icon {
+  color: @color1;
+  opacity: 0.9;
+  margin-left: 6px;
+}
+
+.device-separator {
+  background: alpha(@color8, 0.12);
+  opacity: 0.5;
 }
