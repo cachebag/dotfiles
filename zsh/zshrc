@@ -110,3 +110,6 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+export OPENAI_API_BASE="EzTYI16Kmedfax0ELwoY/dwk1OnJ"   # or whatever your team uses
+export OPENAI_API_KEY="EzTYI16Kmedfax0ELwoY/dwk1OnJ" # or master key, per your team policy
+

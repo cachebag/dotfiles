@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Proton-Mail
+Exec=chromium --app=https://mail.proton.me --class=Mail
+Terminal=false
+Type=Application
+Icon=/home/cachebag/dotfiles/applications/icons/PM.png
+Categories=Office;
+
