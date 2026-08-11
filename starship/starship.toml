@@ -1,0 +1,61 @@
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Colors are ANSI names (blue, green, purple...) rather than hex on purpose:
+# they resolve through the terminal palette, which kitty loads from pywal.
+# So the prompt re-tints itself with the wallpaper for free -- no regeneration.
+
+add_newline = true
+command_timeout = 500
+
+format = """
+$directory$git_branch$git_status$nodejs$python$cmd_duration
+$character"""
+
+[directory]
+style = "bold blue"
+truncation_length = 3
+truncate_to_repo = true
+truncation_symbol = "…/"
+format = "[$path]($style)[$read_only]($read_only_style) "
+read_only = " "
+read_only_style = "red"
+
+[git_branch]
+symbol = " "
+style = "purple"
+format = "[$symbol$branch]($style) "
+
+[git_status]
+style = "yellow"
+format = '([$all_status$ahead_behind]($style) )'
+conflicted = "="
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?"
+stashed = "$"
+modified = "!"
+staged = "+"
+renamed = "»"
+deleted = "✘"
+
+[nodejs]
+symbol = " "
+style = "green"
+format = "[$symbol($version )]($style)"
+
+[python]
+symbol = " "
+style = "cyan"
+format = "[$symbol($virtualenv )]($style)"
+
+[cmd_duration]
+min_time = 2000
+style = "bright-black"
+format = "[$duration]($style) "
+
+# You use `bindkey -v`, so the prompt char reflects vi mode.
+[character]
+success_symbol = "[❯](bold green)"
+error_symbol = "[❯](bold red)"
+vimcmd_symbol = "[❮](bold yellow)"

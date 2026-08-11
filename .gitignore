@@ -22,3 +22,8 @@ lazy-lock.json
 applications/*.AppImage*
 *.AppImage*
 zsh/zsh_history
+
+# Secrets — API keys live in ~/.config/zsh/secrets.zsh, never in this repo.
+secrets.zsh
+*.pre-starship.bak
+.env

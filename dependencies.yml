@@ -18,6 +18,7 @@ system:
     - fd
     - fzf
     - fastfetch
+    - starship
     - yazi
     - nodejs
     - npm

@@ -172,8 +172,19 @@ create_symlinks() {
         fi
     done
 
+    if [[ -f "$DOTFILES_ROOT/starship/starship.toml" ]]; then
+        ln -sf "$DOTFILES_ROOT/starship/starship.toml" "$HOME/.config/starship.toml"
+        log_info "Linked starship.toml"
+    fi
+
     if [[ -f "$DOTFILES_ROOT/zsh/zshrc" ]]; then
-        [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]] && rm -f "$HOME/.zshrc"
+        # Preserve any un-committed local zshrc (it may hold secrets/PATH tweaks)
+        # instead of silently deleting it.
+        if [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]]; then
+            mv -f "$HOME/.zshrc" "$HOME/.zshrc.bak"
+            chmod 600 "$HOME/.zshrc.bak"
+            log_warning "Existing ~/.zshrc backed up to ~/.zshrc.bak"
+        fi
         ln -sf "$DOTFILES_ROOT/zsh/zshrc" "$HOME/.zshrc"
         log_info "Linked zshrc"
     fi
