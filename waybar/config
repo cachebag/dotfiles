@@ -117,7 +117,7 @@
     "tooltip-format": "{controller_alias}\n{num_connections} connected",
     "tooltip-format-connected": "{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}",
-    "on-click": "blueman-manager",
+    "on-click": "/home/cachebag/.local/bin/blurs",
     "interval": 10
   },
 

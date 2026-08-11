@@ -27,6 +27,16 @@ hl.window_rule({
     float = true,
 })
 
+-- blurs is a layer-shell surface, not a window, so it needs a layer rule --
+-- window rules never match it. ignore_alpha keeps the blur from bleeding
+-- through the fully-transparent corners outside the card's rounded border.
+hl.layer_rule({
+    name         = "blurs-blur",
+    match        = { namespace = "^blurs$" },
+    blur         = true,
+    ignore_alpha = 0.3,
+})
+
 hl.window_rule({
     name   = "float-yazi",
     match  = { class = "wallpaper-picker" },

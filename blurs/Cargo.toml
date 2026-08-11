@@ -1,0 +1,24 @@
+[package]
+name = "blurs"
+version = "0.1.0"
+edition = "2024"
+description = "A tiny Bluetooth applet for Wayland/Hyprland, themed from pywal"
+license = "MIT"
+authors = ["Akrm Al-Hakimi <akrm@cachebag.sh>"]
+
+[dependencies]
+zbus = { version = "5.19.0", default-features = false, features = ["tokio"] }
+tokio = { version = "1.53.1", features = ["rt", "macros", "sync", "time"] }
+futures-util = { version = "0.3.34", default-features = false, features = ["std"] }
+gtk = { version = "0.11.4", package = "gtk4", features = ["v4_12"] }
+layer_shell = { version = "0.8.1", package = "gtk4-layer-shell" }
+# glib can await this directly, which is how the D-Bus thread talks to the UI.
+async-channel = "2.5.0"
+
+[profile.release]
+opt-level = "z"
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = "symbols"
+incremental = false

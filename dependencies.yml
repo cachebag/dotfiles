@@ -72,6 +72,10 @@ system:
     - network-manager-applet
     - bluez
     - bluez-utils
+    # blurs (Bluetooth applet) builds against these
+    - gtk4
+    - gtk4-layer-shell
+    - rustup
     
     # File management
     - thunar

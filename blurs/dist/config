@@ -1,0 +1,15 @@
+# blurs — symlinked to ~/.config/blurs/config
+# Command-line arguments override anything here. `blurs --help` lists everything.
+
+# Open over the pointer, so the panel lands above whichever waybar module was
+# clicked rather than in a screen corner. Survives reordering waybar modules.
+# Needs Hyprland's IPC socket; falls back to a fixed corner anywhere else.
+anchor = cursor
+
+# Gap from the pointer, and from screen edges when clamped.
+margin = 8
+
+width  = 360
+
+# Height at which the device list starts scrolling instead of growing.
+max-height = 420

@@ -160,6 +160,7 @@ create_symlinks() {
         "dunst:$HOME/.config/dunst"
         "yazi:$HOME/.config/yazi"
         "fastfetch:$HOME/.config/fastfetch"
+        "blurs/dist:$HOME/.config/blurs"
     )
 
     for mapping in "${optional_configs[@]}"; do

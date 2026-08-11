@@ -1,0 +1,163 @@
+/* blurs -- colors come from @define-color emitted by theme.rs (pywal).
+ * Copy to ~/.config/blurs/style.css to override; that file wins if present. */
+
+window.blurs {
+  background: transparent;
+}
+
+.card {
+  background: alpha(@bl_bg, 0.92);
+  border: 1px solid alpha(@bl_dim, 0.30);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.header {
+  font-size: 13px;
+  font-weight: 700;
+  color: @bl_fg;
+  letter-spacing: 0.4px;
+}
+
+.subtle {
+  color: alpha(@bl_dim, 0.85);
+  font-size: 11px;
+}
+
+.status {
+  color: alpha(@bl_dim, 0.9);
+  font-size: 11px;
+  padding: 2px 2px 0 2px;
+}
+
+.status.error {
+  color: #e06c75;
+}
+
+/* Device rows ---------------------------------------------------------- */
+
+list.devices {
+  background: transparent;
+}
+
+row.device {
+  background: transparent;
+  border-radius: 10px;
+  padding: 7px 9px;
+  margin: 1px 0;
+  transition: background 120ms ease;
+}
+
+row.device:hover {
+  background: alpha(@bl_hover, 0.30);
+}
+
+row.device:selected {
+  background: alpha(@bl_accent, 0.28);
+}
+
+row.device .name {
+  color: @bl_fg;
+  font-size: 12px;
+}
+
+row.device.connected .name {
+  color: @bl_accent;
+  font-weight: 700;
+}
+
+row.device .meta {
+  color: alpha(@bl_dim, 0.8);
+  font-size: 10px;
+}
+
+row.device image.devicon {
+  color: alpha(@bl_fg, 0.85);
+}
+
+row.device.connected image.devicon {
+  color: @bl_accent;
+}
+
+/* Buttons -------------------------------------------------------------- */
+
+button.flat {
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 4px 8px;
+  color: alpha(@bl_fg, 0.85);
+  font-size: 11px;
+  min-height: 0;
+  min-width: 0;
+}
+
+button.flat:hover {
+  background: alpha(@bl_accent, 0.35);
+  color: @bl_fg;
+}
+
+button.flat:disabled {
+  color: alpha(@bl_dim, 0.45);
+  background: transparent;
+}
+
+button.danger:hover {
+  background: alpha(#e06c75, 0.35);
+}
+
+button.pill {
+  background: alpha(@bl_surface, 0.75);
+  border: 1px solid alpha(@bl_dim, 0.25);
+  border-radius: 999px;
+  padding: 3px 12px;
+  color: @bl_fg;
+  font-size: 11px;
+  min-height: 0;
+}
+
+button.pill:hover {
+  background: alpha(@bl_accent, 0.45);
+}
+
+button.pill:checked {
+  background: alpha(@bl_accent, 0.65);
+  color: @bl_bg;
+}
+
+separator {
+  background: alpha(@bl_dim, 0.22);
+  min-height: 1px;
+  margin: 8px 0 6px 0;
+}
+
+switch {
+  min-width: 38px;
+  min-height: 20px;
+  background: alpha(@bl_surface, 0.9);
+  border: 1px solid alpha(@bl_dim, 0.35);
+  border-radius: 999px;
+}
+
+switch:checked {
+  background: @bl_accent;
+  border-color: @bl_accent;
+}
+
+switch > slider {
+  background: @bl_fg;
+  border-radius: 999px;
+  min-width: 16px;
+  min-height: 16px;
+}
+
+scrolledwindow {
+  background: transparent;
+}
+
+/* The empty / scanning placeholder */
+.placeholder {
+  color: alpha(@bl_dim, 0.75);
+  font-size: 11px;
+  padding: 18px 0;
+}
