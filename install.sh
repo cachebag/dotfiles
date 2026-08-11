@@ -391,9 +391,10 @@ fix_paths() {
     local files_to_fix=(
         "$HOME/.config/hypr/hyprpaper.conf"
         "$HOME/.config/hypr/autostart.conf"
-        "$HOME/.config/hypr/keybinds.conf" 
+        "$HOME/.config/hypr/keybinds.conf"
         "$HOME/.config/hypr/hypridle.conf"
     )
+    # The .lua configs derive paths from $HOME at runtime, so they need no rewriting.
     
     for file in "${files_to_fix[@]}"; do
         if [[ -f "$file" ]]; then
@@ -448,7 +449,7 @@ post_install() {
     echo -e "${YELLOW}IMPORTANT - MONITOR CONFIGURATION:${NC}"
     echo "Before rebooting, you may need to configure your displays:"
     echo "1. Run 'hyprctl monitors' to see your current monitor setup"
-    echo "2. Edit ~/.config/hypr/monitors.conf to match your display configuration"
+    echo "2. Edit ~/.config/hypr/monitors.lua to match your display configuration"
     echo "3. This ensures proper resolution and positioning on first boot"
     echo ""
     
