@@ -19,7 +19,6 @@ if [[ -f "$CHOOSER_FILE" ]]; then
         hyprctl hyprpaper wallpaper "$MONITOR2,$selected"
         notify-send "Wallpaper Changed" "$(basename "$selected")" -i "$selected"
 
-        # Update wallpaper path files (for both hypr config and wal-watch script)
         echo "$selected" > ~/.config/hypr/current_wallpaper
         echo "$selected" > ~/dotfiles/hyprland/current_wallpaper
 
@@ -41,21 +40,16 @@ wallpaper {
 EOF
 
         if command -v python &>/dev/null && python -m pywal --help &>/dev/null; then
-            # Run pywal to generate colors from wallpaper (use python -m pywal directly)
             python -m pywal -q -n -i "$selected"
             
-            # Wait a moment for pywal to finish generating files
             sleep 0.3
             
-            # Reload hyprland to pick up new colors
             hyprctl reload
             
-            # Reload waybar to pick up new colors
             pkill waybar
             sleep 0.3
             nohup waybar >/dev/null 2>&1 &
             
-            # Apply colors to all kitty instances
             kitty @ set-colors --all ~/.cache/wal/colors-kitty.conf 2>/dev/null || true
             
             notify-send "Colors Updated" "Pywal colors applied to waybar and kitty"
@@ -67,4 +61,3 @@ EOF
 else
     notify-send "Wallpaper picker cancelled" "No file was selected."
 fi
-

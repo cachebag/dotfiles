@@ -1,4 +1,3 @@
-### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
@@ -11,83 +10,54 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zdharma-continuum/zinit-annex-as-monitor \
-    zdharma-continuum/zinit-annex-bin-gem-node \
-    zdharma-continuum/zinit-annex-patch-dl \
-    zdharma-continuum/zinit-annex-rust
-
-### End of Zinit's installer chunk
-
-# Secrets (API keys). Kept outside the repo so they never reach git.
-# See ~/.config/zsh/secrets.zsh -- chmod 600, gitignored.
 [[ -f "$HOME/.config/zsh/secrets.zsh" ]] && source "$HOME/.config/zsh/secrets.zsh"
 
-# Aliases
 alias ls='ls -1 --color=auto'
 alias vim='nvim'
 alias copy='wl-copy'
-alias free='df -h --output=source,size,used,avail,target | grep -E "Filesystem|/dev/nvme|/dev/sd" | grep -v "/dev/nvme0n1p1"'
+alias disk='df -h --output=source,size,used,avail,target | grep -E "Filesystem|/dev/nvme|/dev/sd" | grep -v "/dev/nvme0n1p1"'
 
-# Git aliases
 alias gs='git status'
 alias gd='git diff'
 alias gl='git log'
 alias gc='git checkout'
 alias gp='git pull'
 
-bindkey -v                       # Use vi keybindings (or skip if you prefer emacs)
-bindkey '^[[1;2C' forward-word   # Shift+Right = move forward one word
-bindkey '^[[1;2D' backward-word  # Shift+Left  = move backward one word
+bindkey -v
+bindkey '^[[1;2C' forward-word
+bindkey '^[[1;2D' backward-word
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;5D' backward-word
 
-bindkey '^[[1;5C' forward-word   # Ctrl+Right
-bindkey '^[[1;5D' backward-word  # Ctrl+Left
-
-# Location and size of the history file
 HISTFILE=~/.zsh_history
-HISTSIZE=10000           # Number of commands to keep in memory
-SAVEHIST=10000           # Number of commands to write to disk
+HISTSIZE=10000
+SAVEHIST=10000
 
-# Share history between sessions
-setopt APPEND_HISTORY     # Don't overwrite history file
-setopt SHARE_HISTORY      # Share history across terminals
+setopt SHARE_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
-setopt INC_APPEND_HISTORY # Write after each command
 
-# Autosuggestions (gray ghost text)
 zinit light zsh-users/zsh-autosuggestions
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
 
-# Syntax highlighting (colorful input)
-zinit light zsh-users/zsh-syntax-highlighting
-fpath+=~/.zfunc
-
-# Fuzzy history search
-zinit light junegunn/fzf
 zinit light zdharma-continuum/history-search-multi-word
 
 export PATH="$HOME/.local/bin:$PATH"
-export PATH="$HOME/personal/brew/bin:$PATH"
 export PATH="/usr/bin/core_perl:$PATH"
 
 [[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
 
-autoload -Uz compinit && compinit
+autoload -Uz compinit && compinit -C
 
-# System info on new shells
 if [[ $TERM_PROGRAM != "vscode" ]] && command -v fastfetch >/dev/null 2>&1; then
   fastfetch
 fi
 
-# Prompt. Starship replaces spaceship-prompt (same look, ~instant instead of
-# ~100ms of zsh). Falls back to a plain prompt if starship isn't installed yet:
-#   sudo pacman -S starship
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 else
   PROMPT='%F{blue}%~%f
 %F{green}❯%f '
 fi
+
+zinit light zsh-users/zsh-syntax-highlighting

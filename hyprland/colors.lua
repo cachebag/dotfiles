@@ -1,12 +1,3 @@
--- Pywal palette loader.
---
--- Reads the hyprlang file pywal already generates (~/.cache/wal/colors-hyprland.conf)
--- and returns it as a Lua table of ARGB integers. Nothing in the pywal pipeline
--- (wal.sh, wal-watch.sh, wallpaper.sh) has to change -- `hyprctl reload` re-runs
--- this file and picks up the new palette exactly like `source =` used to.
-
--- Baked-in copy of the current palette. Used if pywal has never run on a fresh
--- machine, so a missing cache file can never take the config down.
 local FALLBACK = {
     foregroundCol = 0xffdcd4c7,
     backgroundCol = 0xff1c0f0b,
@@ -28,7 +19,6 @@ local FALLBACK = {
     color15       = 0xffdcd4c7,
 }
 
--- Parses `$name = 0xAARRGGBB` lines. Returns nil if unreadable or empty.
 local function parse(path)
     local f = io.open(path, "r")
     if not f then return nil end
@@ -55,7 +45,6 @@ local colors = parse(home .. "/.cache/wal/colors-hyprland.conf")
     or parse(home .. "/.config/hypr/colors.conf")
     or {}
 
--- Backfill anything the palette file was missing so lookups can never be nil.
 for key, value in pairs(FALLBACK) do
     if colors[key] == nil then colors[key] = value end
 end

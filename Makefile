@@ -1,6 +1,6 @@
 # Makefile for dotfiles management
 
-.PHONY: install backup update clean test help deps check-deps verify dev-setup lint
+.PHONY: install backup update clean test help deps check-deps verify dev-setup lint status
 
 # Default target
 help:
@@ -18,6 +18,7 @@ help:
 	@echo "  verify      - Verify installation integrity"
 	@echo "  test        - Test installation script"
 	@echo "  lint        - Lint shell scripts"
+	@echo "  status      - Quick status check"
 	@echo "  dev-setup   - Setup development environment"
 	@echo "  help        - Show this help message"
 
@@ -85,6 +86,7 @@ test:
 	@test -d rofi || (echo "[INFO] rofi directory missing" && exit 1)
 	@test -f nvim/init.lua || (echo "[INFO] nvim/init.lua missing" && exit 1)
 	@test -f dependencies.yml || (echo "[INFO] dependencies.yml missing" && exit 1)
+	@awk '/^arch_packages:/{f=1;next}/^[a-zA-Z_]+:/{f=0}f&&/^[[:space:]]*-/{n++}END{if(n<1){print "[ERROR] dependencies.yml parsed 0 packages";exit 1}else{print "[INFO] dependencies.yml lists " n " arch packages"}}' dependencies.yml
 	@echo "[SUCCESS] All tests passed!"
 
 # Lint shell scripts

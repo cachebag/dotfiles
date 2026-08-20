@@ -1,19 +1,16 @@
--- was: keybinds.conf
-
 local mod = "SUPER"
 local dsp = hl.dsp
 local win = hl.dsp.window
 
 local home = os.getenv("HOME") or ""
 
--- Applications
 hl.bind(mod .. " + Return", dsp.exec_cmd("kitty"))
 hl.bind(mod .. " + B",      dsp.exec_cmd("firefox"))
 hl.bind(mod .. " + Q",      win.close())
 hl.bind(mod .. " + E",      dsp.exec_cmd("thunar"))
 hl.bind(mod .. " + A",      dsp.exec_cmd(home .. "/.config/rofi/launchers/type-3/launcher.sh"))
 hl.bind(mod .. " + V",      win.float({ action = "toggle" }))
-hl.bind(mod .. " + P",      win.pseudo())
+hl.bind(mod .. " + K",      win.pseudo())
 hl.bind(mod .. " + M",      dsp.exit())
 hl.bind(mod .. " + D",      dsp.exec_cmd("chromium --app=https://chat.com --class=ChatGPT"))
 hl.bind(mod .. " + I",      dsp.exec_cmd("chromium --app=https://web.whatsapp.com --class=Whatsapp"))
@@ -21,41 +18,30 @@ hl.bind(mod .. " + W",      dsp.exec_cmd("kitty --class wallpaper-picker " .. ho
 hl.bind(mod .. " + S",      dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]))
 hl.bind(mod .. " + O",      dsp.exec_cmd("obsidian"))
 hl.bind(mod .. " + Y",      dsp.exec_cmd("pkill waybar; nohup waybar >/dev/null 2>&1 &"))
-hl.bind(mod .. " + H",      dsp.exec_cmd(home .. "/dotfiles/hyprland/scripts/toggle_blur.sh"))
 
--- Power
--- NOTE: SUPER+P is bound twice, exactly as it was in keybinds.conf -- once to
--- `pseudo` above and again here. Last one wins, so this is what actually fires.
--- Kept as-is to preserve current behaviour; delete one of them to resolve it.
 hl.bind(mod .. " + P", dsp.exec_cmd(home .. "/dotfiles/scripts/power_menu.sh"))
 hl.bind(mod .. " + L", dsp.exec_cmd(home .. "/dotfiles/scripts/lock.sh"))
 
--- Workspace switching + move window to workspace
 for i = 1, 10 do
-    local key = i % 10 -- 10 maps to key 0
+    local key = i % 10
     hl.bind(mod .. " + " .. key,           dsp.focus({ workspace = i }))
     hl.bind(mod .. " + SHIFT + " .. key,   win.move({ workspace = i }))
 end
 
--- Workspace next/prev
 hl.bind(mod .. " + CTRL + Left",  dsp.focus({ workspace = "e-1" }))
 hl.bind(mod .. " + CTRL + Right", dsp.focus({ workspace = "e+1" }))
 
--- Window focus
 hl.bind(mod .. " + Left",  dsp.focus({ direction = "left" }))
 hl.bind(mod .. " + Right", dsp.focus({ direction = "right" }))
 hl.bind(mod .. " + Up",    dsp.focus({ direction = "up" }))
 hl.bind(mod .. " + Down",  dsp.focus({ direction = "down" }))
 
--- Mouse bindings
 hl.bind(mod .. " + mouse:272", win.drag(),   { mouse = true })
 hl.bind(mod .. " + mouse:273", win.resize(), { mouse = true })
 
--- Resize windows
 hl.bind(mod .. " + SHIFT + Left",  win.resize({ x = -40, y = 0,   relative = true }))
 hl.bind(mod .. " + SHIFT + Right", win.resize({ x = 40,  y = 0,   relative = true }))
 hl.bind(mod .. " + SHIFT + Up",    win.resize({ x = 0,   y = -40, relative = true }))
 hl.bind(mod .. " + SHIFT + Down",  win.resize({ x = 0,   y = 40,  relative = true }))
 
--- Tmux
 hl.bind(mod .. " + SHIFT + M", dsp.exec_cmd([[kitty sh -c "]] .. home .. [[/dotfiles/nmrs.sh"]]))

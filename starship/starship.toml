@@ -1,9 +1,5 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Colors are ANSI names (blue, green, purple...) rather than hex on purpose:
-# they resolve through the terminal palette, which kitty loads from pywal.
-# So the prompt re-tints itself with the wallpaper for free -- no regeneration.
-
 add_newline = true
 command_timeout = 500
 
@@ -54,7 +50,6 @@ min_time = 2000
 style = "bright-black"
 format = "[$duration]($style) "
 
-# You use `bindkey -v`, so the prompt char reflects vi mode.
 [character]
 success_symbol = "[❯](bold green)"
 error_symbol = "[❯](bold red)"

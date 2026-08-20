@@ -2,31 +2,31 @@ name: Test Installation
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ master ]
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   test-install:
     runs-on: ubuntu-latest
-    
+
     steps:
     - uses: actions/checkout@v6
-    
+
     - name: Test script syntax
       run: |
         bash -n install.sh
-        
+
     - name: Check script permissions
       run: |
         test -x install.sh || chmod +x install.sh
-        
+
     - name: Validate shell scripts
       run: |
         if command -v shellcheck &> /dev/null; then
           shellcheck install.sh
         fi
-        
+
     - name: Test file structure
       run: |
         test -d nvim || exit 1
