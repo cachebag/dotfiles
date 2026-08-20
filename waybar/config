@@ -1,22 +1,23 @@
 {
+  "layer": "top",
   "position": "bottom",
   "height": 38,
-  "margin-bottom": 8,
-  "margin-left": 12,
-  "margin-right": 12,
+  "margin-bottom": 0,
+  "margin-left": 0,
+  "margin-right": 0,
   "spacing": 0,
 
-  "modules-left": ["custom/launcher", "hyprland/workspaces"],
+  "modules-left": ["custom/launcher", "ext/workspaces"],
   "modules-center": ["custom/media", "clock"],
   "modules-right": ["tray", "custom/firefox", "custom/zed", "backlight", "pulseaudio", "bluetooth", "custom/bluelight", "network", "cpu", "temperature", "memory", "battery", "custom/power"],
 
-  "hyprland/workspaces": {
+  "ext/workspaces": {
     "format": "{name}",
     "on-click": "activate",
     "on-scroll-up": "hyprctl dispatch \"hl.dsp.focus({ workspace = 'e+1' })\"",
     "on-scroll-down": "hyprctl dispatch \"hl.dsp.focus({ workspace = 'e-1' })\"",
     "all-outputs": true,
-    "sort-by-number": true,
+    "sort-by": "number",
     "persistent-workspaces": {
       "*": 5
     }

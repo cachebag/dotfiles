@@ -1,13 +1,16 @@
 {
   "name": "cachebag-dotfiles",
   "version": "1.0.0",
-  "description": "cahebag's dotfiles",
-  "main": "install.sh",
+  "private": true,
+  "description": "cachebag's dotfiles",
   "scripts": {
-    "install": "./install.sh",
+    "setup": "./install.sh",
+    "deps": "DEPS_ONLY=true ./install.sh",
     "backup": "./scripts/backup.sh",
     "update": "./scripts/update.sh",
-    "clean": "./scripts/clean.sh"
+    "clean": "./scripts/clean.sh",
+    "test": "make test",
+    "lint": "make lint"
   },
   "repository": {
     "type": "git",
@@ -28,9 +31,8 @@
     "url": "https://github.com/cachebag/dotfiles/issues"
   },
   "homepage": "https://github.com/cachebag/dotfiles#readme",
-  "dependencies": {},
-  "devDependencies": {},
+  "packageManager": "bun@1.3.14",
   "engines": {
-    "node": ">=16.0.0"
+    "bun": ">=1.0.0"
   }
 }

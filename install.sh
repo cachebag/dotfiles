@@ -1,7 +1,7 @@
 #!/bin/bash
-# Cachebag's Dotfiles Installation Script
 
-set -euo pipefail
+set -Eeuo pipefail
+shopt -s nullglob
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -9,10 +9,10 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-log_info()    { echo -e "${BLUE}[INFO]${NC} $1"; }
-log_success() { echo -e "${GREEN}[SUCCESS]${NC} $1"; }
-log_warning() { echo -e "${YELLOW}[WARNING]${NC} $1"; }
-log_error()   { echo -e "${RED}[ERROR]${NC} $1"; }
+log_info()    { echo -e "${BLUE}[INFO]${NC} ${1-}"; }
+log_success() { echo -e "${GREEN}[SUCCESS]${NC} ${1-}"; }
+log_warning() { echo -e "${YELLOW}[WARNING]${NC} ${1-}"; }
+log_error()   { echo -e "${RED}[ERROR]${NC} ${1-}"; }
 
 DOTFILES_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 STATE_FILE="$HOME/.dotfiles_install_state"
@@ -22,7 +22,7 @@ save_state() {
 }
 
 get_state() {
-    [[ -f "$STATE_FILE" ]] && cat "$STATE_FILE" || echo "start"
+    if [[ -f "$STATE_FILE" ]]; then cat "$STATE_FILE"; else echo "start"; fi
 }
 
 check_arch() {
@@ -40,48 +40,55 @@ check_user() {
 }
 
 cleanup_on_error() {
-    log_error "Installation failed. State saved. Run script again to continue."
-    exit 1
+    local exit_code=$?
+    log_error "Installation failed (line ${BASH_LINENO[0]}, exit $exit_code). State saved. Run script again to continue."
+    exit "$exit_code"
 }
 
 trap cleanup_on_error ERR
 
+read_pkg_list() {
+    local section="$1" file="$DOTFILES_ROOT/dependencies.yml"
+    [[ -f "$file" ]] || return 1
+    awk -v want="$section:" '
+        /^[a-zA-Z_]+:/ { inside = ($0 == want); next }
+        inside && /^[[:space:]]*-[[:space:]]+/ {
+            sub(/^[[:space:]]*-[[:space:]]+/, "")
+            sub(/[[:space:]]*#.*$/, "")
+            gsub(/[[:space:]]+$/, "")
+            if (length($0)) print
+        }
+    ' "$file"
+}
+
 install_dependencies() {
     log_info "Installing system dependencies..."
-    local pacman_pkgs=(
-        hyprland waybar rofi-wayland dunst kitty neovim
-        git curl wget ripgrep fd fzf fastfetch yazi
-        nodejs npm python python-pip python-virtualenv python-pynvim
-        ttf-fira-code ttf-font-awesome ttf-jetbrains-mono-nerd
-        wl-clipboard grim slurp swappy
-        xdg-desktop-portal-hyprland qt5-wayland qt6-wayland
-        pipewire pipewire-alsa pipewire-pulse pavucontrol
-        polkit-gnome brightnessctl playerctl
-        zsh zsh-autosuggestions zsh-syntax-highlighting
-        sddm qt6-svg qt6-virtualkeyboard qt6-multimedia-ffmpeg
-        network-manager-applet bluez bluez-utils
-        thunar thunar-archive-plugin file-roller
-        firefox dolphin wofi
-        tmux base-devel cmake make gcc unzip
-    )
 
-    sudo pacman -Syu --needed --noconfirm "${pacman_pkgs[@]}" || {
+    local pacman_pkgs=() aur_pkgs=()
+    mapfile -t pacman_pkgs < <(read_pkg_list arch_packages)
+    mapfile -t aur_pkgs   < <(read_pkg_list aur_packages)
+
+    if [[ ${#pacman_pkgs[@]} -eq 0 ]]; then
+        log_error "No packages parsed from $DOTFILES_ROOT/dependencies.yml"
+        exit 1
+    fi
+    log_info "${#pacman_pkgs[@]} pacman packages, ${#aur_pkgs[@]} AUR packages from dependencies.yml"
+
+    sudo pacman -Syu --needed --noconfirm "${pacman_pkgs[@]}" ||
         log_warning "Some pacman packages failed to install — check output above"
-    }
 
     if ! command -v yay &>/dev/null; then
         log_info "Installing yay AUR helper..."
         rm -rf /tmp/yay
         git clone https://aur.archlinux.org/yay.git /tmp/yay
-        cd /tmp/yay && makepkg -si --noconfirm
-        cd "$DOTFILES_ROOT"
+        (cd /tmp/yay && makepkg -si --noconfirm)
     fi
 
-    local aur_pkgs=(hyprpaper swaylock-effects wlogout hypridle hyprshot obsidian cursor-bin)
-    yay -S --needed --noconfirm "${aur_pkgs[@]}" || {
-        log_warning "Some AUR packages failed to install — check output above"
-    }
-    
+    if [[ ${#aur_pkgs[@]} -gt 0 ]]; then
+        yay -S --needed --noconfirm "${aur_pkgs[@]}" ||
+            log_warning "Some AUR packages failed to install — check output above"
+    fi
+
     log_success "Dependencies installed"
     save_state "dependencies_done"
 }
@@ -93,9 +100,10 @@ create_directories() {
         "$HOME/.config/nvim" "$HOME/.config/kitty" "$HOME/.config/dunst"
         "$HOME/.config/yazi" "$HOME/.config/fastfetch" "$HOME/.config/sddm"
         "$HOME/.local/share/applications" "$HOME/.local/bin" "$HOME/.local/share/fonts"
-        "$HOME/wallpapers" "$HOME/Pictures/screenshots"
+        "$HOME/Pictures/screenshots"
     )
-    for d in "${dirs[@]}"; do 
+    local d
+    for d in "${dirs[@]}"; do
         mkdir -p "$d"
     done
     log_success "Directories created"
@@ -104,117 +112,90 @@ create_directories() {
 
 backup_configs() {
     log_info "Backing up existing configurations..."
-    local backup_dir="$HOME/.config/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
+    local backup_dir
+    backup_dir="$HOME/.config/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
     local configs=(hypr waybar rofi nvim kitty dunst yazi fastfetch)
     local backup_needed=false
-    
+    local config config_path file
+
     for config in "${configs[@]}"; do
-        local config_path="$HOME/.config/$config"
+        config_path="$HOME/.config/$config"
         if [[ -d "$config_path" && ! -L "$config_path" ]]; then
-            [[ "$backup_needed" == false ]] && mkdir -p "$backup_dir"
+            mkdir -p "$backup_dir"
             mv "$config_path" "$backup_dir/"
             log_warning "Backed up $config to $backup_dir"
             backup_needed=true
         fi
     done
-    
-    for file in .zshrc .zsh_history; do
+
+    for file in .zshrc .zsh_history .tmux.conf; do
         if [[ -f "$HOME/$file" && ! -L "$HOME/$file" ]]; then
-            [[ "$backup_needed" == false ]] && mkdir -p "$backup_dir"
+            mkdir -p "$backup_dir"
             cp "$HOME/$file" "$backup_dir/"
+            log_warning "Backed up $file to $backup_dir"
             backup_needed=true
         fi
     done
-    
-    if [[ "$backup_needed" == false ]] && [[ -d "$backup_dir" ]]; then
+
+    if [[ "$backup_needed" == false && -d "$backup_dir" ]]; then
         rmdir "$backup_dir" 2>/dev/null || true
     fi
     log_success "Backup completed"
     save_state "backup_done"
 }
 
-# --- Symlinks -----------------------------------------------------------
+link_dir() {
+    local src="$1" dst="$2"
+    [[ -d "$DOTFILES_ROOT/$src" ]] || return 0
+    mkdir -p "$(dirname "$dst")"
+    rm -rf "$dst"
+    ln -sfn "$DOTFILES_ROOT/$src" "$dst"
+    log_info "Linked $src → $dst"
+}
+
+link_file() {
+    local src="$1" dst="$2"
+    [[ -f "$DOTFILES_ROOT/$src" ]] || return 0
+    mkdir -p "$(dirname "$dst")"
+    [[ -e "$dst" && ! -L "$dst" ]] && rm -f "$dst"
+    ln -sfn "$DOTFILES_ROOT/$src" "$dst"
+    log_info "Linked $src → $dst"
+}
 
 create_symlinks() {
     log_info "Creating symlinks..."
 
-    local core_configs=(
+    local dir_map=(
         "hyprland:$HOME/.config/hypr"
-        "waybar:$HOME/.config/waybar" 
+        "waybar:$HOME/.config/waybar"
         "nvim:$HOME/.config/nvim"
         "kitty:$HOME/.config/kitty"
         "rofi:$HOME/.config/rofi"
-    )
-
-    for mapping in "${core_configs[@]}"; do
-        local src="${mapping%:*}"
-        local dst="${mapping#*:}"
-        if [[ -d "$DOTFILES_ROOT/$src" ]]; then
-            [[ -e "$dst" ]] && rm -rf "$dst"
-            ln -sf "$DOTFILES_ROOT/$src" "$dst"
-            log_info "Linked $src → $dst"
-        fi
-    done
-
-    local optional_configs=(
         "dunst:$HOME/.config/dunst"
         "yazi:$HOME/.config/yazi"
         "fastfetch:$HOME/.config/fastfetch"
         "blurs/dist:$HOME/.config/blurs"
     )
-
-    for mapping in "${optional_configs[@]}"; do
-        local src="${mapping%:*}"
-        local dst="${mapping#*:}"
-        if [[ -d "$DOTFILES_ROOT/$src" ]]; then
-            [[ -e "$dst" ]] && rm -rf "$dst"
-            ln -sf "$DOTFILES_ROOT/$src" "$dst"
-            log_info "Linked $src → $dst"
-        fi
+    local mapping
+    for mapping in "${dir_map[@]}"; do
+        link_dir "${mapping%%:*}" "${mapping#*:}"
     done
 
-    if [[ -f "$DOTFILES_ROOT/starship/starship.toml" ]]; then
-        ln -sf "$DOTFILES_ROOT/starship/starship.toml" "$HOME/.config/starship.toml"
-        log_info "Linked starship.toml"
-    fi
+    link_file "starship/starship.toml" "$HOME/.config/starship.toml"
+    link_file "zsh/zshrc"              "$HOME/.zshrc"
+    link_file "tmux/tmux.conf"         "$HOME/.tmux.conf"
 
-    if [[ -f "$DOTFILES_ROOT/zsh/zshrc" ]]; then
-        # Preserve any un-committed local zshrc (it may hold secrets/PATH tweaks)
-        # instead of silently deleting it.
-        if [[ -f "$HOME/.zshrc" && ! -L "$HOME/.zshrc" ]]; then
-            mv -f "$HOME/.zshrc" "$HOME/.zshrc.bak"
-            chmod 600 "$HOME/.zshrc.bak"
-            log_warning "Existing ~/.zshrc backed up to ~/.zshrc.bak"
-        fi
-        ln -sf "$DOTFILES_ROOT/zsh/zshrc" "$HOME/.zshrc"
-        log_info "Linked zshrc"
-    fi
+    local script script_name
+    for script in "$DOTFILES_ROOT/scripts/"*.sh; do
+        chmod +x "$script"
+        script_name=$(basename "$script")
+        ln -sfn "$script" "$HOME/.local/bin/${script_name%.sh}"
+    done
 
-    if [[ -f "$DOTFILES_ROOT/zsh/zsh_history" ]]; then
-        [[ -f "$HOME/.zsh_history" && ! -L "$HOME/.zsh_history" ]] && rm -f "$HOME/.zsh_history"
-        ln -sf "$DOTFILES_ROOT/zsh/zsh_history" "$HOME/.zsh_history"
-        log_info "Linked zsh_history"
-    fi
-
-    if [[ -f "$DOTFILES_ROOT/tmux/tmux.conf" ]]; then
-        [[ -f "$HOME/.tmux.conf" && ! -L "$HOME/.tmux.conf" ]] && rm -f "$HOME/.tmux.conf"
-        ln -sf "$DOTFILES_ROOT/tmux/tmux.conf" "$HOME/.tmux.conf"
-        log_info "Linked tmux.conf"
-    fi
-
-    if [[ -d "$DOTFILES_ROOT/scripts" ]]; then
-        chmod +x "$DOTFILES_ROOT/scripts/"*.sh
-        for script in "$DOTFILES_ROOT/scripts/"*.sh; do
-            local script_name=$(basename "$script")
-            ln -sf "$script" "$HOME/.local/bin/${script_name%.sh}"
-        done
-        log_info "Linked utility scripts to ~/.local/bin"
-    fi
-
-    if [[ -d "$DOTFILES_ROOT/applications" ]]; then
-        ln -sfn "$DOTFILES_ROOT/applications"/* "$HOME/.local/share/applications/"
-        log_info "Linked .desktop applications"
-    fi
+    local app
+    for app in "$DOTFILES_ROOT/applications/"*.desktop; do
+        ln -sfn "$app" "$HOME/.local/share/applications/"
+    done
 
     log_success "Symlinks created"
     save_state "symlinks_done"
@@ -268,41 +249,119 @@ SDDMCONF
     save_state "sddm_done"
 }
 
+install_nerd_font() {
+    local name="$1" probe="$2"
+    local font_dir="$HOME/.local/share/fonts"
+    [[ -f "$font_dir/$probe" ]] && return 0
+
+    local url="https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/${name}.zip"
+    if wget -q -O "/tmp/${name}.zip" "$url"; then
+        unzip -q -o "/tmp/${name}.zip" -d "$font_dir"
+        rm -f "/tmp/${name}.zip"
+        log_info "Installed $name Nerd Font"
+    else
+        log_warning "Failed to download $name Nerd Font — install manually later"
+    fi
+}
+
 setup_fonts() {
     log_info "Installing fonts..."
-    local font_dir="$HOME/.local/share/fonts"
-    mkdir -p "$font_dir"
-
-    if [[ ! -f "$font_dir/FiraCodeNerdFont-Regular.ttf" ]]; then
-        if wget -q -O /tmp/FiraCode.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip; then
-            unzip -q -o /tmp/FiraCode.zip -d "$font_dir"
-            rm -f /tmp/FiraCode.zip
-        else
-            log_warning "Failed to download FiraCode Nerd Font — install manually later"
-        fi
-    fi
-
-    if [[ ! -f "$font_dir/JetBrainsMonoNerdFont-Regular.ttf" ]]; then
-        if wget -q -O /tmp/JetBrainsMono.zip https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip; then
-            unzip -q -o /tmp/JetBrainsMono.zip -d "$font_dir"
-            rm -f /tmp/JetBrainsMono.zip
-        else
-            log_warning "Failed to download JetBrainsMono Nerd Font — install manually later"
-        fi
-    fi
-
-    fc-cache -fv > /dev/null 2>&1 || true
+    mkdir -p "$HOME/.local/share/fonts"
+    install_nerd_font FiraCode      FiraCodeNerdFont-Regular.ttf
+    install_nerd_font JetBrainsMono JetBrainsMonoNerdFont-Regular.ttf
+    fc-cache -f > /dev/null 2>&1 || true
     log_success "Fonts installed"
     save_state "fonts_done"
+}
+
+github_ssh_ok() {
+    local out
+    out=$(ssh -o StrictHostKeyChecking=accept-new -o BatchMode=yes -T git@github.com 2>&1 || true)
+    [[ "$out" == *"successfully authenticated"* ]]
+}
+
+setup_git_ssh() {
+    log_info "Setting up Git identity and GitHub SSH access..."
+
+    local name="" email=""
+    if ! git config --global user.name >/dev/null 2>&1; then
+        read -rp "Git user.name: " name || true
+        [[ -n "$name" ]] && git config --global user.name "$name"
+    fi
+    if ! git config --global user.email >/dev/null 2>&1; then
+        read -rp "Git user.email: " email || true
+        [[ -n "$email" ]] && git config --global user.email "$email"
+    fi
+    email=$(git config --global user.email 2>/dev/null || echo "$USER@$(uname -n)")
+
+    mkdir -p "$HOME/.ssh"
+    chmod 700 "$HOME/.ssh"
+    local key="$HOME/.ssh/id_ed25519"
+
+    if [[ -f "$key" ]]; then
+        log_info "Using existing SSH key at $key"
+    else
+        log_info "Generating an ed25519 SSH key. Leave the passphrase empty for unattended cloning."
+        if ! ssh-keygen -t ed25519 -C "$email" -f "$key"; then
+            log_warning "ssh-keygen failed — skipping GitHub SSH setup"
+            save_state "git_ssh_done"
+            return 0
+        fi
+    fi
+    chmod 600 "$key"
+    chmod 644 "$key.pub"
+
+    if [[ -z "${SSH_AUTH_SOCK:-}" ]]; then
+        eval "$(ssh-agent -s)" >/dev/null 2>&1 || true
+    fi
+    ssh-add "$key" >/dev/null 2>&1 || log_warning "Could not add key to ssh-agent"
+
+    if ! grep -q "Host github.com" "$HOME/.ssh/config" 2>/dev/null; then
+        cat >> "$HOME/.ssh/config" <<SSHCONF
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile $key
+    AddKeysToAgent yes
+SSHCONF
+        chmod 600 "$HOME/.ssh/config"
+        log_info "Added github.com block to ~/.ssh/config"
+    fi
+
+    if github_ssh_ok; then
+        log_success "GitHub SSH already working"
+        save_state "git_ssh_done"
+        return 0
+    fi
+
+    if command -v gh &>/dev/null; then
+        gh auth status >/dev/null 2>&1 || gh auth login --hostname github.com --git-protocol ssh ||
+            log_warning "gh auth login did not complete"
+        gh ssh-key add "$key.pub" --title "$(uname -n)" >/dev/null 2>&1 ||
+            log_warning "Could not upload key via gh — it may already be registered"
+    else
+        log_warning "gh CLI unavailable — add this key at https://github.com/settings/ssh/new"
+        echo
+        cat "$key.pub"
+        echo
+        read -rp "Press Enter once the key is added to GitHub..." || true
+    fi
+
+    if github_ssh_ok; then
+        log_success "GitHub SSH authentication verified"
+    else
+        log_warning "GitHub SSH not verified — SSH clones will fall back to HTTPS"
+    fi
+
+    save_state "git_ssh_done"
 }
 
 setup_wallpapers() {
     log_info "Setting up wallpapers..."
     if [[ -d "$HOME/wallpapers/.git" ]]; then
-        log_info "Wallpapers repo already cloned, pulling latest..."
         git -C "$HOME/wallpapers" pull || log_warning "Failed to pull wallpapers — using existing copy"
     else
-        [[ -d "$HOME/wallpapers" ]] && rm -rf "$HOME/wallpapers"
+        rm -rf "$HOME/wallpapers"
         if ! git clone git@github.com:cachebag/wallpapers.git "$HOME/wallpapers" 2>/dev/null; then
             log_warning "SSH clone failed, trying HTTPS..."
             if ! git clone https://github.com/cachebag/wallpapers.git "$HOME/wallpapers"; then
@@ -321,78 +380,72 @@ setup_services() {
     sudo systemctl enable bluetooth 2>/dev/null || log_warning "Bluetooth service not found — skipping"
     sudo usermod -aG video,input,audio "$USER" || log_warning "Failed to add user to groups"
 
-    if [[ -d "$DOTFILES_ROOT/hyprland/scripts" ]]; then
-        chmod +x "$DOTFILES_ROOT/hyprland/scripts/"*.sh
-    fi
+    local script
+    for script in "$DOTFILES_ROOT/hyprland/scripts/"*.sh; do
+        chmod +x "$script"
+    done
 
     log_success "Services configured"
     save_state "services_done"
 }
 
+rebuild_lazy_plugin() {
+    local dir="$HOME/.local/share/nvim/lazy/$1"
+    [[ -f "$dir/Makefile" ]] || return 0
+    make -C "$dir" clean > /dev/null 2>&1 || true
+    if make -C "$dir" > /dev/null 2>&1; then
+        log_info "Rebuilt $1"
+    else
+        log_warning "Failed to rebuild $1 — may need manual rebuild"
+    fi
+}
+
 setup_neovim() {
     log_info "Setting up Neovim environment..."
-    
+
     if command -v python &>/dev/null; then
-        log_info "Installing Python pynvim..."
-        python -m pip install --user --upgrade pynvim > /dev/null 2>&1 || log_warning "Failed to install pynvim"
+        python -m pip install --user --upgrade pynvim > /dev/null 2>&1 ||
+            log_warning "Failed to install pynvim"
     fi
-    
-    if command -v npm &>/dev/null; then
-        log_info "Installing Node.js neovim package..."
-        sudo npm install -g neovim > /dev/null 2>&1 || log_warning "Failed to install neovim npm package"
+
+    if command -v bun &>/dev/null; then
+        bun install -g neovim > /dev/null 2>&1 ||
+            log_warning "Failed to install neovim package via bun"
+    elif command -v npm &>/dev/null; then
+        sudo npm install -g neovim > /dev/null 2>&1 ||
+            log_warning "Failed to install neovim package via npm"
     fi
-    
-    log_info "Installing Neovim plugins..."
-    if timeout 30 nvim --headless "+qa" 2>/dev/null; then
-        log_info "Neovim starts successfully, proceeding with plugin installation..."
-        timeout 120 nvim --headless "+Lazy! sync" +qa 2>/dev/null || {
-            log_warning "Plugin install timed out or failed - you can run ':Lazy sync' manually later"
-            save_state "neovim_done"
-            return 0
-        }
-    else
-        log_warning "Neovim failed to start - skipping plugin installation"
+
+    if ! timeout 30 nvim --headless "+qa" 2>/dev/null; then
+        log_warning "Neovim failed to start — skipping plugin installation"
         save_state "neovim_done"
         return 0
     fi
-    
-    log_info "Rebuilding telescope-nvim and fzf-native..."
-    local telescope_dir="$HOME/.local/share/nvim/lazy/telescope.nvim"
-    local fzf_dir="$HOME/.local/share/nvim/lazy/telescope-fzf-native.nvim"
-    
-    if [[ -d "$telescope_dir" ]]; then
-        cd "$telescope_dir"
-        if [[ -f "Makefile" ]]; then
-            make clean > /dev/null 2>&1 || true
-            make > /dev/null 2>&1 || log_warning "Failed to rebuild telescope - may need manual rebuild"
-            log_info "Telescope rebuilt successfully"
-        fi
-    else
-        log_warning "Telescope directory not found - plugins may need manual installation"
+
+    if ! timeout 120 nvim --headless "+Lazy! sync" +qa 2>/dev/null; then
+        log_warning "Plugin install timed out or failed — run ':Lazy sync' manually later"
+        save_state "neovim_done"
+        return 0
     fi
-    
-    if [[ -d "$fzf_dir" ]]; then
-        cd "$fzf_dir"
-        if [[ -f "Makefile" ]]; then
-            make clean > /dev/null 2>&1 || true
-            make > /dev/null 2>&1 || log_warning "Failed to rebuild fzf-native - may need manual rebuild"
-            log_info "FZF-native rebuilt successfully"
-        fi
-    fi
-    
-    cd "$DOTFILES_ROOT"
+
+    rebuild_lazy_plugin telescope.nvim
+    rebuild_lazy_plugin telescope-fzf-native.nvim
+
     log_success "Neovim setup completed"
     save_state "neovim_done"
 }
 
 setup_zsh() {
     log_info "Configuring Zsh..."
-    if [[ "$SHELL" != "/usr/bin/zsh" && "$SHELL" != "/bin/zsh" ]]; then
-        log_info "Changing default shell to Zsh..."
-        if chsh -s /usr/bin/zsh; then
+    local zsh_path current_shell
+    zsh_path=$(command -v zsh || echo /usr/bin/zsh)
+    current_shell=$(getent passwd "$USER" | cut -d: -f7)
+
+    if [[ "$current_shell" != "$zsh_path" ]]; then
+        if chsh -s "$zsh_path"; then
             log_warning "Shell changed — logout/login required for full effect"
         else
-            log_warning "Failed to change shell — run 'chsh -s /usr/bin/zsh' manually"
+            log_warning "Failed to change shell — run 'chsh -s $zsh_path' manually"
         fi
     fi
     save_state "zsh_done"
@@ -400,49 +453,41 @@ setup_zsh() {
 
 fix_paths() {
     log_info "Fixing hardcoded paths in configs..."
-    local files_to_fix=(
+    local files=(
         "$HOME/.config/hypr/hyprpaper.conf"
-        "$HOME/.config/hypr/autostart.conf"
-        "$HOME/.config/hypr/keybinds.conf"
         "$HOME/.config/hypr/hypridle.conf"
     )
-    # The .lua configs derive paths from $HOME at runtime, so they need no rewriting.
-    
-    for file in "${files_to_fix[@]}"; do
-        if [[ -f "$file" ]]; then
-            sed -i "s|/home/cachebag|$HOME|g" "$file"
+    local file real
+    for file in "${files[@]}"; do
+        [[ -f "$file" ]] || continue
+        grep -q /home/cachebag "$file" 2>/dev/null || continue
+        real=$(readlink -f "$file")
+        if [[ "$real" == "$DOTFILES_ROOT"/* ]]; then
+            log_warning "$(basename "$file") holds a /home/cachebag path but resolves into the repo ($real) — edit it there instead of letting the installer dirty tracked files"
+            continue
         fi
+        sed -i "s|/home/cachebag|$HOME|g" "$file"
+        log_info "Rewrote paths in $(basename "$file")"
     done
-    
+
     log_success "Paths updated"
     save_state "paths_done"
 }
 
 post_install() {
-    log_info "Running post-installation tasks..."
-    
-    mkdir -p "$HOME/.local/bin"
-    
-    log_info "Installation complete!"
     echo -e "${GREEN}=== INSTALLATION SUMMARY ===${NC}"
     echo "✓ Dependencies installed"
-    echo "✓ Configurations symlinked" 
+    echo "✓ Configurations symlinked"
     echo "✓ Fonts installed"
     echo "✓ SDDM theme configured"
     echo "✓ Services enabled"
     echo "✓ Neovim plugins installed"
     echo "✓ Zsh configured as default shell"
-    echo ""
-    echo -e "${YELLOW}INSTALLED APPLICATIONS:${NC}"
-    echo "• Firefox (Super+B)"
-    echo "• Dolphin file manager (Super+E)"
-    echo "• Obsidian (Super+O)"
+    echo "✓ GitHub SSH key configured"
     echo ""
     echo -e "${YELLOW}NEXT STEPS:${NC}"
-    echo "1. Reboot your system to apply all changes"
-    echo "2. Select 'Hyprland' from your display manager"
-    echo "3. Press Super+A to launch applications"
-    echo "4. Use Super+W to select wallpapers"
+    echo "1. Run 'hyprctl monitors' and edit ~/.config/hypr/monitors.lua to match your displays"
+    echo "2. Reboot and select 'Hyprland' from your display manager"
     echo ""
     echo -e "${BLUE}KEYBINDS:${NC}"
     echo "Super+Return: Terminal"
@@ -455,18 +500,11 @@ post_install() {
     echo "Super+P: Power menu"
     echo "Super+L: Lock screen"
     echo ""
-    
+
     rm -f "$STATE_FILE"
-    
-    echo -e "${YELLOW}IMPORTANT - MONITOR CONFIGURATION:${NC}"
-    echo "Before rebooting, you may need to configure your displays:"
-    echo "1. Run 'hyprctl monitors' to see your current monitor setup"
-    echo "2. Edit ~/.config/hypr/monitors.lua to match your display configuration"
-    echo "3. This ensures proper resolution and positioning on first boot"
-    echo ""
-    
-    echo -e "${GREEN}Reboot recommended to complete setup.${NC}"
-    read -p "Reboot now? (y/N): " -n1 reboot_choice
+
+    local reboot_choice=""
+    read -rp "Reboot now? (y/N): " -n1 reboot_choice || true
     echo
     if [[ $reboot_choice =~ ^[Yy]$ ]]; then
         sudo reboot
@@ -474,6 +512,9 @@ post_install() {
 }
 
 main() {
+    check_arch
+    check_user
+
     echo -e "${BLUE}╔══════════════════════════════════════╗${NC}"
     echo -e "${BLUE}║    Cachebag's Dotfiles Installer     ║${NC}"
     echo -e "${BLUE}╚══════════════════════════════════════╝${NC}"
@@ -488,54 +529,36 @@ main() {
     echo "• Firefox, Dolphin, Obsidian"
     echo "• Various utilities and fonts"
     echo ""
-    
-    read -p "Continue with installation? (y/N): " -n1 choice
+
+    if [[ "${DEPS_ONLY:-}" == "true" ]]; then
+        log_info "DEPS_ONLY set — installing dependencies then stopping"
+        install_dependencies
+        exit 0
+    fi
+
+    local choice=""
+    read -rp "Continue with installation? (y/N): " -n1 choice || true
     echo
     [[ $choice =~ ^[Yy]$ ]] || { log_info "Installation cancelled"; exit 0; }
 
-    check_arch
-    check_user
-
-    local current_state=$(get_state)
+    local current_state
+    current_state=$(get_state)
     log_info "Resuming from state: $current_state"
 
     case "$current_state" in
-        "start")
-            install_dependencies
-            ;&
-        "dependencies_done")
-            create_directories
-            ;&
-        "directories_done")
-            backup_configs
-            ;&
-        "backup_done")
-            create_symlinks
-            ;&
-        "symlinks_done")
-            setup_sddm
-            ;&
-        "sddm_done")
-            setup_fonts
-            ;&
-        "fonts_done")
-            setup_wallpapers
-            ;&
-        "wallpapers_done")
-            setup_services
-            ;&
-        "services_done")
-            setup_neovim
-            ;&
-        "neovim_done")
-            setup_zsh
-            ;&
-        "zsh_done")
-            fix_paths
-            ;&
-        "paths_done")
-            post_install
-            ;;
+        start)             install_dependencies ;&
+        dependencies_done) create_directories   ;&
+        directories_done)  backup_configs       ;&
+        backup_done)       create_symlinks      ;&
+        symlinks_done)     setup_sddm           ;&
+        sddm_done)         setup_fonts          ;&
+        fonts_done)        setup_git_ssh        ;&
+        git_ssh_done)      setup_wallpapers     ;&
+        wallpapers_done)   setup_services       ;&
+        services_done)     setup_neovim         ;&
+        neovim_done)       setup_zsh            ;&
+        zsh_done)          fix_paths            ;&
+        paths_done)        post_install         ;;
         *)
             log_error "Unknown state: $current_state"
             exit 1
@@ -544,4 +567,3 @@ main() {
 }
 
 main "$@"
-

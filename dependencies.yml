@@ -1,93 +1,69 @@
-# Dependencies configuration for dotfiles
-
-system:
-  arch_packages:
-    # Core Hyprland environment
-    - hyprland
-    - waybar
-    - rofi-wayland
-    - dunst
-    - kitty
-    - neovim
-    
-    # Development tools
-    - git
-    - curl
-    - wget
-    - ripgrep
-    - fd
-    - fzf
-    - fastfetch
-    - starship
-    - yazi
-    - nodejs
-    - npm
-    - python
-    - python-pip
-    - python-virtualenv
-    - python-pynvim
-    
-    # Build tools
-    - base-devel
-    - cmake
-    - make
-    - gcc
-    
-    # Fonts
-    - ttf-fira-code
-    - ttf-font-awesome
-    - ttf-jetbrains-mono-nerd
-    
-    # Wayland utilities
-    - wl-clipboard
-    - grim
-    - slurp
-    - swappy
-    - xdg-desktop-portal-hyprland
-    - qt5-wayland
-    - qt6-wayland
-    
-    # Audio/Media
-    - pipewire
-    - pipewire-alsa
-    - pipewire-pulse
-    - pavucontrol
-    
-    # System utilities
-    - polkit-gnome
-    - brightnessctl
-    - playerctl
-    
-    # Shell
-    - zsh
-    - zsh-autosuggestions
-    - zsh-syntax-highlighting
-    
-    # Display manager
-    - sddm
-    - qt5-graphicaleffects
-    - qt5-quickcontrols2
-    
-    # Network/Bluetooth
-    - network-manager-applet
-    - bluez
-    - bluez-utils
-    # blurs (Bluetooth applet) builds against these
-    - gtk4
-    - gtk4-layer-shell
-    - rustup
-    
-    # File management
-    - thunar
-    - thunar-archive-plugin
-    - file-roller
-    
-    # Applications
-    - firefox
-    - dolphin
-    - wofi
-    - obsidian
-    - snapd
+arch_packages:
+  - hyprland
+  - waybar
+  - rofi-wayland
+  - dunst
+  - kitty
+  - neovim
+  - git
+  - curl
+  - wget
+  - ripgrep
+  - fd
+  - fzf
+  - fastfetch
+  - yazi
+  - starship
+  - tmux
+  - nodejs
+  - bun
+  - python
+  - python-pip
+  - python-virtualenv
+  - python-pynvim
+  - python-pywal
+  - inotify-tools
+  - base-devel
+  - cmake
+  - make
+  - gcc
+  - unzip
+  - ttf-fira-code
+  - ttf-font-awesome
+  - ttf-jetbrains-mono-nerd
+  - wl-clipboard
+  - grim
+  - slurp
+  - swappy
+  - xdg-desktop-portal-hyprland
+  - qt5-wayland
+  - qt6-wayland
+  - pipewire
+  - pipewire-alsa
+  - pipewire-pulse
+  - pavucontrol
+  - polkit-gnome
+  - brightnessctl
+  - playerctl
+  - zsh
+  - openssh
+  - github-cli
+  - sddm
+  - qt6-svg
+  - qt6-virtualkeyboard
+  - qt6-multimedia-ffmpeg
+  - network-manager-applet
+  - bluez
+  - bluez-utils
+  - gtk4
+  - gtk4-layer-shell
+  - rustup
+  - thunar
+  - thunar-archive-plugin
+  - file-roller
+  - firefox
+  - dolphin
+  - wofi
 
 aur_packages:
   - hyprpaper
@@ -95,48 +71,6 @@ aur_packages:
   - wlogout
   - hypridle
   - hyprshot
+  - obsidian
+  - cursor-bin
   - nmrs
-
-snap_packages:
-  - chatgpt-linux
-  - whatsapp-linux-app
-
-python:
-  packages:
-    - pynvim
-
-nodejs:
-  global_packages:
-    - neovim
-
-fonts:
-  - name: "FiraCode Nerd Font"
-    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip"
-    install_path: "~/.local/share/fonts"
-  - name: "JetBrains Mono Nerd Font"
-    url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip"
-    install_path: "~/.local/share/fonts"
-
-directories:
-  - ~/.config/hypr
-  - ~/.config/waybar
-  - ~/.config/rofi
-  - ~/.config/nvim
-  - ~/.config/kitty
-  - ~/.config/dunst
-  - ~/.config/yazi
-  - ~/.config/fastfetch
-  - ~/.config/sddm
-  - ~/.local/share/applications
-  - ~/.local/bin
-  - ~/.local/share/fonts
-  - ~/wallpapers
-  - ~/Pictures/screenshots
-
-services:
-  system:
-    - bluetooth
-    - NetworkManager
-    - snapd
-    - sddm
-  - ~/.local/share/fonts

@@ -9,10 +9,10 @@
 }
 
 window#waybar {
-  background: alpha(@background, 0.88);
+  background: alpha(@background, 0.55);
   color: @foreground;
-  border-radius: 14px;
-  border: 1px solid alpha(@color8, 0.25);
+  border-radius: 0;
+  border: none;
   transition: none;
 }
 
@@ -64,7 +64,7 @@ window#waybar.hidden {
   margin: 4px 2px;
   padding: 1px 12px;
   border-radius: 10px;
-  background: alpha(@color0, 0.5);
+  background: transparent;
   color: alpha(@foreground, 0.65);
   font-style: italic;
   font-size: 12px;
@@ -91,7 +91,7 @@ window#waybar.hidden {
   padding: 1px 12px;
   margin: 4px 2px;
   border-radius: 10px;
-  background: alpha(@color0, 0.65);
+  background: transparent;
   color: @foreground;
   transition: none;
 }
@@ -104,7 +104,7 @@ window#waybar.hidden {
   color: @color6;
   letter-spacing: 1px;
   padding: 1px 18px;
-  background: alpha(@color0, 0.75);
+  background: transparent;
 }
 
 #clock:hover {
@@ -362,7 +362,7 @@ window#waybar.hidden {
   color: @color1;
   padding: 1px 14px;
   margin: 4px 8px 4px 2px;
-  background: alpha(@color1, 0.18);
+  background: transparent;
 }
 
 #custom-power:hover {
