@@ -4,8 +4,9 @@
   <strong>my personal arch + hyprland config</strong>
 </p>
 
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/bd617a5f-924e-474d-bdef-f29fd93e7695" />
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/4093b85e-07a2-4071-b795-f1cbdbb1aa57" />
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/ab4d8f56-2991-4840-897e-b58e7c2fef19" />
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/45823ebd-072c-4938-aa0d-2f2c3072c26d" />
+
 
 #
 
@@ -62,37 +63,52 @@ The installer is resumable — if it fails mid-way, just run it again and it pic
 | `Super + Return` | Terminal (Kitty) |
 | `Super + A` | App launcher (Rofi) |
 | `Super + B` | Firefox |
-| `Super + E` | File manager (Dolphin) |
+| `Super + E` | File manager (Thunar) |
 | `Super + D` | ChatGPT |
 | `Super + I` | WhatsApp |
 | `Super + O` | Obsidian |
 | `Super + W` | Wallpaper picker |
-| `Super + S` | Screenshot (region → clipboard) |
+| `Super + S` | Screenshot (region -> clipboard) |
 | `Super + P` | Power menu (wlogout) |
 | `Super + L` | Lock screen |
 | `Super + Y` | Restart Waybar |
-| `Super + H` | Toggle blur |
-| `Super + Shift + M` | nmrs dev layout (tmux) |
 
 ### Screenshots
 
 ##### **Rofi**
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/7a66ed3a-1f57-46a7-ab4a-083ff216176b" />
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/13bd2ff7-1229-422a-8d84-e89cc977dcb0" />
 
 ##### **Wallpaper picker (yazi)**
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/5898fd8d-5500-4560-a7a9-50dd91ae3ba3" />
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/af5602fd-13aa-4172-b870-0022bd9d0cb6" />
 
 ##### **ChatGPT**
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/a108d069-aac0-4019-8fd8-cf4e90505bb7" />
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/29fcf560-7947-4b49-9191-9c5b0bd602ae" />
+
+#### **blurs (bluetooth applet)**
+<img width="1304" height="590" alt="image" src="https://github.com/user-attachments/assets/bedffcec-671b-4592-a1ba-e3cb795a3116" />
 
 ### Window Management
 
+## Keybinds
+
 | Key | Action |
 |-----|--------|
+| `Super + Return` | Terminal (kitty) |
+| `Super + A` | App launcher (Rofi) |
+| `Super + B` | Firefox |
+| `Super + E` | File manager (Thunar) |
+| `Super + O` | Obsidian |
+| `Super + D` | ChatGPT (Chromium app) |
+| `Super + I` | WhatsApp (Chromium app) |
+| `Super + W` | Wallpaper picker |
+| `Super + S` | Screenshot region → clipboard |
+| `Super + L` | Lock screen |
+| `Super + P` | Power menu |
+| `Super + Y` | Restart Waybar |
 | `Super + Q` | Close window |
 | `Super + M` | Exit Hyprland |
 | `Super + V` | Toggle floating |
-| `Super + J` | Toggle split |
+| `Super + K` | Toggle pseudotile |
 | `Super + 1-0` | Switch workspace 1–10 |
 | `Super + Shift + 1-0` | Move window to workspace 1–10 |
 | `Super + Ctrl + Left/Right` | Previous/Next workspace |
@@ -100,26 +116,6 @@ The installer is resumable — if it fails mid-way, just run it again and it pic
 | `Super + Shift + Arrow Keys` | Resize window |
 | `Super + Mouse Left` | Move window |
 | `Super + Mouse Right` | Resize window |
-
-### Tmux
-
-| Key | Action |
-|-----|--------|
-| `Ctrl + Left/Right` | Previous/Next window |
-| `Ctrl + X` | New window |
-| `Ctrl + Up/Down` | Select pane |
-
-### Neovim
-
-| Key | Action |
-|-----|--------|
-| `Space` | Leader key |
-| `<leader>e` | File explorer |
-| `<leader>ff` | Find files |
-| `<leader>fw` | Live grep |
-| `<leader>b` | Switch buffers |
-| `gd` | Go to definition |
-| `K` | Show documentation |
 
 ---
 
