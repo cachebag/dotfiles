@@ -8,7 +8,7 @@
 
   "modules-left": ["custom/launcher", "hyprland/workspaces"],
   "modules-center": ["custom/media", "clock"],
-  "modules-right": ["backlight", "pulseaudio", "bluetooth", "custom/bluelight", "network", "cpu", "temperature", "memory", "battery", "custom/power"],
+  "modules-right": ["tray", "custom/firefox", "custom/zed", "backlight", "pulseaudio", "bluetooth", "custom/bluelight", "network", "cpu", "temperature", "memory", "battery", "custom/power"],
 
   "hyprland/workspaces": {
     "format": "{name}",
@@ -38,9 +38,21 @@
   },
 
   "tray": {
-    "icon-size": 16,
-    "spacing": 6,
+    "icon-size": 15,
+    "spacing": 10,
     "show-passive-items": false
+  },
+
+  "custom/firefox": {
+    "format": "󰈹",
+    "tooltip": "Firefox",
+    "on-click": "/usr/bin/firefox"
+  },
+
+  "custom/zed": {
+    "format": "󰅴",
+    "tooltip": "Zed",
+    "on-click": "/home/cachebag/.local/bin/zed"
   },
 
   "clock": {

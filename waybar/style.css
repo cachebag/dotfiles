@@ -85,6 +85,8 @@ window#waybar.hidden {
 #tray,
 #custom-power,
 #custom-bluelight,
+#custom-firefox,
+#custom-zed,
 #custom-media {
   padding: 1px 12px;
   margin: 4px 2px;
@@ -134,7 +136,16 @@ window#waybar.hidden {
 /* ── System tray ─────────────────────────────────────────── */
 
 #tray {
-  padding: 1px 8px;
+  padding: 1px 12px;
+  color: @color6;
+}
+
+#tray:hover {
+  background: alpha(@color6, 0.35);
+}
+
+#tray > widget:hover {
+  -gtk-icon-effect: highlight;
 }
 
 #tray > .passive {
@@ -145,6 +156,30 @@ window#waybar.hidden {
   -gtk-icon-effect: highlight;
   background: alpha(@color1, 0.5);
   border-radius: 8px;
+}
+
+/* ── App launchers ───────────────────────────────────────── */
+
+#custom-firefox {
+  color: @color3;
+  font-size: 15px;
+  padding: 1px 11px;
+}
+
+#custom-firefox:hover {
+  color: @background;
+  background: @color3;
+}
+
+#custom-zed {
+  color: @color4;
+  font-size: 15px;
+  padding: 1px 11px;
+}
+
+#custom-zed:hover {
+  color: @background;
+  background: @color4;
 }
 
 /* ── Backlight ───────────────────────────────────────────── */
