@@ -1,0 +1,22 @@
+theme = "minimal"
+current_shell = true
+physical_cores = false
+long_uptime = false
+long_shell = false
+long_kernel = false
+disks = ["/"]
+disk_space_percentage = true
+show = [
+  "Host",
+  "Distribution",
+  "Kernel",
+  "WindowManager",
+  "Shell",
+  "Terminal",
+  "Uptime",
+  "Processor",
+  "Memory",
+  "GPU",
+  "DiskSpace",
+  "Packages",
+]

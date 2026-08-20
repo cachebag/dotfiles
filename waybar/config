@@ -1,27 +1,22 @@
 {
+  "layer": "top",
   "position": "bottom",
   "height": 38,
-  "margin-bottom": 8,
-  "margin-left": 12,
-  "margin-right": 12,
+  "margin-bottom": 0,
+  "margin-left": 0,
+  "margin-right": 0,
   "spacing": 0,
-
-  "modules-left": ["custom/launcher", "hyprland/workspaces"],
+  "modules-left": ["custom/launcher", "ext/workspaces"],
   "modules-center": ["custom/media", "clock"],
   "modules-right": ["backlight", "pulseaudio", "bluetooth", "custom/bluelight", "network", "cpu", "temperature", "memory", "battery", "custom/power"],
-
-  "hyprland/workspaces": {
+  "ext/workspaces": {
     "format": "{name}",
     "on-click": "activate",
     "on-scroll-up": "hyprctl dispatch \"hl.dsp.focus({ workspace = 'e+1' })\"",
     "on-scroll-down": "hyprctl dispatch \"hl.dsp.focus({ workspace = 'e-1' })\"",
-    "all-outputs": true,
-    "sort-by-number": true,
-    "persistent-workspaces": {
-      "*": 5
-    }
+    "all-outputs": false,
+    "sort-by-id": true
   },
-
   "hyprland/window": {
     "format": "  {}",
     "max-length": 50,
@@ -36,13 +31,11 @@
       "": "  desktop"
     }
   },
-
   "tray": {
     "icon-size": 16,
     "spacing": 6,
     "show-passive-items": false
   },
-
   "clock": {
     "format": "󰥔  {:%H:%M}",
     "format-alt": "  {:%a, %d %b %Y}",
@@ -60,7 +53,6 @@
       }
     }
   },
-
   "custom/media": {
     "format": "{icon}  {text}",
     "return-type": "json",
@@ -78,7 +70,6 @@
     },
     "escape": true
     },
-
   "pulseaudio": {
     "format": "{icon}  {volume}%",
     "format-muted": "󰝟  muted",
@@ -98,7 +89,6 @@
       "default": ["󰕿", "󰖀", "󰕾"]
     }
   },
-
   "network": {
     "format-wifi": "󰤨  {essid} ({signalStrength}%)",
     "format-ethernet": "󰈀  {ipaddr}",
@@ -108,7 +98,6 @@
     "on-click": "nmrs",
     "interval": 10
   },
-
   "bluetooth": {
     "format": "󰂯  {status}",
     "format-connected": "󰂱  {device_alias}",
@@ -117,10 +106,9 @@
     "tooltip-format": "{controller_alias}\n{num_connections} connected",
     "tooltip-format-connected": "{device_enumerate}",
     "tooltip-format-enumerate-connected": "{device_alias}",
-    "on-click": "/home/cachebag/.local/bin/blurs",
+    "on-click": "/home/alk9fh/.cargo/bin/blurs",
     "interval": 10
   },
-
   "custom/bluelight": {
     "format": "{}",
     "exec": "/home/cachebag/dotfiles/scripts/bluelight-toggle.sh --status",
@@ -129,7 +117,6 @@
     "tooltip": "Toggle blue light filter",
     "interval": 5
   },
-
   "battery": {
     "states": {
       "full": 100,
@@ -145,7 +132,6 @@
     "tooltip-format": "{timeTo}\nPower: {power}W",
     "format-icons": ["󰁺", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"]
   },
-
   "cpu": {
     "interval": 5,
     "format": "󰻠  {usage}%",
@@ -156,7 +142,6 @@
       "critical": 90
     }
   },
-
   "temperature": {
     "critical-threshold": 80,
     "interval": 5,
@@ -165,7 +150,6 @@
     "tooltip-format": "Temperature: {temperatureC}°C",
     "format-icons": ["󱃃", "󰔏", "󱃂"]
   },
-
   "memory": {
     "interval": 10,
     "format": "󰍛  {percentage}%",
@@ -176,7 +160,6 @@
       "critical": 90
     }
   },
-
   "backlight": {
     "format": "{icon}  {percent}%",
     "format-icons": ["󰌶", "󱩎", "󱩏", "󱩐", "󱩑", "󱩒", "󱩓", "󱩔", "󰛨"],
@@ -184,13 +167,11 @@
     "on-scroll-down": "brightnessctl set 5%-",
     "tooltip-format": "Brightness: {percent}%"
   },
-
   "custom/power": {
     "format": "󰐥",
     "tooltip": "Power menu",
     "on-click": "~/dotfiles/scripts/power_menu.sh"
   },
-
   "custom/launcher": {
     "format": "󰣇",
     "tooltip": "App launcher",

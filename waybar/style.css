@@ -1,75 +1,74 @@
-@import url("/home/cachebag/.cache/wal/colors-waybar.css");
+@import url("/home/alk9fh/.cache/wal/colors-waybar.css");
 
 * {
-  border: none;
-  border-radius: 0;
-  font-family: "JetBrainsMono Nerd Font", "Noto Sans CJK SC", sans-serif;
-  font-size: 13px;
-  min-height: 0;
+    border: none;
+    border-radius: 0;
+    font-family: "JetBrainsMono Nerd Font", "Noto Sans CJK SC", sans-serif;
+    font-size: 13px;
+    min-height: 0;
 }
 
 window#waybar {
-  background: alpha(@background, 0.88);
-  color: @foreground;
-  border-radius: 14px;
-  border: 1px solid alpha(@color8, 0.25);
-  transition: none;
+    background: alpha(@background, 0.55);
+    color: @foreground;
+    border-radius: 0;
+    border: none;
+    transition: none;
 }
 
 window#waybar.hidden {
-  opacity: 0.1;
+    opacity: 0.1;
 }
 
 /* ── Workspaces ──────────────────────────────────────────── */
 
 #workspaces {
-  background: transparent;
-  margin: 4px 4px 4px 6px;
-  padding: 0 2px;
+    background: transparent;
+    margin: 4px 4px 4px 6px;
+    padding: 0 2px;
 }
 
 #workspaces button {
-  padding: 2px 10px;
-  margin: 4px 3px;
-  border-radius: 8px;
-  color: #ffffff;
-  background: transparent;
-  transition: none;
-  font-size: 14px;
-  font-weight: bold;
-  min-width: 20px;
+    padding: 2px 10px;
+    margin: 4px 3px;
+    border-radius: 8px;
+    color: #ffffff;
+    background: transparent;
+    transition: none;
+    font-size: 14px;
+    font-weight: bold;
+    min-width: 20px;
 }
 
 #workspaces button.active {
-  color: @color6;
-  background: transparent;
-  font-size: 14px;
-  margin: 4px 3px;
+    color: @color6;
+    background: transparent;
+    font-size: 14px;
+    margin: 4px 3px;
 }
 
 #workspaces button.urgent {
-  color: @color1;
-  font-size: 13px;
+    color: @color1;
+    font-size: 13px;
 }
 
 #workspaces button:hover {
-  color: alpha(@color6, 0.7);
-  background: transparent;
-  box-shadow: none;
+    color: alpha(@color6, 0.7);
+    background: transparent;
+    box-shadow: none;
 }
 
 /* ── Active window title ─────────────────────────────────── */
 
 #window {
-  margin: 4px 2px;
-  padding: 1px 12px;
-  border-radius: 10px;
-  background: alpha(@color0, 0.5);
-  color: alpha(@foreground, 0.65);
-  font-style: italic;
-  font-size: 12px;
+    margin: 4px 2px;
+    padding: 1px 12px;
+    border-radius: 10px;
+    background: transparent;
+    color: alpha(@foreground, 0.65);
+    font-style: italic;
+    font-size: 12px;
 }
-
 
 /* ── Shared module base ──────────────────────────────────── */
 
@@ -86,260 +85,260 @@ window#waybar.hidden {
 #custom-power,
 #custom-bluelight,
 #custom-media {
-  padding: 1px 12px;
-  margin: 4px 2px;
-  border-radius: 10px;
-  background: alpha(@color0, 0.65);
-  color: @foreground;
-  transition: none;
+    padding: 1px 12px;
+    margin: 4px 2px;
+    border-radius: 10px;
+    background: transparent;
+    color: @foreground;
+    transition: none;
 }
 
 /* ── Clock ───────────────────────────────────────────────── */
 
 #clock {
-  font-size: 14px;
-  font-weight: bold;
-  color: @color6;
-  letter-spacing: 1px;
-  padding: 1px 18px;
-  background: alpha(@color0, 0.75);
+    font-size: 14px;
+    font-weight: bold;
+    color: @color6;
+    letter-spacing: 1px;
+    padding: 1px 18px;
+    background: transparent;
 }
 
 #clock:hover {
-  color: @background;
-  background: @color6;
+    color: @background;
+    background: @color6;
 }
 
 /* ── Media player ────────────────────────────────────────── */
 
 #custom-media {
-  color: @color3;
-  margin-right: 6px;
-  font-style: italic;
+    color: @color3;
+    margin-right: 6px;
+    font-style: italic;
 }
 
 #custom-media:hover {
-  color: @background;
-  background: @color3;
+    color: @background;
+    background: @color3;
 }
 
 #custom-media.spotify {
-  color: #1db954;
+    color: #1db954;
 }
 
 #custom-media.firefox {
-  color: @color4;
+    color: @color4;
 }
 
 /* ── System tray ─────────────────────────────────────────── */
 
 #tray {
-  padding: 1px 8px;
+    padding: 1px 8px;
 }
 
 #tray > .passive {
-  -gtk-icon-effect: dim;
+    -gtk-icon-effect: dim;
 }
 
 #tray > .needs-attention {
-  -gtk-icon-effect: highlight;
-  background: alpha(@color1, 0.5);
-  border-radius: 8px;
+    -gtk-icon-effect: highlight;
+    background: alpha(@color1, 0.5);
+    border-radius: 8px;
 }
 
 /* ── Backlight ───────────────────────────────────────────── */
 
 #backlight {
-  color: @color3;
+    color: @color3;
 }
 
 #backlight:hover {
-  color: @background;
-  background: @color3;
+    color: @background;
+    background: @color3;
 }
 
 /* ── Audio ───────────────────────────────────────────────── */
 
 #pulseaudio {
-  color: @color5;
+    color: @color5;
 }
 
 #pulseaudio.muted {
-  color: alpha(@foreground, 0.35);
+    color: alpha(@foreground, 0.35);
 }
 
 #pulseaudio:hover {
-  color: @background;
-  background: @color5;
+    color: @background;
+    background: @color5;
 }
 
 /* ── Bluetooth ───────────────────────────────────────────── */
 
 #bluetooth {
-  color: @color4;
+    color: @color4;
 }
 
 #bluetooth.connected {
-  color: @color6;
+    color: @color6;
 }
 
 #bluetooth.disabled,
 #bluetooth.off {
-  color: alpha(@foreground, 0.35);
+    color: alpha(@foreground, 0.35);
 }
 
 #bluetooth:hover {
-  color: @background;
-  background: @color4;
+    color: @background;
+    background: @color4;
 }
 
 /* ── Blue light filter ───────────────────────────────────── */
 
 #custom-bluelight {
-  color: @color3;
-  font-size: 15px;
+    color: @color3;
+    font-size: 15px;
 }
 
 #custom-bluelight:hover {
-  color: @background;
-  background: @color3;
+    color: @background;
+    background: @color3;
 }
 
 /* ── Network ─────────────────────────────────────────────── */
 
 #network {
-  color: @color4;
+    color: @color4;
 }
 
 #network.disconnected {
-  color: @color1;
+    color: @color1;
 }
 
 #network:hover {
-  color: @background;
-  background: @color4;
+    color: @background;
+    background: @color4;
 }
 
 /* ── CPU ─────────────────────────────────────────────────── */
 
 #cpu {
-  color: @color2;
+    color: @color2;
 }
 
 #cpu.warning {
-  color: @color3;
+    color: @color3;
 }
 
 #cpu.critical {
-  color: @color1;
+    color: @color1;
 }
 
 #cpu:hover {
-  color: @background;
-  background: @color2;
+    color: @background;
+    background: @color2;
 }
 
 /* ── Temperature ─────────────────────────────────────────── */
 
 #temperature {
-  color: @color3;
+    color: @color3;
 }
 
 #temperature.critical {
-  color: @background;
-  background: @color1;
-  animation: blink 1s linear infinite alternate;
+    color: @background;
+    background: @color1;
+    animation: blink 1s linear infinite alternate;
 }
 
 #temperature:hover {
-  color: @background;
-  background: @color3;
+    color: @background;
+    background: @color3;
 }
 
 /* ── Memory ──────────────────────────────────────────────── */
 
 #memory {
-  color: @color5;
+    color: @color5;
 }
 
 #memory.warning {
-  color: @color3;
+    color: @color3;
 }
 
 #memory.critical {
-  color: @color1;
+    color: @color1;
 }
 
 #memory:hover {
-  color: @background;
-  background: @color5;
+    color: @background;
+    background: @color5;
 }
 
 /* ── Battery ─────────────────────────────────────────────── */
 
 #battery {
-  color: @color2;
+    color: @color2;
 }
 
 #battery.good {
-  color: @color2;
+    color: @color2;
 }
 
 #battery.warning {
-  color: @color3;
+    color: @color3;
 }
 
 #battery.critical:not(.charging) {
-  color: @background;
-  background: @color1;
-  animation: blink 1s linear infinite alternate;
+    color: @background;
+    background: @color1;
+    animation: blink 1s linear infinite alternate;
 }
 
 #battery.charging {
-  color: @color4;
+    color: @color4;
 }
 
 #battery:hover {
-  color: @background;
-  background: @color2;
+    color: @background;
+    background: @color2;
 }
 
 /* ── Launcher ────────────────────────────────────────────── */
 
 #custom-launcher {
-  font-size: 24px;
-  color: @color6;
-  padding: 1px 14px;
-  margin: 4px 2px 4px 8px;
-  border-radius: 10px;
-  transition: none;
+    font-size: 24px;
+    color: @color6;
+    padding: 1px 14px;
+    margin: 4px 2px 4px 8px;
+    border-radius: 10px;
+    transition: none;
 }
 
 #custom-launcher:hover {
-  color: @background;
-  background: @color6;
+    color: @background;
+    background: @color6;
 }
 
 /* ── Power ───────────────────────────────────────────────── */
 
 #custom-power {
-  font-size: 16px;
-  color: @color1;
-  padding: 1px 14px;
-  margin: 4px 8px 4px 2px;
-  background: alpha(@color1, 0.18);
+    font-size: 16px;
+    color: @color1;
+    padding: 1px 14px;
+    margin: 4px 8px 4px 2px;
+    background: transparent;
 }
 
 #custom-power:hover {
-  color: @background;
-  background: @color1;
+    color: @background;
+    background: @color1;
 }
 
 /* ── Blink animation ─────────────────────────────────────── */
 
 @keyframes blink {
-  to {
-    background: @color3;
-    color: @background;
-  }
+    to {
+        background: @color3;
+        color: @background;
+    }
 }

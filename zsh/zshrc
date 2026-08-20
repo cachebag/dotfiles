@@ -1,4 +1,3 @@
-### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
@@ -6,88 +5,99 @@ if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
         print -P "%F{33} %F{34}Installation successful.%f%b" || \
         print -P "%F{160} The clone has failed.%f%b"
 fi
-
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
-
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
 zinit light-mode for \
     zdharma-continuum/zinit-annex-as-monitor \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl \
     zdharma-continuum/zinit-annex-rust
-
-### End of Zinit's installer chunk
-
-# Secrets (API keys). Kept outside the repo so they never reach git.
-# See ~/.config/zsh/secrets.zsh -- chmod 600, gitignored.
 [[ -f "$HOME/.config/zsh/secrets.zsh" ]] && source "$HOME/.config/zsh/secrets.zsh"
-
-# Aliases
-alias ls='ls -1 --color=auto'
+unalias ls ll la lt 2>/dev/null
+if command -v eza >/dev/null 2>&1; then
+  _eza() {
+    local -a paths=(${@:#-*})
+    local -a opts=(--git --group-directories-first --icons=auto)
+    if (( $#paths )); then
+      eza $opts "$@"
+    else
+      eza $opts "$@" .
+    fi
+  }
+  ls() { _eza "$@" }
+  ll() { _eza -l --no-user "$@" }
+  la() { _eza -la --no-user "$@" }
+  lt() { _eza --tree --level=2 "$@" }
+else
+  alias ls='ls -1 --color=auto'
+fi
+command -v fdfind >/dev/null 2>&1 && alias fd='fdfind'
 alias vim='nvim'
 alias copy='wl-copy'
 alias free='df -h --output=source,size,used,avail,target | grep -E "Filesystem|/dev/nvme|/dev/sd" | grep -v "/dev/nvme0n1p1"'
-
-# Git aliases
 alias gs='git status'
 alias gd='git diff'
 alias gl='git log'
 alias gc='git checkout'
 alias gp='git pull'
-
-bindkey -v                       # Use vi keybindings (or skip if you prefer emacs)
-bindkey '^[[1;2C' forward-word   # Shift+Right = move forward one word
-bindkey '^[[1;2D' backward-word  # Shift+Left  = move backward one word
-
-bindkey '^[[1;5C' forward-word   # Ctrl+Right
-bindkey '^[[1;5D' backward-word  # Ctrl+Left
-
-# Location and size of the history file
+alias teams-restart='pkill -f teams-for-linux; nohup teams-for-linux >/dev/null 2>&1 </dev/null & disown'
+dev() {
+  local session=dev
+  if ! tmux has-session -t "$session" 2>/dev/null; then
+    tmux new-session -d -s "$session" -c "$HOME/VDS"
+    repeat 3 tmux new-window -t "$session" -c "$HOME/VDS"
+    tmux select-window -t "$session:^"
+  fi
+  if [[ -n "$TMUX" ]]; then
+    tmux switch-client -t "$session"
+  else
+    tmux attach-session -t "$session"
+  fi
+}
+bindkey -v
+bindkey '^[[1;2C' forward-word
+bindkey '^[[1;2D' backward-word
+bindkey '^[[1;5C' forward-word
+bindkey '^[[1;5D' backward-word
 HISTFILE=~/.zsh_history
-HISTSIZE=10000           # Number of commands to keep in memory
-SAVEHIST=10000           # Number of commands to write to disk
-
-# Share history between sessions
-setopt APPEND_HISTORY     # Don't overwrite history file
-setopt SHARE_HISTORY      # Share history across terminals
+HISTSIZE=10000
+SAVEHIST=10000
+setopt APPEND_HISTORY
+setopt SHARE_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
-setopt INC_APPEND_HISTORY # Write after each command
-
-# Autosuggestions (gray ghost text)
+setopt INC_APPEND_HISTORY
 zinit light zsh-users/zsh-autosuggestions
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'
-
-# Syntax highlighting (colorful input)
 zinit light zsh-users/zsh-syntax-highlighting
 fpath+=~/.zfunc
-
-# Fuzzy history search
 zinit light junegunn/fzf
 zinit light zdharma-continuum/history-search-multi-word
-
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/personal/brew/bin:$PATH"
 export PATH="/usr/bin/core_perl:$PATH"
-
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 [[ -f "$HOME/.local/bin/env" ]] && . "$HOME/.local/bin/env"
-
-autoload -Uz compinit && compinit
-
-# System info on new shells
-if [[ $TERM_PROGRAM != "vscode" ]] && command -v fastfetch >/dev/null 2>&1; then
-  fastfetch
+autoload -Uz compinit
+() {
+  setopt local_options extendedglob
+  local -a stale=( ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) )
+  if (( $#stale )); then
+    compinit
+  else
+    compinit -C
+  fi
+}
+command -v zoxide >/dev/null 2>&1 && eval "$(zoxide init zsh)"
+if [[ $TERM_PROGRAM != "vscode" && -z $TMUX ]] && command -v macchina >/dev/null 2>&1; then
+  macchina
 fi
-
-# Prompt. Starship replaces spaceship-prompt (same look, ~instant instead of
-# ~100ms of zsh). Falls back to a plain prompt if starship isn't installed yet:
-#   sudo pacman -S starship
 if command -v starship >/dev/null 2>&1; then
   eval "$(starship init zsh)"
 else
   PROMPT='%F{blue}%~%f
 %F{green}❯%f '
 fi
+export AWS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt

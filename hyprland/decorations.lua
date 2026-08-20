@@ -1,14 +1,13 @@
--- was: decorations.conf
-
 hl.config({
     decoration = {
+        active_opacity = 0.95,
+        inactive_opacity = 0.80,
         shadow = {
             enabled      = true,
             range        = 4,
             render_power = 3,
-            color        = 0xaa000000, -- was rgba(000000aa)
+            color        = 0xaa000000,
         },
-
         blur = {
             enabled           = true,
             size              = 6,
@@ -20,23 +19,17 @@ hl.config({
         },
     },
 })
-
 hl.window_rule({
     name  = "float-nmrs",
     match = { class = "org.nmrs.ui" },
     float = true,
 })
-
--- blurs is a layer-shell surface, not a window, so it needs a layer rule --
--- window rules never match it. ignore_alpha keeps the blur from bleeding
--- through the fully-transparent corners outside the card's rounded border.
 hl.layer_rule({
     name         = "blurs-blur",
     match        = { namespace = "^blurs$" },
     blur         = true,
     ignore_alpha = 0.3,
 })
-
 hl.window_rule({
     name   = "float-yazi",
     match  = { class = "wallpaper-picker" },
@@ -44,13 +37,6 @@ hl.window_rule({
     center = true,
     size   = "900 600",
 })
-
--- NOTE: in decorations.conf this block had no `match:` line at all -- a
--- copy-paste slip, so its float/center/size never applied to anything (thunar
--- only floated because of the separate `windowrule = float 1, match:class thunar`
--- line). A match-less rule is still accepted by the Lua parser but risks applying
--- to every window, so the intended match is now explicit. This is the one place
--- where behaviour changes: thunar now also gets centered at 900x600.
 hl.window_rule({
     name   = "float-thunar",
     match  = { class = "thunar" },

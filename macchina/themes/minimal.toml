@@ -1,0 +1,33 @@
+hide_ascii      = true
+spacing         = 1
+padding         = 1
+separator       = ""
+key_color       = "004"
+separator_color = "008"
+[palette]
+visible = false
+[bar]
+visible = false
+[box]
+visible = true
+border  = "plain"
+title   = " specs "
+[box.inner_margin]
+x = 2
+y = 1
+[randomize]
+key_color       = false
+separator_color = false
+[keys]
+host       = "• host"
+distro     = "• os"
+kernel     = "• kernel"
+wm         = "• wm"
+shell      = "• shell"
+terminal   = "• term"
+uptime     = "• up"
+cpu        = "• cpu"
+memory     = "• mem"
+gpu        = "• gpu"
+disk_space = "• disk"
+packages   = "• pkgs"

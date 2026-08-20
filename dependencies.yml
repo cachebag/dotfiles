@@ -1,16 +1,11 @@
-# Dependencies configuration for dotfiles
-
 system:
   arch_packages:
-    # Core Hyprland environment
     - hyprland
     - waybar
     - rofi-wayland
     - dunst
     - kitty
     - neovim
-    
-    # Development tools
     - git
     - curl
     - wget
@@ -26,19 +21,13 @@ system:
     - python-pip
     - python-virtualenv
     - python-pynvim
-    
-    # Build tools
     - base-devel
     - cmake
     - make
     - gcc
-    
-    # Fonts
     - ttf-fira-code
     - ttf-font-awesome
     - ttf-jetbrains-mono-nerd
-    
-    # Wayland utilities
     - wl-clipboard
     - grim
     - slurp
@@ -46,49 +35,33 @@ system:
     - xdg-desktop-portal-hyprland
     - qt5-wayland
     - qt6-wayland
-    
-    # Audio/Media
     - pipewire
     - pipewire-alsa
     - pipewire-pulse
     - pavucontrol
-    
-    # System utilities
     - polkit-gnome
     - brightnessctl
     - playerctl
-    
-    # Shell
     - zsh
     - zsh-autosuggestions
     - zsh-syntax-highlighting
-    
-    # Display manager
     - sddm
     - qt5-graphicaleffects
     - qt5-quickcontrols2
-    
-    # Network/Bluetooth
     - network-manager-applet
     - bluez
     - bluez-utils
-    # blurs (Bluetooth applet) builds against these
     - gtk4
     - gtk4-layer-shell
     - rustup
-    
-    # File management
     - thunar
     - thunar-archive-plugin
     - file-roller
-    
-    # Applications
     - firefox
     - dolphin
     - wofi
     - obsidian
     - snapd
-
 aur_packages:
   - hyprpaper
   - swaylock-effects
@@ -96,19 +69,20 @@ aur_packages:
   - hypridle
   - hyprshot
   - nmrs
-
 snap_packages:
   - chatgpt-linux
   - whatsapp-linux-app
-
 python:
   packages:
     - pynvim
-
+  pipx_packages:
+    - pywal16
+rust:
+  cargo_packages:
+    - macchina
 nodejs:
   global_packages:
     - neovim
-
 fonts:
   - name: "FiraCode Nerd Font"
     url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/FiraCode.zip"
@@ -116,7 +90,6 @@ fonts:
   - name: "JetBrains Mono Nerd Font"
     url: "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip"
     install_path: "~/.local/share/fonts"
-
 directories:
   - ~/.config/hypr
   - ~/.config/waybar
@@ -126,17 +99,16 @@ directories:
   - ~/.config/dunst
   - ~/.config/yazi
   - ~/.config/fastfetch
+  - ~/.config/macchina
   - ~/.config/sddm
   - ~/.local/share/applications
   - ~/.local/bin
   - ~/.local/share/fonts
   - ~/wallpapers
   - ~/Pictures/screenshots
-
 services:
   system:
     - bluetooth
     - NetworkManager
     - snapd
     - sddm
-  - ~/.local/share/fonts
