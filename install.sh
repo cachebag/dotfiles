@@ -112,7 +112,8 @@ create_directories() {
 
 backup_configs() {
     log_info "Backing up existing configurations..."
-    local backup_dir="$HOME/.config/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
+    local backup_dir
+    backup_dir="$HOME/.config/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
     local configs=(hypr waybar rofi nvim kitty dunst yazi fastfetch)
     local backup_needed=false
     local config config_path file
