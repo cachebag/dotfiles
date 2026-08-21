@@ -17,7 +17,8 @@ Item {
         folder: "file://" + Quickshell.env("HOME") + "/wallpapers"
         nameFilters: ["*.jpg", "*.jpeg", "*.png", "*.webp", "*.JPG", "*.PNG"]
         showDirs: false
-        sortField: FolderListModel.Name
+        sortField: FolderListModel.Time
+        sortReversed: true
     }
 
     Process {
