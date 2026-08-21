@@ -1,18 +1,23 @@
 hl.monitor({
-    output   = "DP-2",
-    mode     = "2560x1440@165",
+    output   = "HDMI-A-1",
+    mode     = "2560x1440@144",
     position = "0x0",
     scale    = 1,
 })
 
+-- catch-all so any display plugged in later gets placed automatically
 hl.monitor({
-    output   = "HDMI-A-1",
-    mode     = "2560x1440@165",
-    position = "2560x-25",
+    output   = "",
+    mode     = "preferred",
+    position = "auto",
     scale    = 1,
 })
 
-hl.workspace_rule({ workspace = "1", monitor = "DP-2",     default = true, persistent = true })
-hl.workspace_rule({ workspace = "2", monitor = "DP-2",                     persistent = true })
-hl.workspace_rule({ workspace = "3", monitor = "DP-2",                     persistent = true })
-hl.workspace_rule({ workspace = "4", monitor = "HDMI-A-1", default = true, persistent = true })
+for i = 1, 5 do
+    hl.workspace_rule({
+        workspace  = tostring(i),
+        monitor    = "HDMI-A-1",
+        default    = i == 1,
+        persistent = true,
+    })
+end

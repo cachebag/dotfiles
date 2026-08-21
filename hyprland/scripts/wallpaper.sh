@@ -2,8 +2,7 @@
 
 WALLPAPER_DIR="$HOME/wallpapers"
 CHOOSER_FILE="/tmp/wallpaper_selected"
-MONITOR="DP-2"
-MONITOR2="HDMI-A-1"
+MONITOR=""   # empty = all connected outputs
 
 rm -f "$CHOOSER_FILE"
 
@@ -16,7 +15,6 @@ if [[ -f "$CHOOSER_FILE" ]]; then
         hyprctl hyprpaper preload "$selected"
         sleep 0.5
         hyprctl hyprpaper wallpaper "$MONITOR,$selected"
-        hyprctl hyprpaper wallpaper "$MONITOR2,$selected"
         notify-send "Wallpaper Changed" "$(basename "$selected")" -i "$selected"
 
         echo "$selected" > ~/.config/hypr/current_wallpaper
@@ -28,12 +26,6 @@ splash = false
 
 wallpaper {
   monitor = $MONITOR
-  path = $selected 
-  fit_mode = cover 
-}
-
-wallpaper {
-  monitor = $MONITOR2
   path = $selected 
   fit_mode = cover 
 }

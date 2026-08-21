@@ -11,5 +11,4 @@ hl.on("hyprland.start", function()
     hl.exec_cmd(home .. "/dotfiles/scripts/wal-watch.sh")
 
     hl.dispatch(hl.dsp.focus({ workspace = 1 }))
-    hl.dispatch(hl.dsp.focus({ monitor = "DP-2" }))
 end)
