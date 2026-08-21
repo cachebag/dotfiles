@@ -17,7 +17,7 @@ hl.bind(mod .. " + I",      dsp.exec_cmd("chromium --app=https://web.whatsapp.co
 hl.bind(mod .. " + W",      dsp.exec_cmd("kitty --class wallpaper-picker " .. home .. "/.config/hypr/scripts/wallpaper.sh"))
 hl.bind(mod .. " + S",      dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]))
 hl.bind(mod .. " + O",      dsp.exec_cmd("obsidian"))
-hl.bind(mod .. " + Y",      dsp.exec_cmd("pkill waybar; nohup waybar >/dev/null 2>&1 &"))
+hl.bind(mod .. " + Y",      dsp.exec_cmd("pkill quickshell; nohup quickshell >/dev/null 2>&1 &"))
 
 hl.bind(mod .. " + P", dsp.exec_cmd(home .. "/dotfiles/scripts/power_menu.sh"))
 hl.bind(mod .. " + L", dsp.exec_cmd(home .. "/dotfiles/scripts/lock.sh"))

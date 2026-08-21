@@ -114,7 +114,7 @@ backup_configs() {
     log_info "Backing up existing configurations..."
     local backup_dir
     backup_dir="$HOME/.config/dotfiles_backup_$(date +%Y%m%d_%H%M%S)"
-    local configs=(hypr waybar rofi nvim kitty dunst yazi fastfetch)
+    local configs=(hypr waybar quickshell rofi nvim kitty dunst yazi fastfetch)
     local backup_needed=false
     local config config_path file
 
@@ -168,6 +168,7 @@ create_symlinks() {
     local dir_map=(
         "hyprland:$HOME/.config/hypr"
         "waybar:$HOME/.config/waybar"
+        "quickshell:$HOME/.config/quickshell"
         "nvim:$HOME/.config/nvim"
         "kitty:$HOME/.config/kitty"
         "rofi:$HOME/.config/rofi"
@@ -190,6 +191,11 @@ create_symlinks() {
         chmod +x "$script"
         script_name=$(basename "$script")
         ln -sfn "$script" "$HOME/.local/bin/${script_name%.sh}"
+    done
+
+    local qs_script
+    for qs_script in "$DOTFILES_ROOT/quickshell/scripts/"*.sh; do
+        [[ -f "$qs_script" ]] && chmod +x "$qs_script"
     done
 
     local app

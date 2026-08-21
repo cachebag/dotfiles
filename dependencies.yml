@@ -1,6 +1,7 @@
 arch_packages:
   - hyprland
   - waybar
+  - quickshell
   - rofi-wayland
   - dunst
   - kitty

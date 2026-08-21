@@ -68,6 +68,7 @@ verify:
 	@echo "Verifying installation..."
 	@test -L ~/.config/hypr || (echo "[INFO] Hyprland config not symlinked" && exit 1)
 	@test -L ~/.config/waybar || (echo "[INFO] Waybar config not symlinked" && exit 1)
+	@test -L ~/.config/quickshell || (echo "[INFO] Quickshell config not symlinked" && exit 1)
 	@test -L ~/.config/nvim || (echo "[INFO] Neovim config not symlinked" && exit 1)
 	@test -L ~/.config/kitty || (echo "[INFO] Kitty config not symlinked" && exit 1)
 	@test -L ~/.zshrc || (echo "[INFO] Zshrc not symlinked" && exit 1)
@@ -81,6 +82,7 @@ test:
 	@echo "Testing file structure..."
 	@test -d hyprland || (echo "[INFO] hyprland directory missing" && exit 1)
 	@test -d waybar || (echo "[INFO] waybar directory missing" && exit 1)
+	@test -d quickshell || (echo "[INFO] quickshell directory missing" && exit 1)
 	@test -d nvim || (echo "[INFO] nvim directory missing" && exit 1)
 	@test -d kitty || (echo "[INFO] kitty directory missing" && exit 1)
 	@test -d rofi || (echo "[INFO] rofi directory missing" && exit 1)
