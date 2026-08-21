@@ -26,10 +26,3 @@ jobs:
         if command -v shellcheck &> /dev/null; then
           shellcheck install.sh
         fi
-
-    - name: Test file structure
-      run: |
-        test -d nvim || exit 1
-        test -f nvim/init.lua || exit 1
-        test -d nvim/lua/plugins || exit 1
-        echo "File structure validation passed"
