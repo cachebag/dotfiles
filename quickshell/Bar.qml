@@ -92,7 +92,7 @@ PanelWindow {
             bottom: parent.bottom
             rightMargin: Theme.gap
         }
-        spacing: 2
+        spacing: 8
 
         TrayArea {
             bar: bar
@@ -114,10 +114,9 @@ PanelWindow {
             Layout.alignment: Qt.AlignVCenter
         }
 
-        Battery {
-            bar: bar
-            Layout.alignment: Qt.AlignVCenter
-        }
+        Network {
+           Layout.alignment: Qt.AlignVCenter
+       }
 
         WallpaperPicker {
             bar: bar
@@ -125,6 +124,11 @@ PanelWindow {
         }
 
         Clock {
+            bar: bar
+            Layout.alignment: Qt.AlignVCenter
+        }
+
+        Battery {
             bar: bar
             Layout.alignment: Qt.AlignVCenter
         }
