@@ -16,7 +16,7 @@ Item {
     BarButton {
         id: btn
         anchors.fill: parent
-        icon: "nmrs"
+        icon: "🖧"
         contentColor: root.cpu > 85 ? Theme.urgent : Theme.fg
 
         onClicked: Quickshell.execDetached(["nmrs"])

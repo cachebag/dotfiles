@@ -22,6 +22,32 @@ hl.bind(mod .. " + Y",      dsp.exec_cmd("pkill quickshell; nohup quickshell >/d
 hl.bind(mod .. " + P", dsp.exec_cmd(home .. "/dotfiles/scripts/power_menu.sh"))
 hl.bind(mod .. " + L", dsp.exec_cmd(home .. "/dotfiles/scripts/lock.sh"))
 
+local function fn_bind(key, command, repeating)
+    hl.bind(key, dsp.exec_cmd(command), {
+        locked = true,
+        repeating = repeating or false,
+    })
+end
+
+-- Speaker and microphone controls.
+fn_bind("XF86AudioRaiseVolume", "wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+", true)
+fn_bind("XF86AudioLowerVolume", "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-", true)
+fn_bind("XF86AudioMute",        "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle")
+fn_bind("XF86AudioMicMute",     "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle")
+
+-- Screen and keyboard backlight controls.
+fn_bind("XF86MonBrightnessUp",   "brightnessctl -q -e4 -n2 set 5%+", true)
+fn_bind("XF86MonBrightnessDown", "brightnessctl -q -e4 -n2 set 5%-", true)
+fn_bind("XF86KbdBrightnessUp",   "brightnessctl -q -c leds -d '*::kbd_backlight' -n 0 set +1", true)
+fn_bind("XF86KbdBrightnessDown", "brightnessctl -q -c leds -d '*::kbd_backlight' -n 0 set 1-", true)
+
+-- Media transport controls.
+fn_bind("XF86AudioPlay",  "playerctl play-pause")
+fn_bind("XF86AudioPause", "playerctl play-pause")
+fn_bind("XF86AudioPrev",  "playerctl previous")
+fn_bind("XF86AudioNext",  "playerctl next")
+fn_bind("XF86AudioStop",  "playerctl stop")
+
 for i = 1, 10 do
     local key = i % 10
     hl.bind(mod .. " + " .. key,           dsp.focus({ workspace = i }))
