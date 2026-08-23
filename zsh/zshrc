@@ -22,6 +22,7 @@ alias gd='git diff'
 alias gl='git log'
 alias gc='git checkout'
 alias gp='git pull'
+alias rafi='ssh cachebag@100.123.198.5'
 
 bindkey -v
 bindkey '^[[1;2C' forward-word

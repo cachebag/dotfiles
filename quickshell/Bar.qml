@@ -114,6 +114,11 @@ PanelWindow {
             Layout.alignment: Qt.AlignVCenter
         }
 
+        Battery {
+            bar: bar
+            Layout.alignment: Qt.AlignVCenter
+        }
+
         WallpaperPicker {
             bar: bar
             Layout.alignment: Qt.AlignVCenter
