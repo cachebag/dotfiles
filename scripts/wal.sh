@@ -25,9 +25,6 @@ fi
 "$WAL_BIN" -q -n --saturate 0.8 -i "$WALL"
 sleep 0.3
 hyprctl reload 2>/dev/null || true
-pkill waybar 2>/dev/null
-sleep 0.3
-nohup waybar >/dev/null 2>&1 &
 kitty @ set-colors --all ~/.cache/wal/colors-kitty.conf 2>/dev/null || true
 "$HOME/dotfiles/scripts/wal-gnome-terminal.sh" >/dev/null 2>&1 || true
 cp ~/.cache/wal/colors-hyprland.conf ~/.config/hypr/colors.conf 2>/dev/null

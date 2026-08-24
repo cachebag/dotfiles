@@ -101,3 +101,7 @@ else
 %F{green}❯%f '
 fi
 export AWS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
+
+export QT_ROOT="$HOME/Qt/6.8.3/gcc_64"
+export LD_LIBRARY_PATH="$QT_ROOT/lib:$LD_LIBRARY_PATH"
+export QML2_IMPORT_PATH="$QT_ROOT/qml:$QML2_IMPORT_PATH"

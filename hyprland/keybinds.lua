@@ -15,7 +15,7 @@ hl.bind(mod .. " + I", dsp.exec_cmd("chromium --app=https://web.whatsapp.com --c
 hl.bind(mod .. " + W", dsp.exec_cmd("kitty --class wallpaper-picker " .. home .. "/.config/hypr/scripts/wallpaper.sh"))
 hl.bind(mod .. " + S", dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]))
 hl.bind(mod .. " + O", dsp.exec_cmd("obsidian"))
-hl.bind(mod .. " + Y", dsp.exec_cmd("pkill waybar; nohup waybar >/dev/null 2>&1 &"))
+hl.bind(mod .. " + Y", dsp.exec_cmd([[pkill quickshell; nohup env QT_ROOT="$HOME/Qt/6.8.3/gcc_64" LD_LIBRARY_PATH="$HOME/Qt/6.8.3/gcc_64/lib" QML2_IMPORT_PATH="$HOME/Qt/6.8.3/gcc_64/qml" "$HOME/.local/bin/quickshell" >/dev/null 2>&1 &]]))
 hl.bind(mod .. " + H", dsp.exec_cmd(home .. "/dotfiles/hyprland/scripts/toggle_blur.sh"))
 hl.bind(mod .. " + P", dsp.exec_cmd(home .. "/dotfiles/scripts/power_menu.sh"))
 hl.bind(mod .. " + L", dsp.exec_cmd("hyprlock"))
