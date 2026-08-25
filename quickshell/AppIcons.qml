@@ -65,6 +65,14 @@ Singleton {
         {
             match: "app.zoom.us",
             icon: "zoom"
+        },
+        {
+            match: "terminal",
+            icon: "terminal"
+        },
+        {
+            match: "outlook.office.com",
+            icon: "outlook"
         }
     ]
 

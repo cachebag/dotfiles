@@ -3,6 +3,7 @@ hl.env("HYPRCURSOR_SIZE", "24")
 local home = os.getenv("HOME") or ""
 hl.on("hyprland.start", function()
     hl.exec_cmd([[env QT_ROOT="$HOME/Qt/6.8.3/gcc_64" LD_LIBRARY_PATH="$HOME/Qt/6.8.3/gcc_64/lib" QML2_IMPORT_PATH="$HOME/Qt/6.8.3/gcc_64/qml" "$HOME/.local/bin/quickshell"]])
+    hl.exec_cmd("flatpak run com.github.wwmm.easyeffects --gapplication-service")
     hl.exec_cmd("dunst")
     hl.exec_cmd("bash -c 'sleep 0.5 && hyprpaper --config " .. home .. "/.config/hypr/hyprpaper.conf'")
     hl.exec_cmd("hypridle")

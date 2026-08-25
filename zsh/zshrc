@@ -20,9 +20,9 @@ if command -v eza >/dev/null 2>&1; then
     local -a paths=(${@:#-*})
     local -a opts=(--git --group-directories-first --icons=auto)
     if (( $#paths )); then
-      eza $opts "$@"
+      eza -1 $opts "$@"
     else
-      eza $opts "$@" .
+      eza -1 $opts "$@" .
     fi
   }
   ls() { _eza "$@" }
@@ -105,3 +105,82 @@ export AWS_CA_BUNDLE=/etc/ssl/certs/ca-certificates.crt
 export QT_ROOT="$HOME/Qt/6.8.3/gcc_64"
 export LD_LIBRARY_PATH="$QT_ROOT/lib:$LD_LIBRARY_PATH"
 export QML2_IMPORT_PATH="$QT_ROOT/qml:$QML2_IMPORT_PATH"
+
+fixproxy() {
+  systemctl --user restart proxy.service
+  local ip pid
+  for i in {1..12}; do
+    sleep 1
+    curl -s -o /dev/null --max-time 6 https://teams.cloud.microsoft/ 2>/dev/null
+    pid=$(systemctl --user show proxy.service -p MainPID --value)
+    [[ -z "$pid" || "$pid" == 0 ]] && continue
+    ip=$(ss -tnp 2>/dev/null | grep "pid=$pid," | awk '{print $5}' | grep -v '^127' \
+      | cut -d: -f1 | sort | uniq -c | sort -rn | head -1 | awk '{print $2}')
+    [[ -n "$ip" ]] && break
+  done
+  case "$ip" in
+    10.224.200.25) print -P "%F{green}proxy -> NA (38ms) ok%f" ;;
+    10.171.234.13) print -P "%F{red}proxy -> India (265ms) - run again%f" ;;
+    10.4.103.143)  print -P "%F{yellow}proxy -> Germany (151ms) - run again%f" ;;
+    *)             print -P "%F{red}proxy -> no upstream detected%f" ;;
+  esac
+}
+
+whichproxy() {
+  local pid ip
+  pid=$(systemctl --user show proxy.service -p MainPID --value)
+  if [[ -z "$pid" || "$pid" == 0 ]]; then
+    print -P "%F{red}proxy not running%f"
+    return 1
+  fi
+  ip=$(ss -tnp 2>/dev/null | grep "pid=$pid," | awk '{print $5}' | grep -v '^127' \
+    | cut -d: -f1 | sort | uniq -c | sort -rn | head -1 | awk '{print $2}')
+  [[ -z "$ip" ]] && { curl -s -o /dev/null --max-time 6 https://teams.cloud.microsoft/ 2>/dev/null
+    ip=$(ss -tnp 2>/dev/null | grep "pid=$pid," | awk '{print $5}' | grep -v '^127' \
+      | cut -d: -f1 | sort | uniq -c | sort -rn | head -1 | awk '{print $2}'); }
+  case "$ip" in
+    10.224.200.25) print -P "%F{green}NA (38ms) - good%f" ;;
+    10.171.234.13) print -P "%F{red}INDIA (265ms) - run fixproxy%f" ;;
+    10.4.103.143)  print -P "%F{yellow}GERMANY (151ms) - run fixproxy%f" ;;
+    10.187.197.9)  print -P "%F{yellow}APAC (290ms) - run fixproxy%f" ;;
+    *)             print -P "%F{red}unknown/no upstream%f" ;;
+  esac
+}
+
+# One-shot recovery for public-wifi VPN breakage: wifi -> tunnel -> proxy -> kerberos
+vpnfix() {
+  # DNS query, not ping: some VPN gateways drop ICMP to the DNS server
+  _tunnel_ok() { dig +time=2 +tries=1 @10.53.53.53 bosch.com +short 2>/dev/null | grep -q .; }
+  local gw
+  gw=$(nmcli -g IP4.GATEWAY device show wlp0s20f3 2>/dev/null | head -n1)
+  if [[ -z "$gw" ]] || ! ping -c1 -W2 "$gw" >/dev/null 2>&1; then
+    print -P "%F{red}wifi gateway unreachable - fix wifi first (captive portal?)%f"
+    return 1
+  fi
+
+  if _tunnel_ok; then
+    print -P "%F{green}tunnel ok%f"
+  else
+    print -P "%F{yellow}tunnel dead - reconnecting VPN%f"
+    osd-vpn-connect
+    local i
+    for i in {1..15}; do
+      sleep 2
+      _tunnel_ok && break
+    done
+    if ! _tunnel_ok; then
+      print -P "%F{red}tunnel still dead - check: tail -5 ~/vpn-debug/vpn-watch.log%f"
+      return 1
+    fi
+    print -P "%F{green}tunnel restored%f"
+  fi
+
+  whichproxy | grep -q "good" || fixproxy
+
+  if klist -s 2>/dev/null; then
+    print -P "%F{green}kerberos ticket ok%f"
+  else
+    print -P "%F{yellow}no kerberos ticket - running kinit%f"
+    kinit ALK9FH@US.BOSCH.COM
+  fi
+}
