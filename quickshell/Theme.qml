@@ -40,15 +40,17 @@ Singleton {
         return Qt.rgba(c.r, c.g, c.b, a);
     }
 
-    Process {
+    // Watched, not polled. FileView watches the containing directory as well as
+    // the file, so pywal replacing it via temp+rename still triggers a reload.
+    FileView {
         id: reader
-        command: ["cat", Quickshell.env("HOME") + "/.cache/wal/colors.json"]
+        path: Quickshell.env("HOME") + "/.cache/wal/colors.json"
+        watchChanges: true
+        preload: true
+        printErrors: false
 
-        stdout: StdioCollector {
-            id: out
-        }
-
-        onExited: root.ingest(String(out.text))
+        onFileChanged: reader.reload()
+        onLoaded: root.ingest(reader.text())
     }
 
     function ingest(raw) {
@@ -73,16 +75,8 @@ Singleton {
         }
     }
 
+    // Kept for WallpaperPicker, which reloads explicitly after applying a wallpaper.
     function reload() {
-        reader.running = true;
-    }
-
-    Component.onCompleted: root.reload()
-
-    Timer {
-        interval: 4000
-        running: true
-        repeat: true
-        onTriggered: root.reload()
+        reader.reload();
     }
 }

@@ -118,7 +118,6 @@
     "format-disconnected": "󰤭  offline",
     "tooltip-format-wifi": "󰤨  {essid}\nSignal: {signalStrength}%\nFreq: {frequency}MHz\nIP: {ipaddr}",
     "tooltip-format-ethernet": "󰈀  {ifname}\nIP: {ipaddr}",
-    "on-click": "nmrs",
     "interval": 10
   },
 

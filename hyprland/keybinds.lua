@@ -70,4 +70,3 @@ hl.bind(mod .. " + SHIFT + Right", win.resize({ x = 40,  y = 0,   relative = tru
 hl.bind(mod .. " + SHIFT + Up",    win.resize({ x = 0,   y = -40, relative = true }))
 hl.bind(mod .. " + SHIFT + Down",  win.resize({ x = 0,   y = 40,  relative = true }))
 
-hl.bind(mod .. " + SHIFT + M", dsp.exec_cmd([[kitty sh -c "]] .. home .. [[/dotfiles/nmrs.sh"]]))

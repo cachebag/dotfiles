@@ -10,9 +10,32 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+
 [[ -f "$HOME/.config/zsh/secrets.zsh" ]] && source "$HOME/.config/zsh/secrets.zsh"
 
-alias ls='ls -1 --color=auto'
+unalias ls ll la lt 2>/dev/null
+if command -v eza >/dev/null 2>&1; then
+  _eza() {
+    local -a paths=(${@:#-*})
+    local -a opts=(--git --group-directories-first --icons=auto)
+    if (( $#paths )); then
+      eza -1 $opts "$@"
+    else
+      eza -1 $opts "$@" .
+    fi
+  }
+  ls() { _eza "$@" }
+  ll() { _eza -l --no-user "$@" }
+  la() { _eza -la --no-user "$@" }
+  lt() { _eza --tree --level=2 "$@" }
+else
+  alias ls='ls -1 --color=auto'
+fi
 alias vim='nvim'
 alias copy='wl-copy'
 alias disk='df -h --output=source,size,used,avail,target | grep -E "Filesystem|/dev/nvme|/dev/sd" | grep -v "/dev/nvme0n1p1"'
@@ -34,9 +57,11 @@ HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 
+setopt APPEND_HISTORY
 setopt SHARE_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
+setopt INC_APPEND_HISTORY
 
 zinit light zsh-users/zsh-autosuggestions
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=8'

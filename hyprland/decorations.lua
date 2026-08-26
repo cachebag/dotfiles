@@ -22,12 +22,6 @@ hl.config({
     },
 })
 
-hl.window_rule({
-    name  = "float-nmrs",
-    match = { class = "org.nmrs.ui" },
-    float = true,
-})
-
 hl.layer_rule({
     name         = "blurs-blur",
     match        = { namespace = "^blurs$" },
