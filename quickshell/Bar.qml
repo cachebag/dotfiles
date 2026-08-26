@@ -73,11 +73,24 @@ PanelWindow {
     RowLayout {
         id: centerRow
         anchors {
-            horizontalCenter: parent.horizontalCenter
             top: parent.top
             bottom: parent.bottom
         }
         spacing: Theme.gap
+
+        // Centred while there's room, otherwise slid left just far enough to clear
+        // the right-hand group — the pill keeps its width instead of truncating.
+        // The floor stops it from crowding the launcher/workspaces on the left.
+        // Must not reference leftRow: that anchors to centerRow.left, so reading
+        // its width here would be a binding loop.
+        x: Math.max(240, Math.min((bar.width - width) / 2, bar.width - rightRow.width - Theme.gap * 2 - width))
+
+        Behavior on x {
+            NumberAnimation {
+                duration: Theme.normal
+                easing.type: Theme.easeOut
+            }
+        }
 
         MediaPill {
             bar: bar
@@ -86,6 +99,8 @@ PanelWindow {
     }
 
     RowLayout {
+        id: rightRow
+
         anchors {
             right: parent.right
             top: parent.top
@@ -93,6 +108,11 @@ PanelWindow {
             rightMargin: Theme.gap
         }
         spacing: 8
+
+        WorkStatus {
+            bar: bar
+            Layout.alignment: Qt.AlignVCenter
+        }
 
         NotificationCenter {
             bar: bar
@@ -112,6 +132,11 @@ PanelWindow {
         }
 
         AudioControl {
+            Layout.alignment: Qt.AlignVCenter
+        }
+
+        BluetoothControl {
+            bar: bar
             Layout.alignment: Qt.AlignVCenter
         }
 

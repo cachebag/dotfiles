@@ -14,4 +14,7 @@ ShellRoot {
 
     // Single instance: toasts belong on one screen, not mirrored across all of them.
     NotificationToasts {}
+
+    // Claims org.freedesktop.PolicyKit1.AuthenticationAgent for the session.
+    PolkitDialog {}
 }
