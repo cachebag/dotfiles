@@ -68,7 +68,6 @@ aur_packages:
   - wlogout
   - hypridle
   - hyprshot
-  - nmrs
 snap_packages:
   - chatgpt-linux
   - whatsapp-linux-app

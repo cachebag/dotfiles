@@ -94,6 +94,11 @@ PanelWindow {
         }
         spacing: 8
 
+        NotificationCenter {
+            bar: bar
+            Layout.alignment: Qt.AlignVCenter
+        }
+
         TrayArea {
             bar: bar
             Layout.alignment: Qt.AlignVCenter

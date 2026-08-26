@@ -29,7 +29,6 @@
 | Logout | [Wlogout](https://github.com/ArtsyMacaw/wlogout) |
 | Screenshot | [grim](https://sr.ht/~emersion/grim/) + [slurp](https://github.com/emersion/slurp) |
 | Fetch | [Fastfetch](https://github.com/fastfetch-cli/fastfetch) |
-| Network UI | [nmrs](https://github.com/cachebag/nmrs) |
 
 ## Installation
 
@@ -72,7 +71,6 @@ The installer is resumable — if it fails mid-way, just run it again and it pic
 | `Super + L` | Lock screen |
 | `Super + Y` | Restart Waybar |
 | `Super + H` | Toggle blur |
-| `Super + Shift + M` | nmrs dev layout (tmux) |
 
 ### Screenshots
 

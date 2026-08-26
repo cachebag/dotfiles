@@ -11,4 +11,7 @@ ShellRoot {
             Bar {}
         }
     }
+
+    // Single instance: toasts belong on one screen, not mirrored across all of them.
+    NotificationToasts {}
 }

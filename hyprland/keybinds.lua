@@ -36,7 +36,6 @@ hl.bind(mod .. " + SHIFT + Left", win.resize({ x = -40, y = 0, relative = true }
 hl.bind(mod .. " + SHIFT + Right", win.resize({ x = 40, y = 0, relative = true }))
 hl.bind(mod .. " + SHIFT + Up", win.resize({ x = 0, y = -40, relative = true }))
 hl.bind(mod .. " + SHIFT + Down", win.resize({ x = 0, y = 40, relative = true }))
-hl.bind(mod .. " + SHIFT + M", dsp.exec_cmd([[kitty sh -c "]] .. home .. [[/dotfiles/nmrs.sh"]]))
 local hold = { repeating = true }
 local locked = { locked = true }
 hl.bind("XF86AudioRaiseVolume", dsp.exec_cmd("wpctl set-volume -l 1.0 @DEFAULT_AUDIO_SINK@ 5%+"), hold)
