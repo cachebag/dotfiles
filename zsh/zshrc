@@ -184,3 +184,4 @@ vpnfix() {
     kinit ALK9FH@US.BOSCH.COM
   fi
 }
+export PATH="$HOME/.opencode/bin:$PATH"

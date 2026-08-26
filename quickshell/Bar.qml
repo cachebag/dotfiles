@@ -115,8 +115,9 @@ PanelWindow {
         }
 
         Network {
-           Layout.alignment: Qt.AlignVCenter
-       }
+            bar: bar
+            Layout.alignment: Qt.AlignVCenter
+        }
 
         WallpaperPicker {
             bar: bar
