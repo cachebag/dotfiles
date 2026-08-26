@@ -30,8 +30,6 @@
 | Logout | [Wlogout](https://github.com/ArtsyMacaw/wlogout) |
 | Screenshot | [grim](https://sr.ht/~emersion/grim/) + [slurp](https://github.com/emersion/slurp) |
 | Fetch | [Fastfetch](https://github.com/fastfetch-cli/fastfetch) |
-| Network UI | [nmrs](https://github.com/cachebag/nmrs) |
-
 ## Installation
 
 > Requires Arch Linux. Do not run as root.

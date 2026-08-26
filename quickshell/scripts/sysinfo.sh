@@ -1,20 +1,41 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Emits "<cpu%> <mem%>" for Resources.qml.
+# CPU is averaged since the previous run rather than sampled with a sleep,
+# so the widget's own poll interval sets the window.
 
-read -r _ a b c prev_idle rest < /proc/stat
-prev_total=$((a + b + c + prev_idle))
-for v in $rest; do prev_total=$((prev_total + v)); done
+state="${XDG_RUNTIME_DIR:-/tmp}/qs-sysinfo.state"
 
-sleep 0.25
+read -r _ user nice sys idle iowait irq softirq steal _ < /proc/stat
+idle_all=$((idle + iowait))
+total=$((user + nice + sys + idle + iowait + irq + softirq + steal))
 
-read -r _ a b c idle rest < /proc/stat
-total=$((a + b + c + idle))
-for v in $rest; do total=$((total + v)); done
-
-d_total=$((total - prev_total))
-d_idle=$((idle - prev_idle))
 cpu=0
-[[ $d_total -gt 0 ]] && cpu=$(((100 * (d_total - d_idle)) / d_total))
+if [[ -r $state ]]; then
+    read -r prev_total prev_idle < "$state"
+    dt=$((total - prev_total))
+    di=$((idle_all - prev_idle))
+    if ((dt > 0)); then
+        cpu=$(((100 * (dt - di) + dt / 2) / dt))
+        ((cpu < 0)) && cpu=0
+        ((cpu > 100)) && cpu=100
+    fi
+fi
+printf '%s %s\n' "$total" "$idle_all" > "$state"
 
-mem=$(awk '/MemTotal/{t=$2} /MemAvailable/{a=$2} END{if (t>0) printf "%d", (t-a)*100/t; else print 0}' /proc/meminfo)
+# MemAvailable, not MemFree: cache and reclaimable slab are not "used".
+mem_total=0
+mem_avail=0
+while read -r key value _; do
+    case $key in
+        MemTotal:) mem_total=$value ;;
+        MemAvailable:)
+            mem_avail=$value
+            break
+            ;;
+    esac
+done < /proc/meminfo
 
-echo "$cpu $mem"
+mem=0
+((mem_total > 0)) && mem=$(((100 * (mem_total - mem_avail) + mem_total / 2) / mem_total))
+
+printf '%d %d\n' "$cpu" "$mem"

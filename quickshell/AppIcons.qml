@@ -143,9 +143,9 @@ Singleton {
             return Quickshell.iconPath("chromium", "application-x-executable");
         }
 
-        const native = root.fromEntry(appId);
-        if (native !== "")
-            return native;
+        const nativeIcon = root.fromEntry(appId);
+        if (nativeIcon !== "")
+            return nativeIcon;
 
         const rescue = root.lookupCustom(appId, title);
         if (rescue !== "")
