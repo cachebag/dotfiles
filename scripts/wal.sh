@@ -22,7 +22,14 @@ if [[ ! -x "$WAL_BIN" ]]; then
     notify-send "Colors not updated" "pywal is not installed" 2>/dev/null || true
     exit 1
 fi
-"$WAL_BIN" -q -n --saturate 0.8 -i "$WALL"
+# Honour the light/dark choice so changing wallpaper keeps the current mode.
+MODE_FILE="$HOME/.cache/wal/mode"
+MODE_FLAG=()
+if [[ -r "$MODE_FILE" && "$(cat "$MODE_FILE")" == "light" ]]; then
+    MODE_FLAG=(-l)
+fi
+
+"$WAL_BIN" -q -n --saturate 0.8 "${MODE_FLAG[@]}" -i "$WALL"
 sleep 0.3
 hyprctl reload 2>/dev/null || true
 kitty @ set-colors --all ~/.cache/wal/colors-kitty.conf 2>/dev/null || true
