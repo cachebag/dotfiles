@@ -15,6 +15,13 @@ vim.opt.expandtab = true
 vim.opt.termguicolors = true
 vim.opt.signcolumn = "yes"
 
+-- Treat .mdx as markdown (nvim has no built-in mdx detection)
+vim.filetype.add({
+  extension = {
+    mdx = "markdown",
+  },
+})
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
