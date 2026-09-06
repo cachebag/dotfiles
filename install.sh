@@ -176,6 +176,7 @@ create_symlinks() {
         "yazi:$HOME/.config/yazi"
         "fastfetch:$HOME/.config/fastfetch"
         "blurs/dist:$HOME/.config/blurs"
+        "wal/templates:$HOME/.config/wal/templates"
     )
     local mapping
     for mapping in "${dir_map[@]}"; do

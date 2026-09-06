@@ -18,7 +18,7 @@ hl.bind(mod .. " + W",      dsp.exec_cmd("kitty --class wallpaper-picker " .. ho
 hl.bind(mod .. " + S",      dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]))
 hl.bind(mod .. " + O",      dsp.exec_cmd("obsidian"))
 hl.bind(mod .. " + Y",      dsp.exec_cmd("pkill quickshell; nohup quickshell >/dev/null 2>&1 &"))
-
+hl.bind(mod .. " + Z", dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
 hl.bind(mod .. " + P", dsp.exec_cmd(home .. "/dotfiles/scripts/power_menu.sh"))
 hl.bind(mod .. " + L", dsp.exec_cmd(home .. "/dotfiles/scripts/lock.sh"))
 

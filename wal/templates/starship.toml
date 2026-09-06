@@ -8,26 +8,26 @@ $directory$git_branch$git_status$rust$nodejs$python$golang$lua$c$cmd_duration
 $character"""
 
 [directory]
-style = "bold white"
+style = "bold {color7}"
 truncation_length = 3
 truncate_to_repo = true
 truncation_symbol = "…/"
 format = "[$path]($style)[$read_only]($read_only_style) "
 read_only = " "
-read_only_style = "red"
+read_only_style = "{color1}"
 
 [git_branch]
 symbol = " "
-style = "yellow"
+style = "{color3}"
 format = "[$symbol$branch]($style) "
 
 [git_status]
-style = "red"
+style = "{color1}"
 format = '([$all_status$ahead_behind]($style) )'
 conflicted = "="
-ahead = "⇡${count}"
-behind = "⇣${count}"
-diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+ahead = "⇡${{count}}"
+behind = "⇣${{count}}"
+diverged = "⇕⇡${{ahead_count}}⇣${{behind_count}}"
 untracked = "?"
 stashed = "$"
 modified = "!"
@@ -37,40 +37,40 @@ deleted = "✘"
 
 [rust]
 symbol = " "
-style = "green"
+style = "{color2}"
 format = "[$symbol($version )]($style)"
 
 [nodejs]
 symbol = " "
-style = "green"
+style = "{color2}"
 format = "[$symbol($version )]($style)"
 
 [python]
 symbol = " "
-style = "green"
+style = "{color2}"
 format = "[$symbol($virtualenv )]($style)"
 
 [golang]
 symbol = " "
-style = "green"
+style = "{color2}"
 format = "[$symbol($version )]($style)"
 
 [lua]
 symbol = " "
-style = "green"
+style = "{color2}"
 format = "[$symbol($version )]($style)"
 
 [c]
 symbol = " "
-style = "green"
+style = "{color2}"
 format = "[$symbol($version )]($style)"
 
 [cmd_duration]
 min_time = 2000
-style = "bright-black"
+style = "{color8}"
 format = "[$duration]($style) "
 
 [character]
-success_symbol = "[❯](bold cyan)"
-error_symbol = "[❯](bold red)"
-vimcmd_symbol = "[❮](bold yellow)"
+success_symbol = "[❯](bold {color6})"
+error_symbol = "[❯](bold {color1})"
+vimcmd_symbol = "[❮](bold {color3})"

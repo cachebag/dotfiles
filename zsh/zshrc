@@ -45,6 +45,11 @@ alias gd='git diff'
 alias gl='git log'
 alias gc='git checkout'
 alias gp='git pull'
+alias diego='ssh cachebag@diego'
+alias leila='ssh svc@leila'
+alias punch='ssh svc@punch'
+alias stalin='ssh svc@stalin'
+alias vultr='ssh linuxuser@vultr'
 
 bindkey -v
 bindkey '^[[1;2C' forward-word
@@ -79,6 +84,7 @@ if [[ $TERM_PROGRAM != "vscode" ]] && command -v fastfetch >/dev/null 2>&1; then
 fi
 
 if command -v starship >/dev/null 2>&1; then
+  [[ -f "$HOME/.cache/wal/starship.toml" ]] && export STARSHIP_CONFIG="$HOME/.cache/wal/starship.toml"
   eval "$(starship init zsh)"
 else
   PROMPT='%F{blue}%~%f
