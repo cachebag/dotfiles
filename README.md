@@ -4,9 +4,8 @@
   <strong>my personal arch + hyprland config</strong>
 </p>
 
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/ab4d8f56-2991-4840-897e-b58e7c2fef19" />
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/45823ebd-072c-4938-aa0d-2f2c3072c26d" />
-
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/32bd570f-0bc5-4af9-8709-94d36ba8f983" />
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/b2d35ffa-8006-4a63-b14b-663034686a8b" />
 
 #
 
@@ -74,16 +73,17 @@ The installer is resumable — if it fails mid-way, just run it again and it pic
 ### Screenshots
 
 ##### **Rofi**
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/13bd2ff7-1229-422a-8d84-e89cc977dcb0" />
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/b2d35ffa-8006-4a63-b14b-663034686a8b" />
 
 ##### **Wallpaper picker (yazi)**
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/af5602fd-13aa-4172-b870-0022bd9d0cb6" />
+<img width="2530" height="1440" alt="image" src="https://github.com/user-attachments/assets/6a67fcc4-70ae-4a16-ac28-a116ddfbbd48" />
 
 ##### **ChatGPT**
-<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/29fcf560-7947-4b49-9191-9c5b0bd602ae" />
+<img width="2560" height="1440" alt="image" src="https://github.com/user-attachments/assets/e044d7eb-e1be-4710-b615-d84ec3885a58" />
 
 #### **blurs (bluetooth applet)**
-<img width="1304" height="590" alt="image" src="https://github.com/user-attachments/assets/bedffcec-671b-4592-a1ba-e3cb795a3116" />
+<img width="856" height="261" alt="image" src="https://github.com/user-attachments/assets/4b10b754-c545-4987-9bff-0c2a814d002f" />
+
 
 ### Window Management
 
