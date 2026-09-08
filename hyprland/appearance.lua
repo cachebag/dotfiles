@@ -18,4 +18,9 @@ hl.config({
     animations = {
         enabled = false,
     },
+    render = {
+        -- Lets a fullscreen app's buffer go straight to the display instead of
+        -- being composited first. Only helps fullscreen, but it is free.
+        direct_scanout = true,
+    },
 })

@@ -41,6 +41,8 @@ alias gd='git diff'
 alias gl='git log'
 alias gc='git checkout'
 alias gp='git pull'
+alias cbh='cliphist list | fzf | cliphist decode | wl-copy'
+alias cbl='cliphist list'
 alias teams-restart='pkill -f teams-for-linux; nohup teams-for-linux >/dev/null 2>&1 </dev/null & disown'
 dev() {
   local session=dev
