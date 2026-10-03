@@ -49,7 +49,7 @@ alias diego='ssh cachebag@diego'
 alias leila='ssh svc@leila'
 alias punch='ssh svc@punch'
 alias stalin='ssh svc@stalin'
-alias vultr='ssh linuxuser@vultr'
+alias hal='ssh linuxuser@hal'
 
 bindkey -v
 bindkey '^[[1;2C' forward-word
