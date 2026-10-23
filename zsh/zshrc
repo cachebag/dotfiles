@@ -92,3 +92,4 @@ else
 fi
 
 zinit light zsh-users/zsh-syntax-highlighting
+export PATH="$HOME/.bun/bin:$PATH"
