@@ -15,6 +15,9 @@ ShellRoot {
     // Single instance: toasts belong on one screen, not mirrored across all of them.
     NotificationToasts {}
 
+    // Slide-out panel: toggles, sliders, media, notification history.
+    ControlCenter {}
+
     // Claims org.freedesktop.PolicyKit1.AuthenticationAgent for the session.
     PolkitDialog {}
 }

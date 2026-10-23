@@ -21,6 +21,8 @@ hl.bind(mod .. " + Y",      dsp.exec_cmd("pkill quickshell; nohup quickshell >/d
 hl.bind(mod .. " + Z", dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
 hl.bind(mod .. " + P", dsp.exec_cmd(home .. "/dotfiles/scripts/power_menu.sh"))
 hl.bind(mod .. " + L", dsp.exec_cmd(home .. "/dotfiles/scripts/lock.sh"))
+hl.bind(mod .. " + N",         dsp.exec_cmd("qs ipc call notifications toggle"))
+hl.bind(mod .. " + SHIFT + N", dsp.exec_cmd("qs ipc call notifications toggleDnd"))
 
 for i = 1, 10 do
     local key = i % 10

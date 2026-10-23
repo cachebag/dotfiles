@@ -1,0 +1,10 @@
+{
+    "sounds": true,
+    "quietWhenFullscreen": true,
+    "historyLimit": 100,
+    "rules": [
+        { "app": "^(spotify|mpv|firefox)$", "summary": "^Now Playing", "toast": false, "sound": false },
+        { "app": "^discord$", "sound": "message-new-instant" },
+        { "app": "^steam$", "sound": false }
+    ]
+}

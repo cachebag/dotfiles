@@ -10,6 +10,8 @@ Rectangle {
     property bool floating: false
 
     property bool replying: false
+    // Off inside a group, whose header already names the app.
+    property bool showApp: true
 
     // Live handle while the sending app still owns it, null once closed. Read
     // through it when present so in-place updates show, fall back to the snapshot.
@@ -19,18 +21,12 @@ Rectangle {
     readonly property string summary: (root.live ? root.live.summary : root.entry.summary) || ""
     readonly property string body: (root.live ? root.live.body : root.entry.body) || ""
     readonly property int urgency: root.live ? root.live.urgency : root.entry.urgency
-    readonly property var actions: root.live ? root.live.actions : []
+    // "default" is what clicking the card does, so it doesn't get its own button.
+    readonly property var actions: root.live ? Array.prototype.filter.call(root.live.actions, a => a.identifier !== "default") : []
+    readonly property bool clickable: Notifications.defaultAction(root.entry) !== null
     readonly property bool canReply: root.live ? root.live.hasInlineReply : false
 
-    readonly property string iconSource: {
-        const img = root.live ? root.live.image : root.entry.image;
-        if (img !== "")
-            return img;
-        const ico = root.live ? root.live.appIcon : root.entry.appIcon;
-        if (ico !== "")
-            return Quickshell.iconPath(ico, true);
-        return "";
-    }
+    readonly property string iconSource: root.live ? Notifications.iconFor(root.live) : Notifications.iconFor(root.entry)
 
     implicitHeight: layout.implicitHeight + 20
 
@@ -56,11 +52,14 @@ Rectangle {
         color: Notifications.urgencyColor(root.urgency)
     }
 
+    // Under the column, so buttons and the reply field still take their own clicks.
     MouseArea {
         id: hover
         anchors.fill: parent
         hoverEnabled: true
-        acceptedButtons: Qt.NoButton
+        acceptedButtons: root.clickable ? Qt.LeftButton : Qt.NoButton
+        cursorShape: root.clickable ? Qt.PointingHandCursor : Qt.ArrowCursor
+        onClicked: Notifications.activate(root.entry.key)
     }
 
     Column {
@@ -81,9 +80,9 @@ Rectangle {
                 id: appIcon
                 anchors.left: parent.left
                 anchors.verticalCenter: parent.verticalCenter
-                width: root.iconSource === "" ? 0 : 14
+                width: root.iconSource === "" || !root.showApp ? 0 : 14
                 height: 14
-                visible: root.iconSource !== ""
+                visible: root.iconSource !== "" && root.showApp
                 source: root.iconSource
                 fillMode: Image.PreserveAspectFit
                 asynchronous: true
@@ -97,6 +96,7 @@ Rectangle {
                 anchors.rightMargin: 6
                 anchors.verticalCenter: parent.verticalCenter
                 elide: Text.ElideRight
+                visible: root.showApp
                 text: root.appName !== "" ? root.appName : "notification"
                 color: Notifications.urgencyColor(root.urgency)
                 font.family: Theme.font
@@ -116,6 +116,15 @@ Rectangle {
                     color: Theme.muted
                     font.family: Theme.font
                     font.pixelSize: Theme.fontSize - 4
+                }
+
+                BarButton {
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: hover.containsMouse || containsMouse
+                    hpad: 3
+                    icon: "󰆏"
+                    contentColor: containsMouse ? Theme.accent : Theme.muted
+                    onClicked: Quickshell.clipboardText = [root.summary, root.body.replace(/<[^>]*>/g, "")].filter(t => t !== "").join("\n")
                 }
 
                 BarButton {
