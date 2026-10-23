@@ -1,76 +1,114 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-add_newline = true
+add_newline = false
 command_timeout = 500
 
-format = """
-$directory$git_branch$git_status$rust$nodejs$python$golang$lua$c$cmd_duration
-$character"""
+format = "$hostname$directory$git_branch${custom.dirty}$git_status$character"
+
+right_format = "$status$cmd_duration$jobs$python$conda$nix_shell$docker_context$direnv$rust$nodejs$golang$lua$c$time"
+
+[hostname]
+ssh_only = true
+style = "blue"
+format = "[$hostname:]($style)"
 
 [directory]
 style = "bold white"
-truncation_length = 3
+truncation_length = 1
 truncate_to_repo = true
-truncation_symbol = "…/"
-format = "[$path]($style)[$read_only]($read_only_style) "
-read_only = " "
+truncation_symbol = ""
+format = "[$path]($style)[$read_only]($read_only_style)"
+read_only = " ro"
 read_only_style = "red"
 
 [git_branch]
-symbol = " "
+style = "bright-black"
+format = "  [$branch]($style)"
+
+[custom.dirty]
+when = "test -n \"$(git status --porcelain 2>/dev/null | head -c1)\""
+require_repo = true
 style = "yellow"
-format = "[$symbol$branch]($style) "
+format = "[•]($style)"
 
 [git_status]
+style = "yellow"
+format = '([$ahead_behind]($style))'
+ahead = " ⇡${count}"
+behind = " ⇣${count}"
+diverged = " ⇡${ahead_count}⇣${behind_count}"
+
+[character]
+format = "  $symbol "
+success_symbol = "[❯](cyan)"
+error_symbol = "[❯](red)"
+vimcmd_symbol = "[❮](yellow)"
+
+# right side: plain words, dot-separated, all dim
+
+[status]
+disabled = false
 style = "red"
-format = '([$all_status$ahead_behind]($style) )'
-conflicted = "="
-ahead = "⇡${count}"
-behind = "⇣${count}"
-diverged = "⇕⇡${ahead_count}⇣${behind_count}"
-untracked = "?"
-stashed = "$"
-modified = "!"
-staged = "+"
-renamed = "»"
-deleted = "✘"
-
-[rust]
-symbol = " "
-style = "green"
-format = "[$symbol($version )]($style)"
-
-[nodejs]
-symbol = " "
-style = "green"
-format = "[$symbol($version )]($style)"
-
-[python]
-symbol = " "
-style = "green"
-format = "[$symbol($virtualenv )]($style)"
-
-[golang]
-symbol = " "
-style = "green"
-format = "[$symbol($version )]($style)"
-
-[lua]
-symbol = " "
-style = "green"
-format = "[$symbol($version )]($style)"
-
-[c]
-symbol = " "
-style = "green"
-format = "[$symbol($version )]($style)"
+format = "[✘ $status]($style)[ · ](bright-black)"
 
 [cmd_duration]
 min_time = 2000
 style = "bright-black"
-format = "[$duration]($style) "
+format = "[$duration · ]($style)"
 
-[character]
-success_symbol = "[❯](bold cyan)"
-error_symbol = "[❯](bold red)"
-vimcmd_symbol = "[❮](bold yellow)"
+[jobs]
+symbol = "jobs "
+style = "bright-black"
+number_threshold = 1
+format = "[$symbol$number · ]($style)"
+
+[python]
+style = "bright-black"
+format = "[py( $virtualenv) · ]($style)"
+
+[conda]
+style = "bright-black"
+ignore_base = true
+format = "[conda $environment · ]($style)"
+
+[nix_shell]
+style = "bright-black"
+format = "[nix · ]($style)"
+
+[docker_context]
+style = "bright-black"
+only_with_files = true
+format = "[docker $context · ]($style)"
+
+[direnv]
+disabled = false
+style = "bright-black"
+format = "[direnv( $allowed) · ]($style)"
+allowed_msg = ""
+denied_msg = "denied"
+
+[rust]
+style = "bright-black"
+format = "[rust · ]($style)"
+
+[nodejs]
+style = "bright-black"
+format = "[node · ]($style)"
+
+[golang]
+style = "bright-black"
+format = "[go · ]($style)"
+
+[lua]
+style = "bright-black"
+format = "[lua · ]($style)"
+
+[c]
+style = "bright-black"
+format = "[c · ]($style)"
+
+[time]
+disabled = false
+style = "bright-black"
+time_format = "%H:%M"
+format = "[$time]($style)"
