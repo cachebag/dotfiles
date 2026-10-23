@@ -44,3 +44,15 @@ hl.window_rule({
     center = true,
     size   = "900 600",
 })
+
+-- Overwatch: real fullscreen (hides the bar), no blur/transparency, tearing allowed
+hl.config({ general = { allow_tearing = true } })
+
+hl.window_rule({
+    name       = "overwatch",
+    match      = { class = "^steam_app_2357570$" },
+    fullscreen = true,
+    immediate  = true,
+    no_blur    = true,
+    opaque     = true,
+})
