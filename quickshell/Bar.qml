@@ -127,6 +127,7 @@ PanelWindow {
         }
 
         AudioControl {
+            bar: bar
             Layout.alignment: Qt.AlignVCenter
         }
 
