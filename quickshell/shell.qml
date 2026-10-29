@@ -18,6 +18,9 @@ ShellRoot {
     // Slide-out panel: toggles, sliders, media, notification history.
     ControlCenter {}
 
+    // Sunburst disk usage overlay, `qs ipc call storage toggle`.
+    Storage {}
+
     // Claims org.freedesktop.PolicyKit1.AuthenticationAgent for the session.
     PolkitDialog {}
 }

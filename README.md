@@ -97,6 +97,7 @@ The installer is resumable — if it fails mid-way, just run it again and it pic
 | `Super + E` | File manager (Thunar) |
 | `Super + O` | Obsidian |
 | `Super + D` | ChatGPT (Chromium app) |
+| `Super + Shift + D` | Storage overlay (diskring) |
 | `Super + I` | WhatsApp (Chromium app) |
 | `Super + W` | Wallpaper picker |
 | `Super + S` | Screenshot region → clipboard |

@@ -56,3 +56,6 @@ hl.window_rule({
     no_blur    = true,
     opaque     = true,
 })
+
+-- Deadlock: same treatment as Overwatch
+hl.window_rule({ name = "deadlock", match = { class = "^steam_app_1422450$" }, fullscreen = true, immediate = true, no_blur = true, opaque = true })
