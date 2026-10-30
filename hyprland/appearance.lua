@@ -17,6 +17,9 @@ hl.config({
     misc = {
         disable_hyprland_logo   = true,
         force_default_wallpaper = 0,
+        -- G-Sync over DisplayPort, fullscreen windows only (games), so the
+        -- desktop doesn't flicker at low refresh rates.
+        vrr = 2,
     },
 
     animations = {

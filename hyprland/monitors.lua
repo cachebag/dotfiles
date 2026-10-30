@@ -1,6 +1,6 @@
 hl.monitor({
-    output   = "HDMI-A-1",
-    mode     = "2560x1440@144",
+    output   = "desc:LG Electronics LG ULTRAGEAR 304NTJJCH612",
+    mode     = "2560x1440@165",
     position = "0x0",
     scale    = 1,
 })
@@ -16,7 +16,7 @@ hl.monitor({
 for i = 1, 5 do
     hl.workspace_rule({
         workspace  = tostring(i),
-        monitor    = "HDMI-A-1",
+        monitor    = "desc:LG Electronics LG ULTRAGEAR 304NTJJCH612",
         default    = i == 1,
         persistent = true,
     })
