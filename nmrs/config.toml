@@ -1,0 +1,40 @@
+[appearance]
+theme = "system"
+light_theme = "nmrs Light"
+dark_theme = "Gruvbox Dark"
+font_size = 14.0
+radius = 8.0
+opacity = 1.0
+density = "comfortable"
+
+[layout]
+mode = "sidebar"
+pages = [
+    "wifi",
+    "ethernet",
+    "vpn",
+    "bluetooth",
+    "profiles",
+    "network",
+    "appearance",
+]
+width = 920.0
+height = 620.0
+floating = false
+
+[wifi]
+signal = "icon"
+show_band = true
+show_bssid = false
+show_security = true
+min_strength = 0
+sort = "signal"
+scan_on_open = true
+
+[devices]
+show_virtual = false
+
+[behavior]
+close_on_connect = false
+close_on_escape = true
+confirm_forget = true
