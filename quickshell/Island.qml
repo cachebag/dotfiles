@@ -19,6 +19,7 @@ import Quickshell.Services.Pipewire
 //   expanded – on hover: full player, or clock + what is using the mic/camera,
 //              plus a toolbar (do not disturb, wallpapers)
 //   walls    – wallpaper strip; `qs ipc call island walls`, Esc or leaving closes it
+//   music    – Apple Music panel (MusicPanel.qml); `qs ipc call island music`
 // Right-click toggles do not disturb (`qs ipc call island dnd`).
 PanelWindow {
     id: win
@@ -38,14 +39,14 @@ PanelWindow {
 
     anchors.top: true
     implicitWidth: 860
-    implicitHeight: 280
+    implicitHeight: 560
     exclusiveZone: restH + restY * 2
     color: "transparent"
 
     WlrLayershell.layer: WlrLayer.Top
     WlrLayershell.namespace: "quickshell-island"
-    // Keyboard only while the wallpaper strip is open (arrows, Enter, Esc).
-    WlrLayershell.keyboardFocus: mode === "walls" ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
+    // Keyboard only while a panel is open (arrows, typing, Enter, Esc).
+    WlrLayershell.keyboardFocus: panel !== "" ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
     // Only the island itself takes input; the rest of the window is click-through.
     mask: Region {
@@ -270,19 +271,38 @@ PanelWindow {
 
     readonly property string wallDir: Quickshell.env("HOME") + "/wallpapers"
     readonly property string thumbDir: Quickshell.env("HOME") + "/.cache/quickshell/wall-thumbs"
-    property bool walls: false
+    // Panels take over the island until Esc, a click away or the mouse leaves.
+    property string panel: ""
+    readonly property bool walls: panel === "walls"
     property string applying: ""
+
+    function closePanel() {
+        panel = "";
+        panelClose.stop();
+    }
 
     function openWalls() {
         thumbs.running = true;
-        walls = true;
+        panel = "walls";
         wallList.currentIndex = Math.max(0, wallList.indexOfCurrent());
         wallList.positionViewAtIndex(wallList.currentIndex, ListView.Center);
         wallList.forceActiveFocus();
     }
-    function closeWalls() {
-        walls = false;
-        wallsClose.stop();
+    function openMusic() {
+        if (!AppleMusic.connected) {
+            AppleMusic.launch();
+            pop({
+                kind: "compact",
+                prio: 3,
+                ms: 2500,
+                icon: "󰀵",
+                tint: "#fc3c44",
+                text: "Opening"
+            });
+            return;
+        }
+        panel = "music";
+        musicPanel.open();
     }
 
     FolderListModel {
@@ -326,9 +346,9 @@ PanelWindow {
     }
 
     Timer {
-        id: wallsClose
+        id: panelClose
         interval: 450
-        onTriggered: win.closeWalls()
+        onTriggered: win.closePanel()
     }
 
     IpcHandler {
@@ -337,7 +357,10 @@ PanelWindow {
         enabled: win.focused
 
         function walls(): void {
-            win.walls ? win.closeWalls() : win.openWalls();
+            win.walls ? win.closePanel() : win.openWalls();
+        }
+        function music(): void {
+            win.panel === "music" ? win.closePanel() : win.openMusic();
         }
         function dnd(): void {
             win.toggleDnd();
@@ -380,7 +403,7 @@ PanelWindow {
     }
 
     readonly property int morph: 280
-    readonly property string mode: walls ? "walls" : hovering ? "expanded" : (cur && focused) ? cur.kind : "rest"
+    readonly property string mode: panel !== "" ? panel : hovering ? "expanded" : (cur && focused) ? cur.kind : "rest"
 
     // ---- geometry ---------------------------------------------------------
 
@@ -389,6 +412,8 @@ PanelWindow {
         switch (mode) {
         case "walls":
             return Math.min(win.width - 20, 820);
+        case "music":
+            return 440;
         case "expanded":
             return hasMedia ? 420 : 300;
         case "banner":
@@ -403,6 +428,8 @@ PanelWindow {
         switch (mode) {
         case "walls":
             return 196;
+        case "music":
+            return musicPanel.implicitHeight + 36;
         case "expanded":
             return (hasMedia ? 176 : (micOn || camOn ? 112 : 84)) + 48;
         case "banner":
@@ -427,13 +454,13 @@ PanelWindow {
             onHoveredChanged: {
                 if (hovered) {
                     hoverOut.stop();
-                    wallsClose.stop();
+                    panelClose.stop();
                     hoverIn.restart();
                 } else {
                     hoverIn.stop();
                     hoverOut.restart();
-                    if (win.walls)
-                        wallsClose.restart();
+                    if (win.panel !== "")
+                        panelClose.restart();
                 }
             }
         }
@@ -459,7 +486,7 @@ PanelWindow {
         height: win.targetH
         x: Math.round((win.width - width) / 2) - hit.x
         y: win.restY
-        radius: win.mode === "expanded" || win.mode === "walls" ? 40 : height / 2
+        radius: win.mode === "expanded" || win.panel !== "" ? 40 : height / 2
         color: "#000000"
         clip: true
 
@@ -900,6 +927,13 @@ PanelWindow {
                 label: "Wallpapers"
                 onClicked: win.openWalls()
             }
+            Chip {
+                glyph: "󰀵"
+                label: "Music"
+                tint: "#fc3c44"
+                on: AppleMusic.playing
+                onClicked: win.openMusic()
+            }
         }
 
         // ---- walls: thumbnail strip ----
@@ -963,7 +997,7 @@ PanelWindow {
                     return -1;
                 }
 
-                Keys.onEscapePressed: win.closeWalls()
+                Keys.onEscapePressed: win.closePanel()
                 Keys.onReturnPressed: win.applyWall(String(wallFiles.get(currentIndex, "filePath")))
                 Keys.onEnterPressed: win.applyWall(String(wallFiles.get(currentIndex, "filePath")))
                 Keys.onLeftPressed: decrementCurrentIndex()
@@ -1067,16 +1101,33 @@ PanelWindow {
             }
         }
 
+        // ---- music: Apple Music panel ----
+        MusicPanel {
+            id: musicPanel
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.margins: 18
+            opacity: win.mode === "music" ? 1 : 0
+            visible: opacity > 0 || win.mode === "music"
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Theme.fast
+                }
+            }
+            onClose: win.closePanel()
+        }
+
         // Right-click anywhere toggles do not disturb.
         TapHandler {
             acceptedButtons: Qt.RightButton
-            enabled: win.mode !== "walls"
+            enabled: win.panel === ""
             onTapped: win.toggleDnd()
         }
 
         // Scroll anywhere on the island for volume.
         WheelHandler {
-            enabled: win.mode !== "walls"
+            enabled: win.panel === ""
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
             onWheel: e => {
                 if (!win.sink?.audio)

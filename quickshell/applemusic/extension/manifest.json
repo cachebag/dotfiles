@@ -1,0 +1,14 @@
+{
+  "manifest_version": 3,
+  "name": "Quickshell Apple Music bridge",
+  "version": "1.0",
+  "description": "Lets the Quickshell island control music.apple.com through the page's own MusicKit, over native messaging.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqYp9qYsaKB0Fbq27qwwTz1T3OVfZrL7enmWN0QGxX4lqcBH2mPFK944jsR7jJd1KuS9J+/2QIAS7r75k07iyQwN+IbLqqogGJcXPO17hNcohGw0nRdkCE1Sd/3sLIN8nrLAURDpXFxhAkYregLBnAWuvlC8Vp2qd+Am2X8lX0X2aDUSpIvtTmcJKR3fnoprGKz1U7AEgrUUbUKlvRhVo5bfQQIgCKeL+phNKVOV97+hkNv+NWJ3mAi2mJYDU11DHFhWz0KO6Gx4l10Pb3q+pRwmnWlM6dKf6YjuR+9pCqfMoJY4w/hpyhLgtin2wvUrIAzhBxZkWTGQLGF9AxliyoQIDAQAB",
+  "permissions": ["nativeMessaging"],
+  "host_permissions": ["https://music.apple.com/*"],
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    { "matches": ["https://music.apple.com/*"], "js": ["page.js"], "world": "MAIN", "run_at": "document_idle" },
+    { "matches": ["https://music.apple.com/*"], "js": ["bridge.js"], "run_at": "document_start" }
+  ]
+}
