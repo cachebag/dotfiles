@@ -327,7 +327,7 @@ PanelWindow {
 
     Timer {
         id: wallsClose
-        interval: 700
+        interval: 450
         onTriggered: win.closeWalls()
     }
 
@@ -370,15 +370,16 @@ PanelWindow {
     property bool hovering: false
     Timer {
         id: hoverIn
-        interval: 140
+        interval: 60
         onTriggered: win.hovering = true
     }
     Timer {
         id: hoverOut
-        interval: 350
+        interval: 120
         onTriggered: win.hovering = false
     }
 
+    readonly property int morph: 280
     readonly property string mode: walls ? "walls" : hovering ? "expanded" : (cur && focused) ? cur.kind : "rest"
 
     // ---- geometry ---------------------------------------------------------
@@ -437,6 +438,20 @@ PanelWindow {
             }
         }
 
+    // Shader-drawn shadow: no offscreen layer, no per-frame blur.
+    RectangularShadow {
+        anchors.fill: island
+        radius: island.radius
+        blur: 28
+        offset: Qt.vector2d(0, 4)
+        color: Qt.rgba(0, 0, 0, win.mode === "rest" ? 0 : 0.55)
+        Behavior on color {
+            ColorAnimation {
+                duration: Theme.fast
+            }
+        }
+    }
+
     Rectangle {
         id: island
 
@@ -448,36 +463,27 @@ PanelWindow {
         color: "#000000"
         clip: true
 
-        // The springy, slightly overshooting resize is most of the effect.
+        // One fixed-length ease with a small overshoot: every morph lands at
+        // the same moment, unlike a spring that keeps wobbling as it settles.
         Behavior on width {
-            SpringAnimation {
-                spring: 4.2
-                damping: 0.3
-                epsilon: 0.3
+            NumberAnimation {
+                duration: win.morph
+                easing.type: Easing.OutBack
+                easing.overshoot: 0.9
             }
         }
         Behavior on height {
-            SpringAnimation {
-                spring: 4.2
-                damping: 0.3
-                epsilon: 0.3
+            NumberAnimation {
+                duration: win.morph
+                easing.type: Easing.OutBack
+                easing.overshoot: 0.9
             }
         }
         Behavior on radius {
             NumberAnimation {
-                duration: Theme.normal
+                duration: win.morph
                 easing.type: Theme.easeOut
             }
-        }
-
-        layer.enabled: true
-        layer.effect: MultiEffect {
-            shadowEnabled: true
-            shadowColor: "#000000"
-            shadowBlur: 1.0
-            shadowOpacity: win.mode === "rest" ? 0 : 0.55
-            shadowVerticalOffset: 4
-            blurMax: 32
         }
 
         // ---- rest: leading art, empty middle, trailing waveform/dots ----
@@ -487,7 +493,7 @@ PanelWindow {
             visible: opacity > 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: Theme.normal
+                    duration: Theme.fast
                 }
             }
 
@@ -533,7 +539,7 @@ PanelWindow {
                 }
                 Wave {
                     visible: win.hasMedia
-                    active: win.playing
+                    active: win.playing && win.mode === "rest" && win.visible
                     color: win.glow
                 }
             }
@@ -546,7 +552,7 @@ PanelWindow {
             visible: opacity > 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: Theme.normal
+                    duration: Theme.fast
                 }
             }
 
@@ -605,7 +611,7 @@ PanelWindow {
             visible: opacity > 0 || win.mode === "banner"
             Behavior on opacity {
                 NumberAnimation {
-                    duration: Theme.normal
+                    duration: Theme.fast
                 }
             }
 
@@ -676,7 +682,7 @@ PanelWindow {
             visible: opacity > 0 || win.mode === "expanded"
             Behavior on opacity {
                 NumberAnimation {
-                    duration: Theme.normal
+                    duration: Theme.fast
                 }
             }
 
@@ -721,7 +727,7 @@ PanelWindow {
                     id: bigWave
                     anchors.right: parent.right
                     anchors.verticalCenter: bigCover.verticalCenter
-                    active: win.playing
+                    active: win.playing && win.mode === "expanded"
                     color: win.glow
                 }
 
@@ -878,7 +884,7 @@ PanelWindow {
             visible: opacity > 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: Theme.normal
+                    duration: Theme.fast
                 }
             }
 
@@ -904,7 +910,7 @@ PanelWindow {
             visible: opacity > 0 || win.mode === "walls"
             Behavior on opacity {
                 NumberAnimation {
-                    duration: Theme.normal
+                    duration: Theme.fast
                 }
             }
 
