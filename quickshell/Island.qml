@@ -1,6 +1,8 @@
 import QtQuick
 import QtQuick.Effects
+import Qt.labs.folderlistmodel
 import Quickshell
+import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
 import Quickshell.Widgets
@@ -14,7 +16,10 @@ import Quickshell.Services.Pipewire
 //              middle left empty (the iPhone "compact" layout). Privacy dot trailing.
 //   compact  – wider capsule for quick values: volume meter, workspace number
 //   banner   – medium rounded panel: bluetooth, mic mute, notifications
-//   expanded – on hover: full player, or clock + what is using the mic/camera
+//   expanded – on hover: full player, or clock + what is using the mic/camera,
+//              plus a toolbar (do not disturb, wallpapers)
+//   walls    – wallpaper strip; `qs ipc call island walls`, Esc or leaving closes it
+// Right-click toggles do not disturb (`qs ipc call island dnd`).
 PanelWindow {
     id: win
 
@@ -32,14 +37,15 @@ PanelWindow {
     readonly property int restY: 4
 
     anchors.top: true
-    implicitWidth: 560
-    implicitHeight: 200
+    implicitWidth: 860
+    implicitHeight: 280
     exclusiveZone: restH + restY * 2
     color: "transparent"
 
     WlrLayershell.layer: WlrLayer.Top
     WlrLayershell.namespace: "quickshell-island"
-    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
+    // Keyboard only while the wallpaper strip is open (arrows, Enter, Esc).
+    WlrLayershell.keyboardFocus: mode === "walls" ? WlrKeyboardFocus.Exclusive : WlrKeyboardFocus.None
 
     // Only the island itself takes input; the rest of the window is click-through.
     mask: Region {
@@ -241,6 +247,103 @@ PanelWindow {
         }
     }
 
+    // ---- do not disturb ---------------------------------------------------
+
+    readonly property bool dnd: Notifications.dnd
+    readonly property color dndColor: "#bf5af2"
+    onDndChanged: {
+        if (ready)
+            pop({
+                kind: "compact",
+                prio: 3,
+                ms: 1600,
+                icon: "󰽥",
+                tint: dnd ? dndColor : "",
+                text: dnd ? "Focus on" : "Focus off"
+            });
+    }
+    function toggleDnd() {
+        Notifications.dnd = !Notifications.dnd;
+    }
+
+    // ---- wallpapers -------------------------------------------------------
+
+    readonly property string wallDir: Quickshell.env("HOME") + "/wallpapers"
+    readonly property string thumbDir: Quickshell.env("HOME") + "/.cache/quickshell/wall-thumbs"
+    property bool walls: false
+    property string applying: ""
+
+    function openWalls() {
+        thumbs.running = true;
+        walls = true;
+        wallList.currentIndex = Math.max(0, wallList.indexOfCurrent());
+        wallList.positionViewAtIndex(wallList.currentIndex, ListView.Center);
+        wallList.forceActiveFocus();
+    }
+    function closeWalls() {
+        walls = false;
+        wallsClose.stop();
+    }
+
+    FolderListModel {
+        id: wallFiles
+        folder: "file://" + win.wallDir
+        nameFilters: ["*.jpg", "*.jpeg", "*.png", "*.webp", "*.JPG", "*.JPEG", "*.PNG", "*.WEBP"]
+        showDirs: false
+        sortField: FolderListModel.Time
+        sortReversed: true
+    }
+
+    FileView {
+        id: currentWall
+        path: Quickshell.env("HOME") + "/.config/hypr/current_wallpaper"
+        watchChanges: true
+        preload: true
+        printErrors: false
+        onFileChanged: reload()
+    }
+    readonly property string wallNow: currentWall.text().trim()
+
+    // Builds any missing thumbnails; cheap when they all exist.
+    Process {
+        id: thumbs
+        command: [Quickshell.env("HOME") + "/.config/quickshell/scripts/wall-thumbs.sh"]
+    }
+
+    Process {
+        id: wallApply
+        onExited: {
+            win.applying = "";
+            Theme.reload();
+        }
+    }
+    function applyWall(path) {
+        if (wallApply.running)
+            return;
+        applying = path;
+        wallApply.command = [Quickshell.env("HOME") + "/.config/hypr/scripts/wallpaper.sh", path];
+        wallApply.running = true;
+    }
+
+    Timer {
+        id: wallsClose
+        interval: 700
+        onTriggered: win.closeWalls()
+    }
+
+    IpcHandler {
+        target: "island"
+        // Every monitor has an island; only the focused one answers.
+        enabled: win.focused
+
+        function walls(): void {
+            win.walls ? win.closeWalls() : win.openWalls();
+        }
+        function dnd(): void {
+            win.toggleDnd();
+        }
+    }
+
     // ---- state machine ----------------------------------------------------
 
     // Swallow the burst of "changes" that every binding reports on startup.
@@ -276,27 +379,31 @@ PanelWindow {
         onTriggered: win.hovering = false
     }
 
-    readonly property string mode: hovering ? "expanded" : (cur && focused) ? cur.kind : "rest"
+    readonly property string mode: walls ? "walls" : hovering ? "expanded" : (cur && focused) ? cur.kind : "rest"
 
     // ---- geometry ---------------------------------------------------------
 
     readonly property bool active: hasMedia || micOn || camOn
     readonly property real targetW: {
         switch (mode) {
+        case "walls":
+            return Math.min(win.width - 20, 820);
         case "expanded":
             return hasMedia ? 420 : 300;
         case "banner":
             return Math.max(300, Math.min(440, bannerText.implicitWidth + 96));
         case "compact":
-            return 250;
+            return Math.max(250, compactText.implicitWidth + 80);
         default:
-            return hasMedia ? 210 : active ? 150 : 124;
+            return hasMedia ? 210 : (active || dnd) ? 150 : 124;
         }
     }
     readonly property real targetH: {
         switch (mode) {
+        case "walls":
+            return 196;
         case "expanded":
-            return hasMedia ? 176 : (micOn || camOn ? 112 : 84);
+            return (hasMedia ? 176 : (micOn || camOn ? 112 : 84)) + 48;
         case "banner":
             return 64;
         default:
@@ -317,10 +424,13 @@ PanelWindow {
             onHoveredChanged: {
                 if (hovered) {
                     hoverOut.stop();
+                    wallsClose.stop();
                     hoverIn.restart();
                 } else {
                     hoverIn.stop();
                     hoverOut.restart();
+                    if (win.walls)
+                        wallsClose.restart();
                 }
             }
         }
@@ -333,7 +443,7 @@ PanelWindow {
         height: win.targetH
         x: Math.round((win.width - width) / 2)
         y: win.restY
-        radius: win.mode === "expanded" ? 40 : height / 2
+        radius: win.mode === "expanded" || win.mode === "walls" ? 40 : height / 2
         color: "#000000"
         clip: true
 
@@ -388,12 +498,30 @@ PanelWindow {
                 size: 20
                 radius: 6
             }
+            Text {
+                anchors.left: parent.left
+                anchors.leftMargin: 13
+                anchors.verticalCenter: parent.verticalCenter
+                visible: win.dnd && !win.hasMedia
+                text: "󰽥"
+                color: win.dndColor
+                font.family: Theme.font
+                font.pixelSize: 15
+            }
 
             Row {
                 anchors.right: parent.right
                 anchors.rightMargin: 13
                 anchors.verticalCenter: parent.verticalCenter
                 spacing: 8
+                Text {
+                    anchors.verticalCenter: parent.verticalCenter
+                    visible: win.dnd && win.hasMedia
+                    text: "󰽥"
+                    color: win.dndColor
+                    font.family: Theme.font
+                    font.pixelSize: 12
+                }
                 Dot {
                     visible: win.micOn
                     color: win.micColor
@@ -428,7 +556,7 @@ PanelWindow {
                 anchors.leftMargin: 14
                 anchors.verticalCenter: parent.verticalCenter
                 text: parent.p?.icon ?? ""
-                color: "#ffffff"
+                color: parent.p?.tint ? parent.p.tint : "#ffffff"
                 font.family: Theme.font
                 font.pixelSize: 16
             }
@@ -455,6 +583,7 @@ PanelWindow {
                 }
             }
             Text {
+                id: compactText
                 anchors.right: parent.right
                 anchors.rightMargin: 16
                 anchors.verticalCenter: parent.verticalCenter
@@ -541,6 +670,7 @@ PanelWindow {
             anchors.fill: parent
             anchors.margins: 20
             anchors.topMargin: 18
+            anchors.bottomMargin: 66
             opacity: win.mode === "expanded" ? 1 : 0
             visible: opacity > 0 || win.mode === "expanded"
             Behavior on opacity {
@@ -737,8 +867,209 @@ PanelWindow {
             }
         }
 
+        // Toolbar under the expanded view.
+        Row {
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 14
+            spacing: 10
+            opacity: win.mode === "expanded" ? 1 : 0
+            visible: opacity > 0
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Theme.normal
+                }
+            }
+
+            Chip {
+                glyph: "󰽥"
+                label: "Focus"
+                on: win.dnd
+                tint: win.dndColor
+                onClicked: win.toggleDnd()
+            }
+            Chip {
+                glyph: "󰸉"
+                label: "Wallpapers"
+                onClicked: win.openWalls()
+            }
+        }
+
+        // ---- walls: thumbnail strip ----
+        Item {
+            anchors.fill: parent
+            anchors.margins: 16
+            opacity: win.mode === "walls" ? 1 : 0
+            visible: opacity > 0 || win.mode === "walls"
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: Theme.normal
+                }
+            }
+
+            Row {
+                id: wallHeader
+                spacing: 8
+                x: 6
+                Text {
+                    text: "󰸉"
+                    color: "#ffffff"
+                    font.family: Theme.font
+                    font.pixelSize: Theme.fontSize + 2
+                }
+                Text {
+                    text: "Wallpapers"
+                    color: "#ffffff"
+                    font.family: Theme.font
+                    font.pixelSize: Theme.fontSize + 1
+                    font.bold: true
+                }
+                Text {
+                    anchors.baseline: parent.children[1].baseline
+                    text: wallFiles.count + "  ·  ←/→ enter esc"
+                    color: Qt.rgba(1, 1, 1, 0.4)
+                    font.family: Theme.font
+                    font.pixelSize: Theme.fontSize - 2
+                }
+            }
+
+            ListView {
+                id: wallList
+                anchors.top: wallHeader.bottom
+                anchors.topMargin: 12
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                orientation: ListView.Horizontal
+                spacing: 10
+                clip: true
+                model: wallFiles
+                cacheBuffer: 1200
+                highlightMoveDuration: 180
+                highlightFollowsCurrentItem: false
+                boundsBehavior: Flickable.StopAtBounds
+
+                function indexOfCurrent() {
+                    for (var i = 0; i < wallFiles.count; i++)
+                        if (String(wallFiles.get(i, "filePath")) === win.wallNow)
+                            return i;
+                    return -1;
+                }
+
+                Keys.onEscapePressed: win.closeWalls()
+                Keys.onReturnPressed: win.applyWall(String(wallFiles.get(currentIndex, "filePath")))
+                Keys.onEnterPressed: win.applyWall(String(wallFiles.get(currentIndex, "filePath")))
+                Keys.onLeftPressed: decrementCurrentIndex()
+                Keys.onRightPressed: incrementCurrentIndex()
+
+                // Vertical wheel scrolls the strip sideways.
+                WheelHandler {
+                    acceptedDevices: PointerDevice.Mouse
+                    onWheel: e => {
+                        wallList.flick(e.angleDelta.y * 12, 0);
+                    }
+                }
+
+                delegate: Item {
+                    id: cell
+                    required property int index
+                    required property string fileName
+                    required property string filePath
+
+                    readonly property bool isNow: filePath === win.wallNow
+                    readonly property bool isSel: ListView.isCurrentItem
+
+                    width: 192
+                    height: 120
+                    y: (wallList.height - height) / 2
+
+                    ClippingRectangle {
+                        anchors.fill: parent
+                        radius: 14
+                        color: Qt.rgba(1, 1, 1, 0.06)
+                        scale: cellMouse.containsMouse ? 1.04 : 1
+                        Behavior on scale {
+                            NumberAnimation {
+                                duration: Theme.fast
+                                easing.type: Theme.easeOut
+                            }
+                        }
+
+                        Image {
+                            id: thumb
+                            anchors.fill: parent
+                            fillMode: Image.PreserveAspectCrop
+                            asynchronous: true
+                            cache: true
+                            sourceSize: Qt.size(384, 240)
+                            source: "file://" + win.thumbDir + "/" + cell.fileName + ".jpg"
+                            // No thumbnail yet: fall back to the full image.
+                            onStatusChanged: if (status === Image.Error)
+                                source = "file://" + cell.filePath
+                            opacity: status === Image.Ready ? 1 : 0
+                            Behavior on opacity {
+                                NumberAnimation {
+                                    duration: Theme.normal
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            anchors.fill: parent
+                            color: Qt.rgba(0, 0, 0, 0.5)
+                            visible: win.applying === cell.filePath
+                            Text {
+                                anchors.centerIn: parent
+                                text: "󰑓"
+                                color: "#ffffff"
+                                font.family: Theme.font
+                                font.pixelSize: 22
+                                RotationAnimation on rotation {
+                                    running: win.applying === cell.filePath
+                                    from: 0
+                                    to: 360
+                                    duration: 900
+                                    loops: Animation.Infinite
+                                }
+                            }
+                        }
+                    }
+
+                    // Current wallpaper: solid ring; keyboard selection: faint ring.
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.margins: -3
+                        radius: 16
+                        color: "transparent"
+                        border.width: 2
+                        border.color: cell.isNow ? "#ffffff" : Qt.rgba(1, 1, 1, 0.35)
+                        visible: cell.isNow || (cell.isSel && wallList.activeFocus)
+                    }
+
+                    MouseArea {
+                        id: cellMouse
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            wallList.currentIndex = cell.index;
+                            win.applyWall(cell.filePath);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Right-click anywhere toggles do not disturb.
+        TapHandler {
+            acceptedButtons: Qt.RightButton
+            enabled: win.mode !== "walls"
+            onTapped: win.toggleDnd()
+        }
+
         // Scroll anywhere on the island for volume.
         WheelHandler {
+            enabled: win.mode !== "walls"
             acceptedDevices: PointerDevice.Mouse | PointerDevice.TouchPad
             onWheel: e => {
                 if (!win.sink?.audio)
@@ -807,6 +1138,56 @@ PanelWindow {
             enabled: ctl.enabled
             cursorShape: Qt.PointingHandCursor
             onClicked: ctl.clicked()
+        }
+    }
+
+    // Pill toggle/button used in the expanded toolbar.
+    component Chip: Rectangle {
+        id: chip
+        property string glyph
+        property string label
+        property bool on: false
+        property color tint: "#ffffff"
+        signal clicked
+        width: chipRow.implicitWidth + 24
+        height: 30
+        radius: 15
+        color: on ? Theme.alpha(tint, 0.9) : chipMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.18) : Qt.rgba(1, 1, 1, 0.1)
+        Behavior on color {
+            ColorAnimation {
+                duration: Theme.fast
+            }
+        }
+        scale: chipMouse.pressed ? 0.94 : 1
+        Behavior on scale {
+            NumberAnimation {
+                duration: Theme.fast
+            }
+        }
+        Row {
+            id: chipRow
+            anchors.centerIn: parent
+            spacing: 6
+            Text {
+                text: chip.glyph
+                color: "#ffffff"
+                font.family: Theme.font
+                font.pixelSize: 14
+            }
+            Text {
+                anchors.verticalCenter: parent.verticalCenter
+                text: chip.label
+                color: "#ffffff"
+                font.family: Theme.font
+                font.pixelSize: Theme.fontSize - 1
+            }
+        }
+        MouseArea {
+            id: chipMouse
+            anchors.fill: parent
+            hoverEnabled: true
+            cursorShape: Qt.PointingHandCursor
+            onClicked: chip.clicked()
         }
     }
 
