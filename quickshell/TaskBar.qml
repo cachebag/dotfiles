@@ -72,8 +72,28 @@ Item {
                     anchors.centerIn: parent
                     spacing: 6
 
+                    Rectangle {
+                        anchors.verticalCenter: parent.verticalCenter
+                        visible: task.iconSource === ""
+                        width: 16
+                        height: 16
+                        radius: 4
+                        color: Theme.alpha(Theme.accent, 0.25)
+                        opacity: task.isActive ? 1.0 : 0.75
+
+                        Text {
+                            anchors.centerIn: parent
+                            text: (task.appTitle || task.appId || "?").replace(/^[^A-Za-z0-9]+/, "").charAt(0).toUpperCase()
+                            color: Theme.fg
+                            font.family: Theme.font
+                            font.pixelSize: 10
+                            font.bold: true
+                        }
+                    }
+
                     IconImage {
                         anchors.verticalCenter: parent.verticalCenter
+                        visible: task.iconSource !== ""
                         implicitSize: 16
                         asynchronous: true
                         source: task.iconSource

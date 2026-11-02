@@ -118,39 +118,61 @@ Singleton {
         return "";
     }
 
-    function fromEntry(appId) {
-        if (root.entryCount === 0)
+    function themed(name) {
+        if (!name || name === "")
             return "";
-
-        const entry = appId ? DesktopEntries.heuristicLookup(String(appId)) : null;
-        const named = entry ? entry.icon : "";
-
-        if (!named || named === "")
-            return "";
-
-        if (named.charAt(0) === "/")
-            return "file://" + named;
-
-        return Quickshell.iconPath(named, "application-x-executable");
+        if (name.charAt(0) === "/")
+            return "file://" + name;
+        return Quickshell.iconPath(name, true);
     }
 
-    function resolve(appId, title) {
-        if (root.isChromiumApp(appId)) {
-            const custom = root.lookupCustom(appId, title);
-            if (custom !== "")
-                return custom;
+    function fromEntry(appId) {
+        if (root.entryCount === 0 || !appId)
+            return "";
+        const entry = DesktopEntries.heuristicLookup(String(appId));
+        return entry ? root.themed(entry.icon) : "";
+    }
 
-            return Quickshell.iconPath("chromium", "application-x-executable");
+    // Match a desktop entry whose Name matches the window title (e.g. Steam/Proton games).
+    function fromTitle(title) {
+        const t = String(title || "").toLowerCase().trim();
+        if (t === "" || root.entryCount === 0)
+            return "";
+        const apps = DesktopEntries.applications.values;
+        for (var i = 0; i < apps.length; i++) {
+            const n = String(apps[i].name || "").toLowerCase().replace(/[®™©]/g, "").trim();
+            if (n !== "" && n === t)
+                return root.themed(apps[i].icon);
+        }
+        return "";
+    }
+
+    // Returns "" when no real icon exists, so callers can draw their own fallback.
+    function resolve(appId, title) {
+        const id = String(appId || "");
+
+        if (root.isChromiumApp(id)) {
+            const custom = root.lookupCustom(id, title);
+            return custom !== "" ? custom : root.themed("chromium");
         }
 
-        const nativeIcon = root.fromEntry(appId);
-        if (nativeIcon !== "")
-            return nativeIcon;
+        const steam = id.match(/^steam_app_(\d+)$/);
+        if (steam) {
+            const s = root.themed("steam_icon_" + steam[1]);
+            if (s !== "")
+                return s;
+        }
 
-        const rescue = root.lookupCustom(appId, title);
-        if (rescue !== "")
-            return rescue;
-
-        return Quickshell.iconPath(String(appId || "").toLowerCase(), "application-x-executable");
+        const candidates = [
+            root.fromEntry(id),
+            root.fromTitle(title),
+            root.lookupCustom(id, title),
+            root.themed(id.toLowerCase()),
+            steam ? root.themed("steam") : ""
+        ];
+        for (var i = 0; i < candidates.length; i++)
+            if (candidates[i] !== "")
+                return candidates[i];
+        return "";
     }
 }
