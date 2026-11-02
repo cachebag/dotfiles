@@ -1,4 +1,5 @@
 //@ pragma UseQApplication
+//@ pragma Env QSG_USE_SIMPLE_ANIMATION_DRIVER=1
 
 import QtQuick
 import Quickshell
