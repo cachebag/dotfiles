@@ -411,53 +411,42 @@ PanelWindow {
         }
     }
 
-    // Hit area: the island plus a margin, reaching the screen edge so the top
-    // centre of the screen is a reliable hover target.
+    // Hover/input area: the island plus a margin, reaching the screen edge so
+    // the top centre is a reliable hover target. The island is a child of it,
+    // so hovering the island's buttons still counts as hovering this.
+    // Sized from the target (not animated) size to avoid a binding loop.
     Item {
         id: hit
-        x: island.x - 6
+        x: Math.round((win.width - win.targetW) / 2) - 6
         y: 0
-        width: island.width + 12
-        height: island.y + island.height + 6
+        width: win.targetW + 12
+        height: win.restY + win.targetH + 6
 
         HoverHandler {
-            id: hitHover
-            onHoveredChanged: win.hoverChanged()
+            onHoveredChanged: {
+                if (hovered) {
+                    hoverOut.stop();
+                    wallsClose.stop();
+                    hoverIn.restart();
+                } else {
+                    hoverIn.stop();
+                    hoverOut.restart();
+                    if (win.walls)
+                        wallsClose.restart();
+                }
+            }
         }
-    }
-
-    // Two detectors: `hit` covers the margin up to the screen edge, but buttons
-    // inside the island block hover from reaching it (it is a sibling, not a
-    // parent). The island's own handler always sees hover over its children.
-    readonly property bool pointerIn: hitHover.hovered || islandHover.hovered
-    function hoverChanged() {
-        if (pointerIn) {
-            hoverOut.stop();
-            wallsClose.stop();
-            hoverIn.restart();
-        } else {
-            hoverIn.stop();
-            hoverOut.restart();
-            if (walls)
-                wallsClose.restart();
-        }
-    }
 
     Rectangle {
         id: island
 
         width: win.targetW
         height: win.targetH
-        x: Math.round((win.width - width) / 2)
+        x: Math.round((win.width - width) / 2) - hit.x
         y: win.restY
         radius: win.mode === "expanded" || win.mode === "walls" ? 40 : height / 2
         color: "#000000"
         clip: true
-
-        HoverHandler {
-            id: islandHover
-            onHoveredChanged: win.hoverChanged()
-        }
 
         // The springy, slightly overshooting resize is most of the effect.
         Behavior on width {
@@ -1090,6 +1079,8 @@ PanelWindow {
                 win.sink.audio.volume = Math.max(0, Math.min(1, win.sink.audio.volume + step));
             }
         }
+    }
+
     }
 
     // ---- small components -------------------------------------------------
