@@ -421,18 +421,25 @@ PanelWindow {
         height: island.y + island.height + 6
 
         HoverHandler {
-            onHoveredChanged: {
-                if (hovered) {
-                    hoverOut.stop();
-                    wallsClose.stop();
-                    hoverIn.restart();
-                } else {
-                    hoverIn.stop();
-                    hoverOut.restart();
-                    if (win.walls)
-                        wallsClose.restart();
-                }
-            }
+            id: hitHover
+            onHoveredChanged: win.hoverChanged()
+        }
+    }
+
+    // Two detectors: `hit` covers the margin up to the screen edge, but buttons
+    // inside the island block hover from reaching it (it is a sibling, not a
+    // parent). The island's own handler always sees hover over its children.
+    readonly property bool pointerIn: hitHover.hovered || islandHover.hovered
+    function hoverChanged() {
+        if (pointerIn) {
+            hoverOut.stop();
+            wallsClose.stop();
+            hoverIn.restart();
+        } else {
+            hoverIn.stop();
+            hoverOut.restart();
+            if (walls)
+                wallsClose.restart();
         }
     }
 
@@ -446,6 +453,11 @@ PanelWindow {
         radius: win.mode === "expanded" || win.mode === "walls" ? 40 : height / 2
         color: "#000000"
         clip: true
+
+        HoverHandler {
+            id: islandHover
+            onHoveredChanged: win.hoverChanged()
+        }
 
         // The springy, slightly overshooting resize is most of the effect.
         Behavior on width {
