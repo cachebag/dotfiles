@@ -57,5 +57,14 @@ hl.window_rule({
     opaque     = true,
 })
 
+-- Apple Music web app: lives in a hidden scratchpad, playing in the background.
+-- SUPER+U (or the island's "show the app" button) slides it in and out.
+hl.window_rule({
+    name      = "apple-music-scratchpad",
+    -- Chromium ignores --class for --app windows on Wayland; the class is URL-derived.
+    match     = { class = "^chrome-music\\.apple\\.com.*$" },
+    workspace = "special:music silent",
+})
+
 -- Deadlock: same treatment as Overwatch
 hl.window_rule({ name = "deadlock", match = { class = "^steam_app_1422450$" }, fullscreen = true, immediate = true, no_blur = true, opaque = true })

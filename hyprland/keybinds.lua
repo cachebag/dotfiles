@@ -24,6 +24,7 @@ hl.bind(mod .. " + L", dsp.exec_cmd(home .. "/dotfiles/scripts/lock.sh"))
 hl.bind(mod .. " + N",         dsp.exec_cmd("qs ipc call notifications toggle"))
 hl.bind(mod .. " + SHIFT + N", dsp.exec_cmd("qs ipc call notifications toggleDnd"))
 hl.bind(mod .. " + SHIFT + D", dsp.exec_cmd("qs ipc call storage toggle"))
+hl.bind(mod .. " + U",         hl.dsp.workspace.toggle_special("music"))
 
 for i = 1, 10 do
     local key = i % 10
