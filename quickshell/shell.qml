@@ -12,6 +12,15 @@ ShellRoot {
         }
     }
 
+    // Persistent top-centre island on every monitor: media, pop-ups, privacy dots.
+    Variants {
+        model: Quickshell.screens
+
+        delegate: Component {
+            Island {}
+        }
+    }
+
     // Single instance: toasts belong on one screen, not mirrored across all of them.
     NotificationToasts {}
 
