@@ -2,29 +2,14 @@ local mod = "SUPER"
 local dsp = hl.dsp
 local win = hl.dsp.window
 
-local home = os.getenv("HOME") or ""
-
+-- Your desktop's binds, limited to what's installed on this Mac so far.
 hl.bind(mod .. " + Return", dsp.exec_cmd("kitty"))
 hl.bind(mod .. " + B",      dsp.exec_cmd("firefox"))
 hl.bind(mod .. " + Q",      win.close())
-hl.bind(mod .. " + E",      dsp.exec_cmd("thunar"))
-hl.bind(mod .. " + A",      dsp.exec_cmd(home .. "/.config/rofi/launchers/type-3/launcher.sh"))
 hl.bind(mod .. " + V",      win.float({ action = "toggle" }))
 hl.bind(mod .. " + K",      win.pseudo())
 hl.bind(mod .. " + M",      dsp.exit())
-hl.bind(mod .. " + D",      dsp.exec_cmd("chromium --app=https://chat.com --class=ChatGPT"))
-hl.bind(mod .. " + I",      dsp.exec_cmd("chromium --app=https://web.whatsapp.com --class=Whatsapp"))
-hl.bind(mod .. " + W",      dsp.exec_cmd("qs ipc call island walls"))
-hl.bind(mod .. " + S",      dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]))
-hl.bind(mod .. " + O",      dsp.exec_cmd("obsidian"))
-hl.bind(mod .. " + Y",      dsp.exec_cmd("pkill quickshell; nohup quickshell >/dev/null 2>&1 &"))
-hl.bind(mod .. " + Z", dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"))
-hl.bind(mod .. " + P", dsp.exec_cmd(home .. "/dotfiles/scripts/power_menu.sh"))
-hl.bind(mod .. " + L", dsp.exec_cmd(home .. "/dotfiles/scripts/lock.sh"))
-hl.bind(mod .. " + N",         dsp.exec_cmd("qs ipc call notifications toggle"))
-hl.bind(mod .. " + SHIFT + N", dsp.exec_cmd("qs ipc call notifications toggleDnd"))
-hl.bind(mod .. " + SHIFT + D", dsp.exec_cmd("qs ipc call storage toggle"))
-hl.bind(mod .. " + U",         hl.dsp.workspace.toggle_special("music"))
+hl.bind(mod .. " + F",      win.fullscreen())
 
 for i = 1, 10 do
     local key = i % 10
@@ -47,4 +32,3 @@ hl.bind(mod .. " + SHIFT + Left",  win.resize({ x = -40, y = 0,   relative = tru
 hl.bind(mod .. " + SHIFT + Right", win.resize({ x = 40,  y = 0,   relative = true }))
 hl.bind(mod .. " + SHIFT + Up",    win.resize({ x = 0,   y = -40, relative = true }))
 hl.bind(mod .. " + SHIFT + Down",  win.resize({ x = 0,   y = 40,  relative = true }))
-

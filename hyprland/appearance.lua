@@ -17,9 +17,13 @@ hl.config({
     misc = {
         disable_hyprland_logo   = true,
         force_default_wallpaper = 0,
-        -- G-Sync over DisplayPort, fullscreen windows only (games), so the
-        -- desktop doesn't flicker at low refresh rates.
-        vrr = 2,
+        -- No vrr here: the built-in panel's 120 Hz comes from the driver's
+        -- swap timestamps, and turning VRR on didn't help when tested.
+    },
+
+    -- The M3 Pro's display driver doesn't do hardware cursors yet.
+    cursor = {
+        no_hardware_cursors = true,
     },
 
     animations = {
