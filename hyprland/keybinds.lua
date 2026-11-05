@@ -32,6 +32,16 @@ hl.bind(mod .. " + Right", dsp.focus({ direction = "right" }))
 hl.bind(mod .. " + Up",    dsp.focus({ direction = "up" }))
 hl.bind(mod .. " + Down",  dsp.focus({ direction = "down" }))
 
+-- Top-row media keys (hid_apple fnmode=3 sends these by default).
+-- No screen-brightness keys: the panel has no backlight device yet.
+hl.bind("XF86AudioRaiseVolume", dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
+hl.bind("XF86AudioLowerVolume", dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
+hl.bind("XF86AudioMute",        dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true })
+hl.bind("XF86AudioPlay",        dsp.exec_cmd("playerctl play-pause"), { locked = true })
+hl.bind("XF86AudioPause",       dsp.exec_cmd("playerctl play-pause"), { locked = true })
+hl.bind("XF86AudioNext",        dsp.exec_cmd("playerctl next"),       { locked = true })
+hl.bind("XF86AudioPrev",        dsp.exec_cmd("playerctl previous"),   { locked = true })
+
 hl.bind(mod .. " + mouse:272", win.drag(),   { mouse = true })
 hl.bind(mod .. " + mouse:273", win.resize(), { mouse = true })
 
