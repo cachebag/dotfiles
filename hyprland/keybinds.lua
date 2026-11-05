@@ -25,29 +25,10 @@ for i = 1, 10 do
     hl.bind(mod .. " + SHIFT + " .. key,   win.move({ workspace = i }))
 end
 
--- macOS-style edit keys: Cmd (Super) + key is sent to the focused window as
--- Ctrl + key. Terminals use Ctrl+Shift for copy/paste, and Ctrl+C / Ctrl+Z
--- there would interrupt or suspend the running program, so they get their
--- own mapping (nil = do nothing in a terminal).
-local terminals = { kitty = true, Alacritty = true, foot = true }
-
-local function cmd(key, app_mods, term_mods)
-    return function()
-        local w = hl.get_active_window()
-        local mods = (w and terminals[w.class]) and term_mods or app_mods
-        if mods then
-            hl.dispatch(dsp.send_shortcut({ mods = mods, key = key }))
-        end
-    end
-end
-
-hl.bind(mod .. " + C",         cmd("C", "CTRL", "CTRL SHIFT"))         -- copy
-hl.bind(mod .. " + V",         cmd("V", "CTRL", "CTRL SHIFT"))         -- paste
-hl.bind(mod .. " + X",         cmd("X", "CTRL", nil))                  -- cut
-hl.bind(mod .. " + Z",         cmd("Z", "CTRL", nil))                  -- undo
-hl.bind(mod .. " + SHIFT + Z", cmd("Z", "CTRL SHIFT", nil))            -- redo
-hl.bind(mod .. " + SHIFT + C", cmd("C", "CTRL SHIFT", "CTRL SHIFT"))   -- copy (terminal-style)
-hl.bind(mod .. " + SHIFT + V", cmd("V", "CTRL SHIFT", "CTRL SHIFT"))   -- paste without formatting
+-- App edit shortcuts (Cmd+C/V/X/Z/A/T/W/F/L/Space ...) are NOT bound here.
+-- keyd remaps the physical Command key to Ctrl (keyd/default.conf), so apps
+-- get them natively, and the window-manager modifier below ("SUPER") is the
+-- Option key. See keyd/README.md.
 
 hl.bind(mod .. " + CTRL + Left",  dsp.focus({ workspace = "e-1" }))
 hl.bind(mod .. " + CTRL + Right", dsp.focus({ workspace = "e+1" }))
