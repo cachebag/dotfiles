@@ -3,7 +3,7 @@ hl.monitor({
     output   = "eDP-1",
     mode     = "preferred",
     position = "auto",
-    scale    = 2,
+    scale    = 1.75,
 })
 
 -- catch-all so any display plugged in later gets placed automatically
