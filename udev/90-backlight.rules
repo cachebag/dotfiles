@@ -1,0 +1,7 @@
+# Let the desktop user set backlights without root (brightnessctl ships no
+# rule on ALARM). Keyboard backlight -> group "input"; screen backlight ->
+# group "video" (none exists on the M3 Pro yet, harmless until it does).
+# Install: sudo cp ~/dotfiles/udev/90-backlight.rules /etc/udev/rules.d/ &&
+#          sudo udevadm control --reload && sudo udevadm trigger -s leds -s backlight
+ACTION=="add", SUBSYSTEM=="leds", KERNEL=="*kbd_backlight", RUN+="/bin/chgrp input /sys/class/leds/%k/brightness", RUN+="/bin/chmod g+w /sys/class/leds/%k/brightness"
+ACTION=="add", SUBSYSTEM=="backlight", RUN+="/bin/chgrp video /sys/class/backlight/%k/brightness", RUN+="/bin/chmod g+w /sys/class/backlight/%k/brightness"

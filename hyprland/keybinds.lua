@@ -18,6 +18,8 @@ hl.bind(mod .. " + W",      dsp.exec_cmd("qs ipc call island walls"))
 hl.bind(mod .. " + L",      dsp.exec_cmd("qs ipc call lock lock"))
 hl.bind(mod .. " + N",         dsp.exec_cmd("qs ipc call notifications toggle"))
 hl.bind(mod .. " + SHIFT + N", dsp.exec_cmd("qs ipc call notifications toggleDnd"))
+hl.bind(mod .. " + S",         dsp.exec_cmd([[grim -g "$(slurp)" - | wl-copy]]))      -- screenshot region -> clipboard
+hl.bind(mod .. " + SHIFT + S", dsp.exec_cmd([[grim -g "$(slurp)" - | swappy -f -]]))   -- screenshot region -> annotate
 
 for i = 1, 10 do
     local key = i % 10
@@ -40,7 +42,10 @@ hl.bind(mod .. " + Up",    dsp.focus({ workspace = "e-1" }))
 hl.bind(mod .. " + Down",  dsp.focus({ workspace = "e+1" }))
 
 -- Top-row media keys (hid_apple fnmode=3 sends these by default).
--- No screen-brightness keys: the panel has no backlight device yet.
+-- Screen brightness (F1/F2) has nothing to drive yet: the panel has no backlight
+-- device. Until it does, Option+F1/F2 drive the keyboard backlight instead.
+hl.bind(mod .. " + XF86MonBrightnessDown", dsp.exec_cmd("brightnessctl -d white:kbd_backlight set 10%-"), { locked = true, repeating = true })
+hl.bind(mod .. " + XF86MonBrightnessUp",   dsp.exec_cmd("brightnessctl -d white:kbd_backlight set +10%"), { locked = true, repeating = true })
 hl.bind("XF86AudioRaiseVolume", dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
 hl.bind("XF86AudioLowerVolume", dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
 hl.bind("XF86AudioMute",        dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true })
