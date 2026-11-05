@@ -21,3 +21,12 @@ hl.config({
         },
     },
 })
+
+-- Apple Music web app: lives in a hidden scratchpad, playing in the background.
+-- Option+U (or the island's music button) slides it in and out.
+hl.window_rule({
+    name      = "apple-music-scratchpad",
+    -- Chromium ignores --class for --app windows on Wayland; the class is URL-derived.
+    match     = { class = "^chrome-music\\.apple\\.com.*$" },
+    workspace = "special:music silent",
+})

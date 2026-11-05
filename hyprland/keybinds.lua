@@ -18,6 +18,7 @@ hl.bind(mod .. " + W",      dsp.exec_cmd("qs ipc call island walls"))
 hl.bind(mod .. " + L",      dsp.exec_cmd("qs ipc call lock lock"))
 hl.bind(mod .. " + N",         dsp.exec_cmd("qs ipc call notifications toggle"))
 hl.bind(mod .. " + SHIFT + N", dsp.exec_cmd("qs ipc call notifications toggleDnd"))
+hl.bind(mod .. " + U",         hl.dsp.workspace.toggle_special("music"))
 hl.bind(mod .. " + S",         dsp.exec_cmd([[grim -g "$(slurp)" - | tee ~/Pictures/screenshots/$(date +%F_%H-%M-%S).png | wl-copy]]))  -- screenshot region -> clipboard + ~/Pictures/screenshots
 hl.bind(mod .. " + SHIFT + S", dsp.exec_cmd([[grim -g "$(slurp)" - | swappy -f -]]))   -- screenshot region -> annotate
 
