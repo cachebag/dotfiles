@@ -143,6 +143,27 @@ PanelWindow {
             });
     }
 
+    // ---- brightness -------------------------------------------------------
+    // sysfs sends no change events, so the F1/F2 binds report the new level
+    // over IPC (island.brightness / island.kbd) right after setting it.
+
+    function brightIcon(pct) {
+        return pct < 34 ? "󰃞" : pct < 67 ? "󰃟" : "󰃠";
+    }
+    function showBrightness(pct, keyboard) {
+        if (!ready)
+            return;
+        const v = Math.max(0, Math.min(100, pct));
+        pop({
+            kind: "compact",
+            prio: 2,
+            ms: 1600,
+            icon: keyboard ? "󰌌" : brightIcon(v),
+            text: Math.round(v) + "%",
+            value: v / 100
+        });
+    }
+
     // ---- privacy ----------------------------------------------------------
 
     // Node properties stay empty until the node is tracked.
@@ -364,6 +385,13 @@ PanelWindow {
         }
         function dnd(): void {
             win.toggleDnd();
+        }
+        // Screen / keyboard backlight level, 0-100, from the brightness keybinds.
+        function brightness(pct: string): void {
+            win.showBrightness(parseInt(pct) || 0, false);
+        }
+        function kbd(pct: string): void {
+            win.showBrightness(parseInt(pct) || 0, true);
         }
     }
 

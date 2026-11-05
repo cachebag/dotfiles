@@ -45,10 +45,16 @@ hl.bind(mod .. " + Down",  dsp.focus({ workspace = "e+1" }))
 -- F1/F2: screen brightness (apple-panel-bl, from the t6030-brightness appledrm
 -- backport; 5% steps on a perceptual curve, never fully off).
 -- Option+F1/F2: keyboard backlight.
-hl.bind("XF86MonBrightnessDown", dsp.exec_cmd("brightnessctl -e4 -n2 -d apple-panel-bl set 5%-"), { locked = true, repeating = true })
-hl.bind("XF86MonBrightnessUp",   dsp.exec_cmd("brightnessctl -e4 -n2 -d apple-panel-bl set 5%+"), { locked = true, repeating = true })
-hl.bind(mod .. " + XF86MonBrightnessDown", dsp.exec_cmd("brightnessctl -d white:kbd_backlight set 10%-"), { locked = true, repeating = true })
-hl.bind(mod .. " + XF86MonBrightnessUp",   dsp.exec_cmd("brightnessctl -d white:kbd_backlight set +10%"), { locked = true, repeating = true })
+-- After setting, report the level to the island so it shows the OSD.
+local function backlight(dev, change, ipc)
+    return dsp.exec_cmd(string.format(
+        [[brightnessctl -e4 -n2 -d %s set %s && qs ipc call island %s "$(brightnessctl -m -d %s | cut -d, -f4 | tr -d %%)"]],
+        dev, change, ipc, dev))
+end
+hl.bind("XF86MonBrightnessDown", backlight("apple-panel-bl", "5%-", "brightness"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp",   backlight("apple-panel-bl", "5%+", "brightness"), { locked = true, repeating = true })
+hl.bind(mod .. " + XF86MonBrightnessDown", backlight("white:kbd_backlight", "10%-", "kbd"), { locked = true, repeating = true })
+hl.bind(mod .. " + XF86MonBrightnessUp",   backlight("white:kbd_backlight", "10%+", "kbd"), { locked = true, repeating = true })
 hl.bind("XF86AudioRaiseVolume", dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
 hl.bind("XF86AudioLowerVolume", dsp.exec_cmd("wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"),      { locked = true, repeating = true })
 hl.bind("XF86AudioMute",        dsp.exec_cmd("wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle"),     { locked = true })
