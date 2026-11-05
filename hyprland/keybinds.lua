@@ -54,8 +54,9 @@ hl.bind(mod .. " + CTRL + Right", dsp.focus({ workspace = "e+1" }))
 
 hl.bind(mod .. " + Left",  dsp.focus({ direction = "left" }))
 hl.bind(mod .. " + Right", dsp.focus({ direction = "right" }))
-hl.bind(mod .. " + Up",    dsp.focus({ direction = "up" }))
-hl.bind(mod .. " + Down",  dsp.focus({ direction = "down" }))
+-- Cmd+Up/Down: previous / next workspace.
+hl.bind(mod .. " + Up",    dsp.focus({ workspace = "e-1" }))
+hl.bind(mod .. " + Down",  dsp.focus({ workspace = "e+1" }))
 
 -- Top-row media keys (hid_apple fnmode=3 sends these by default).
 -- No screen-brightness keys: the panel has no backlight device yet.
