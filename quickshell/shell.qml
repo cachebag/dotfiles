@@ -33,4 +33,7 @@ ShellRoot {
 
     // Claims org.freedesktop.PolicyKit1.AuthenticationAgent for the session.
     PolkitDialog {}
+
+    // Session lock, `qs ipc call lock lock`.
+    Lock {}
 }

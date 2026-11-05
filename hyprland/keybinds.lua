@@ -14,7 +14,7 @@ hl.bind(mod .. " + M",      dsp.exit())
 hl.bind(mod .. " + F",      win.fullscreen())
 hl.bind(mod .. " + Y",      dsp.exec_cmd("pkill quickshell; nohup quickshell >/dev/null 2>&1 &"))
 hl.bind(mod .. " + W",      dsp.exec_cmd("qs ipc call island walls"))
-hl.bind(mod .. " + L",      dsp.exec_cmd(home .. "/dotfiles/scripts/lock.sh"))
+hl.bind(mod .. " + L",      dsp.exec_cmd("qs ipc call lock lock"))
 hl.bind(mod .. " + N",         dsp.exec_cmd("qs ipc call notifications toggle"))
 hl.bind(mod .. " + SHIFT + N", dsp.exec_cmd("qs ipc call notifications toggleDnd"))
 

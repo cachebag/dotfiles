@@ -6,9 +6,9 @@ local home = os.getenv("HOME") or ""
 -- hypridle isn't set up on this Mac yet. Add it back here once installed.
 hl.on("hyprland.start", function()
     -- tty1 logs in automatically on this Mac (its text console is blank),
-    -- so lock first: the password is asked here instead of at the console.
-    hl.exec_cmd(home .. "/dotfiles/scripts/lock.sh")
-    hl.exec_cmd("quickshell")
+    -- so quickshell starts locked (Lock.qml): the password is asked here
+    -- instead of at the console.
+    hl.exec_cmd("QS_LOCK_ON_START=1 quickshell")
     hl.exec_cmd("bash -c 'sleep 0.5 && hyprpaper --config " .. home .. "/.config/hypr/hyprpaper.conf'")
     -- Recolours from the wallpaper once python-pywal is installed.
     hl.exec_cmd(home .. "/dotfiles/scripts/wal-watch.sh")
