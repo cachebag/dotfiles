@@ -140,7 +140,7 @@ PanelWindow {
             Layout.alignment: Qt.AlignVCenter
         }
 
-        Network {
+        Nmrs {
             bar: bar
             Layout.alignment: Qt.AlignVCenter
         }
