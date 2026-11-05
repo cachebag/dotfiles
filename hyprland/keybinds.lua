@@ -7,6 +7,7 @@ local home = os.getenv("HOME") or ""
 -- Your desktop's binds, limited to what's installed on this Mac so far.
 hl.bind(mod .. " + Return", dsp.exec_cmd("kitty"))
 hl.bind(mod .. " + B",      dsp.exec_cmd("firefox"))
+hl.bind(mod .. " + A",      dsp.exec_cmd(home .. "/.config/rofi/launchers/type-3/launcher.sh"))
 hl.bind(mod .. " + Q",      win.close())
 hl.bind(mod .. " + SHIFT + F", win.float({ action = "toggle" }))
 hl.bind(mod .. " + K",      win.pseudo())
@@ -43,7 +44,6 @@ end
 hl.bind(mod .. " + C",         cmd("C", "CTRL", "CTRL SHIFT"))         -- copy
 hl.bind(mod .. " + V",         cmd("V", "CTRL", "CTRL SHIFT"))         -- paste
 hl.bind(mod .. " + X",         cmd("X", "CTRL", nil))                  -- cut
-hl.bind(mod .. " + A",         cmd("A", "CTRL", nil))                  -- select all
 hl.bind(mod .. " + Z",         cmd("Z", "CTRL", nil))                  -- undo
 hl.bind(mod .. " + SHIFT + Z", cmd("Z", "CTRL SHIFT", nil))            -- redo
 hl.bind(mod .. " + SHIFT + C", cmd("C", "CTRL SHIFT", "CTRL SHIFT"))   -- copy (terminal-style)
