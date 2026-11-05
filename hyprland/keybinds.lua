@@ -42,8 +42,11 @@ hl.bind(mod .. " + Up",    dsp.focus({ workspace = "e-1" }))
 hl.bind(mod .. " + Down",  dsp.focus({ workspace = "e+1" }))
 
 -- Top-row media keys (hid_apple fnmode=3 sends these by default).
--- Screen brightness (F1/F2) has nothing to drive yet: the panel has no backlight
--- device. Until it does, Option+F1/F2 drive the keyboard backlight instead.
+-- F1/F2: screen brightness (apple-panel-bl, from the t6030-brightness appledrm
+-- backport; 5% steps on a perceptual curve, never fully off).
+-- Option+F1/F2: keyboard backlight.
+hl.bind("XF86MonBrightnessDown", dsp.exec_cmd("brightnessctl -e4 -n2 -d apple-panel-bl set 5%-"), { locked = true, repeating = true })
+hl.bind("XF86MonBrightnessUp",   dsp.exec_cmd("brightnessctl -e4 -n2 -d apple-panel-bl set 5%+"), { locked = true, repeating = true })
 hl.bind(mod .. " + XF86MonBrightnessDown", dsp.exec_cmd("brightnessctl -d white:kbd_backlight set 10%-"), { locked = true, repeating = true })
 hl.bind(mod .. " + XF86MonBrightnessUp",   dsp.exec_cmd("brightnessctl -d white:kbd_backlight set +10%"), { locked = true, repeating = true })
 hl.bind("XF86AudioRaiseVolume", dsp.exec_cmd("wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+"), { locked = true, repeating = true })
