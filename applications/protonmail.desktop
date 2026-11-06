@@ -5,7 +5,7 @@ Exec=chromium --app=https://mail.proton.me --class=Mail
 Terminal=false
 Type=Application
 Icon=/home/cachebag/dotfiles/applications/icons/PM.png
-Categories=Office;Network;Email;
+Categories=Network;Email;
 # Chromium ignores --class for --app windows on Wayland; the class is URL-derived.
 StartupWMClass=chrome-mail.proton.me__-Default
 
