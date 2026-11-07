@@ -7,6 +7,7 @@ local home = os.getenv("HOME") or ""
 -- Your desktop's binds, limited to what's installed on this Mac so far.
 hl.bind(mod .. " + Return", dsp.exec_cmd("kitty"))
 hl.bind(mod .. " + B",      dsp.exec_cmd("firefox"))
+hl.bind(mod .. " + E",      dsp.exec_cmd("thunar"))
 hl.bind(mod .. " + A",      dsp.exec_cmd(home .. "/.config/rofi/launchers/type-3/launcher.sh"))
 hl.bind(mod .. " + Q",      win.close())
 hl.bind(mod .. " + SHIFT + F", win.float({ action = "toggle" }))

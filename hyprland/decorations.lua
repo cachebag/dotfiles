@@ -30,3 +30,11 @@ hl.window_rule({
     match     = { class = "^chrome-music\\.apple\\.com.*$" },
     workspace = "special:music silent",
 })
+
+hl.window_rule({
+    name   = "float-thunar",
+    match  = { class = "thunar" },
+    float  = true,
+    center = true,
+    size   = "900 600",
+})
