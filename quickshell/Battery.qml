@@ -37,18 +37,27 @@ Item {
     FileView { id: energyNowFile;  path: root.supply + "/energy_now";   printErrors: false }
     FileView { id: energyFullFile; path: root.supply + "/energy_full";  printErrors: false }
 
-    // sysfs attributes don't send change notifications: poll.
+    function reloadAll() {
+        capacityFile.reload();
+        statusFile.reload();
+        powerFile.reload();
+        energyNowFile.reload();
+        energyFullFile.reload();
+    }
+
+    // Plug/unplug and charge-state changes arrive as kernel uevents (Power.qml),
+    // so they show up immediately.
+    Connections {
+        target: Power
+        function onChanged() { root.reloadAll(); }
+    }
+
+    // Capacity and wattage drift without an event: keep a slow poll for those.
     Timer {
         interval: 5000
         running: true
         repeat: true
-        onTriggered: {
-            capacityFile.reload();
-            statusFile.reload();
-            powerFile.reload();
-            energyNowFile.reload();
-            energyFullFile.reload();
-        }
+        onTriggered: root.reloadAll()
     }
 
     function levelIcon() {

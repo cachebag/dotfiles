@@ -112,6 +112,13 @@ Scope {
             batStatus.reload();
         }
     }
+    Connections {
+        target: Power
+        function onChanged() {
+            batCap.reload();
+            batStatus.reload();
+        }
+    }
     readonly property int battery: {
         const n = parseInt(String(batCap.text()).trim());
         return isNaN(n) ? -1 : n;
