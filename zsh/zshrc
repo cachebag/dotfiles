@@ -45,11 +45,14 @@ alias gd='git diff'
 alias gl='git log'
 alias gc='git checkout'
 alias gp='git pull'
+
 alias diego='ssh cachebag@diego'
 alias leila='ssh svc@leila'
 alias punch='ssh svc@punch'
 alias stalin='ssh svc@stalin'
 alias hal='ssh linuxuser@hal'
+alias rafi='ssh cachebag@rafael'
+alias sylvie='ssh cachebag@sylvie'
 
 bindkey -v
 bindkey '^[[1;2C' forward-word
