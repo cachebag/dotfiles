@@ -24,15 +24,68 @@ Singleton {
     property string acSupply: "/sys/class/power_supply/macsmc-ac"
     property string chime: Quickshell.env("HOME") + "/.local/share/sounds/macos/connect_power.aif"
 
+    property string batSupply: "/sys/class/power_supply/macsmc-battery"
+
     // null until the first read, so startup never chimes.
     property var acOnline: null
+
+    // When the charger last connected or disconnected (ms since epoch), and
+    // the battery level at that moment. Kept in ~/.cache so a quickshell
+    // restart doesn't reset it; if the saved state doesn't match (e.g. it
+    // changed while powered off), it starts counting from now.
+    property real since: 0
+    property real sinceEnergy: 0     // µWh
+    property int sinceCapacity: -1
 
     signal changed()
 
     function setOnline(v) {
+        if (root.acOnline === v)
+            return;
         if (root.acOnline === false && v === true)
             chimeProc.running = true;
+        const first = root.acOnline === null;
         root.acOnline = v;
+        if (first && root.restoreSince(v))
+            return;
+        root.markSince(v);
+    }
+
+    function markSince(v) {
+        energyFile.reload();
+        capFile.reload();
+        root.since = Date.now();
+        root.sinceEnergy = parseFloat(String(energyFile.text()).trim()) || 0;
+        root.sinceCapacity = parseInt(String(capFile.text()).trim());
+        sinceFile.setText(JSON.stringify({
+            online: v,
+            since: root.since,
+            energy: root.sinceEnergy,
+            capacity: root.sinceCapacity
+        }));
+    }
+
+    function restoreSince(v) {
+        try {
+            const d = JSON.parse(sinceFile.text());
+            if (d.online !== v || !(d.since > 0) || d.since > Date.now())
+                return false;
+            root.since = d.since;
+            root.sinceEnergy = d.energy || 0;
+            root.sinceCapacity = d.capacity ?? -1;
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    FileView { id: energyFile; path: root.batSupply + "/energy_now"; blockLoading: true; printErrors: false }
+    FileView { id: capFile;    path: root.batSupply + "/capacity";   blockLoading: true; printErrors: false }
+    FileView {
+        id: sinceFile
+        path: Quickshell.env("HOME") + "/.cache/quickshell/ac-since.json"
+        blockLoading: true
+        printErrors: false
     }
 
     FileView {
