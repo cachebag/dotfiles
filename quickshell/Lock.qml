@@ -123,7 +123,12 @@ Scope {
         const n = parseInt(String(batCap.text()).trim());
         return isNaN(n) ? -1 : n;
     }
-    readonly property bool charging: String(batStatus.text()).trim() === "Charging"
+    readonly property bool charging: {
+        const st = String(batStatus.text()).trim();
+        if (Power.acOnline === false)
+            return false;
+        return st === "Charging" || (Power.acOnline === true && st === "Discharging");
+    }
 
     readonly property var player: {
         const ps = Mpris.players.values;

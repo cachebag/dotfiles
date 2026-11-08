@@ -18,8 +18,15 @@ Item {
         return isNaN(n) ? -1 : n;
     }
     readonly property string status: String(statusFile.text()).trim()
-    readonly property bool charging: status === "Charging"
-    readonly property bool full: status === "Full" || (status === "Not charging" && capacity >= 95)
+    // macsmc_power_fast reports AC online at connector insertion, ~0.4 s
+    // before the charger finishes negotiating and the battery leaves
+    // "Discharging". Treat that window as plugged in.
+    // Likewise on unplug, AC goes offline before the battery status file is
+    // re-read, so an offline charger overrides a stale "Full"/"Charging".
+    readonly property bool unplugged: Power.acOnline === false
+    readonly property bool pending: Power.acOnline === true && status === "Discharging"
+    readonly property bool charging: !unplugged && (status === "Charging" || (pending && capacity < 95))
+    readonly property bool full: !unplugged && (status === "Full" || ((status === "Not charging" || pending) && capacity >= 95))
     readonly property bool low: !charging && !full && capacity <= 15
 
     // µW and µWh from the kernel.

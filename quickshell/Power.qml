@@ -53,14 +53,16 @@ Singleton {
 
         stdout: SplitParser {
             onRead: line => {
-                if (line.startsWith("POWER_SUPPLY_NAME=")) {
+                // Every line pushes the reload out; it fires 15 ms after the
+                // burst goes quiet. (Don't key this on the blank line between
+                // events: SplitParser doesn't reliably deliver empty lines.)
+                burst.restart();
+                if (line.startsWith("KERNEL[")) {
+                    monitor.dev = "";
+                } else if (line.startsWith("POWER_SUPPLY_NAME=")) {
                     monitor.dev = line.slice(18);
                 } else if (line.startsWith("POWER_SUPPLY_ONLINE=") && monitor.dev === "macsmc-ac") {
                     root.setOnline(line.slice(20) === "1");
-                } else if (line === "") {
-                    // End of one event block.
-                    monitor.dev = "";
-                    burst.restart();
                 }
             }
         }
