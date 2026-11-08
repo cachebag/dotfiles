@@ -44,7 +44,10 @@ Singleton {
     Process {
         id: monitor
         running: true
-        command: ["udevadm", "monitor", "--kernel", "--property", "--subsystem-match=power_supply"]
+        // stdbuf: into a pipe udevadm's stdout is block-buffered, so the tail
+        // of a burst (the one that flips ONLINE=1) sat in the buffer until the
+        // next event ~1.5 s later. Line-buffer it.
+        command: ["stdbuf", "-oL", "udevadm", "monitor", "--kernel", "--property", "--subsystem-match=power_supply"]
 
         property string dev: ""
 
