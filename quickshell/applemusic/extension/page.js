@@ -96,10 +96,12 @@
 
     let last = -1;
     mk.addEventListener(E.playbackTimeDidChange, ev => {
-      const p = Math.floor((ev && ev.currentPlaybackTime) || mk.currentPlaybackTime || 0);
+      const t = (ev && ev.currentPlaybackTime) || mk.currentPlaybackTime || 0;
+      const p = Math.floor(t);
       if (p !== last) {
         last = p;
-        post({ type: "position", position: p, duration: mk.currentPlaybackDuration || 0 });
+        // Exact time, once a second: the shell interpolates between updates.
+        post({ type: "position", position: t, duration: mk.currentPlaybackDuration || 0 });
       }
     });
 
@@ -128,12 +130,24 @@
       case "library": await addToLibrary(); break;
       case "search": await search(c.term || "", c.rid); break;
       case "browse": await browse(c.what, c.rid); break;
+      case "lyrics": await lyrics(c.rid); break;
       case "api": { // raw query for debugging from the shell: result shape, not full payload
-        const r = await mk.api.music(c.path, c.params || {});
-        const d = r && r.data;
+        const now = info(mk.nowPlayingItem);
+        const path = String(c.path).replace("{id}", now ? (now.catalogId || now.id) : "");
+        let d;
+        try {
+          const r = await mk.api.music(path, c.params || {});
+          d = r && r.data;
+        } catch (e) {
+          d = { thrown: String((e && e.message) || e), status: e && (e.status || (e.data && e.data.status)) };
+        }
         const arr = d && Array.isArray(d.data) ? d.data : null;
-        post({ type: "api", rid: c.rid, path: c.path, keys: d ? Object.keys(d) : [], count: arr ? arr.length : -1,
-          sample: arr && arr[0] ? { type: arr[0].type, id: arr[0].id, attrs: Object.keys(arr[0].attributes || {}), rels: Object.keys(arr[0].relationships || {}) } : null });
+        const first = arr && arr[0];
+        const attrs = (first && first.attributes) || {};
+        post({ type: "api", rid: c.rid, path, keys: d ? Object.keys(d) : [], count: arr ? arr.length : -1,
+          errors: d && d.errors ? d.errors.map(x => ({ status: x.status, title: x.title, detail: x.detail })) : (d && d.thrown ? [d] : null),
+          sample: first ? { type: first.type, id: first.id, attrs: Object.keys(attrs), rels: Object.keys(first.relationships || {}),
+            ttml: typeof attrs.ttml === "string" ? attrs.ttml.length + " chars: " + attrs.ttml.slice(0, 400) : undefined } : null });
         break;
       }
       case "playItem": await playItem(c.kind, c.id); break;
@@ -222,6 +236,93 @@
       }
     }
     post({ type: "browse", what, rid, items, note });
+  }
+
+  // ---- lyrics: Apple's TTML, word timings when the song has them ----------
+
+  // "12.3", "1:02.3", "0:01:02.3", optional trailing "s".
+  function t2s(t) {
+    if (!t) return 0;
+    const parts = String(t).replace(/s$/, "").split(":").map(Number);
+    let s = 0;
+    for (const x of parts) s = s * 60 + (isNaN(x) ? 0 : x);
+    return s;
+  }
+
+  // Words of one <p>, skipping background vocals (ttm:role="x-bg" spans).
+  // `sp` marks a space after the token, so syllables of one word stay joined.
+  function wordsOf(p) {
+    const out = [];
+    const walk = node => {
+      for (const ch of node.childNodes) {
+        if (ch.nodeType === 1 && ch.localName === "span") {
+          if (ch.getAttribute("ttm:role") === "x-bg") continue;
+          if (ch.hasAttribute("begin") && !ch.querySelector("span[begin]")) {
+            const next = ch.nextSibling;
+            out.push({ t: ch.textContent, b: t2s(ch.getAttribute("begin")), e: t2s(ch.getAttribute("end")),
+              sp: !!(next && next.nodeType === 3 && /\s/.test(next.textContent)) });
+          } else {
+            walk(ch);
+          }
+        }
+      }
+    };
+    walk(p);
+    return out;
+  }
+
+  function parseTTML(x) {
+    const doc = new DOMParser().parseFromString(x, "text/xml");
+    const lines = [];
+    for (const p of doc.getElementsByTagName("p")) {
+      const w = wordsOf(p);
+      const text = w.length ? w.map(k => k.t + (k.sp ? " " : "")).join("").trim() : p.textContent.replace(/\s+/g, " ").trim();
+      if (!text) continue;
+      lines.push({ b: t2s(p.getAttribute("begin")), e: t2s(p.getAttribute("end")), t: text, w });
+    }
+    return lines;
+  }
+
+  async function lyrics(rid) {
+    const now = info(mk.nowPlayingItem);
+    if (!now) { post({ type: "lyrics", rid, id: "", kind: "none", lines: [] }); return; }
+    const id = now.catalogId || now.id;
+    let ttml = "", kind = "none", err = "";
+    for (const ep of ["syllable-lyrics", "lyrics"]) {
+      try {
+        const r = await mk.api.music(`/v1/catalog/${sf()}/songs/${id}/${ep}`);
+        const d = r && r.data && r.data.data && r.data.data[0];
+        if (d && d.attributes && d.attributes.ttml) {
+          ttml = d.attributes.ttml;
+          kind = ep === "lyrics" ? "line" : "syllable";
+          break;
+        }
+      } catch (e) {
+        err = ep + ": " + String((e && e.message) || e);
+      }
+    }
+    // The web player's own route: lyrics as an include on the song resource.
+    if (!ttml) {
+      try {
+        const r = await mk.api.music(`/v1/catalog/${sf()}/songs/${id}`, { include: "syllable-lyrics,lyrics" });
+        const song = r && r.data && r.data.data && r.data.data[0];
+        const rel = (song && song.relationships) || {};
+        for (const key of ["syllable-lyrics", "lyrics"]) {
+          const d = rel[key] && rel[key].data && rel[key].data[0];
+          if (d && d.attributes && d.attributes.ttml) {
+            ttml = d.attributes.ttml;
+            kind = key === "lyrics" ? "line" : "syllable";
+            break;
+          }
+        }
+      } catch (e) {
+        err += " | include: " + String((e && e.message) || e);
+      }
+    }
+    const lines = ttml ? parseTTML(ttml) : [];
+    // Line-level files have no spans; syllable files sometimes have untimed lines.
+    if (kind === "syllable" && !lines.some(l => l.w.length)) kind = "line";
+    post({ type: "lyrics", rid, id: now.id, kind, lines, err });
   }
 
   async function playItem(kind, id) {

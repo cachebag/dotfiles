@@ -31,6 +31,79 @@ Singleton {
     property bool searching: false
     property int rid: 0
 
+    // ---- lyrics ----
+    // Survives hot reloads (PersistentProperties) and restarts (state file).
+    property bool lyricsOn: false
+    PersistentProperties {
+        id: persist
+        reloadableId: "applemusic"
+        property bool lyricsOn: false
+        property bool restored: false
+        onLoaded: {
+            root.lyricsOn = lyricsOn;
+            restored = true;
+        }
+    }
+    readonly property string statePath: Quickshell.env("HOME") + "/.cache/quickshell/am-lyrics"
+    FileView {
+        id: stateFile
+        path: root.statePath
+        preload: true
+        printErrors: false
+        onLoaded: if (!persist.restored)
+            root.lyricsOn = text().trim() === "1"
+    }
+    Process {
+        id: stateWrite
+    }
+    onLyricsOnChanged: {
+        persist.lyricsOn = lyricsOn;
+        stateWrite.command = ["sh", "-c", 'mkdir -p "$(dirname "$1")" && printf %s "$2" > "$1"', "_", statePath, lyricsOn ? "1" : "0"];
+        stateWrite.running = true;
+        if (lyricsOn && !hasLyrics)
+            requestLyrics();
+    }
+    property var lines: []           // [{ b, e, t, w: [{ t, b, e, sp }] }]
+    property string lyricsKind: "none"   // none | line | syllable
+    property string lyricsFor: ""    // item id the lines belong to
+    property bool lyricsLoading: false
+    readonly property string itemId: item?.id ?? ""
+    readonly property bool hasLyrics: lyricsFor !== "" && lyricsFor === itemId && lines.length > 0
+
+    // Playback time interpolated between the bridge's once-a-second updates.
+    property real basePos: 0
+    property real baseAt: 0
+    property real tick: 0
+    readonly property real livePos: playing ? basePos + (tick - baseAt) / 1000 : basePos
+    Timer {
+        interval: 80
+        repeat: true
+        running: root.lyricsOn && root.playing && root.hasLyrics
+        onTriggered: root.tick = Date.now()
+    }
+    function mark(p) {
+        basePos = p;
+        baseAt = Date.now();
+        tick = baseAt;
+    }
+
+    onItemIdChanged: {
+        if (lyricsOn)
+            requestLyrics();
+    }
+    function requestLyrics() {
+        if (itemId === "")
+            return;
+        lyricsLoading = true;
+        send({
+            cmd: "lyrics",
+            rid: 0
+        });
+    }
+    function toggleLyrics() {
+        lyricsOn = !lyricsOn;
+    }
+
     property string browse: ""       // "" | playlists | pinned | recent
     property var browseItems: []
     property bool browsing: false    // request in flight
@@ -135,6 +208,7 @@ Singleton {
             connected = true;
             playing = !!m.playing;
             position = m.position ?? 0;
+            mark(position);
             duration = m.duration ?? 0;
             item = m.item ?? null;
             loved = !!m.loved;
@@ -147,8 +221,18 @@ Singleton {
         case "position":
             lastSeen = Date.now();
             position = m.position ?? position;
+            mark(position);
             if (m.duration)
                 duration = m.duration;
+            break;
+        case "lyrics":
+            lyricsLoading = false;
+            console.log("applemusic lyrics:", m.kind, (m.lines ?? []).length, "lines", m.err ? "err=" + m.err : "");
+            if (m.id === itemId) {
+                lines = m.lines ?? [];
+                lyricsKind = m.kind ?? "none";
+                lyricsFor = m.id;
+            }
             break;
         case "results":
             if (m.rid === rid) {
@@ -193,6 +277,9 @@ Singleton {
                 cmd: "reloadExtension"
             });
         }
+        function lyrics(): void {
+            root.toggleLyrics();
+        }
     }
 
     // ---- transport (optimistic where it is cheap to be) -------------------
@@ -214,6 +301,7 @@ Singleton {
     }
     function seek(t) {
         position = t;
+        mark(t);
         send({
             cmd: "seek",
             time: t
