@@ -39,6 +39,30 @@ Singleton {
 
     readonly property bool hasItem: connected && item !== null && (item.name ?? "") !== ""
 
+    // Artwork cached to disk so the island's ColorQuantizer (local files only)
+    // can tint from it. "" until the download finishes.
+    readonly property string artDir: Quickshell.env("HOME") + "/.cache/quickshell/am-art"
+    readonly property string artUrl: item?.art ?? ""
+    property string artFile: ""
+    onArtUrlChanged: {
+        artFile = "";
+        artFetch.running = false;
+        if (artUrl === "")
+            return;
+        const path = artDir + "/" + Qt.md5(artUrl) + ".jpg";
+        artFetch.target = path;
+        artFetch.command = ["sh", "-c", 'mkdir -p "$1" && { [ -s "$2" ] || curl -sfL --max-time 10 -o "$2" "$3"; }', "_", artDir, path, artUrl];
+        artFetch.running = true;
+    }
+    Process {
+        id: artFetch
+        property string target: ""
+        onExited: code => {
+            if (code === 0 && root.artUrl !== "")
+                root.artFile = "file://" + target;
+        }
+    }
+
     property var client: null
     property real lastSeen: 0
 

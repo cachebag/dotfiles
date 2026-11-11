@@ -64,9 +64,36 @@ PanelWindow {
                 return ps[i];
         return ps[0];
     }
-    readonly property bool hasMedia: player !== null && (player.trackTitle ?? "") !== ""
-    readonly property bool playing: player?.isPlaying ?? false
-    readonly property string art: player?.trackArtUrl ?? ""
+    // One media source for the whole island. Apple Music's bridge wins while it
+    // is playing, or when it has a track and nothing else is playing; Chromium's
+    // MPRIS for that page only carries the window title and no artwork.
+    readonly property bool amActive: AppleMusic.hasItem && (AppleMusic.playing || !(player?.isPlaying ?? false))
+    readonly property bool hasMedia: amActive || (player !== null && (player.trackTitle ?? "") !== "")
+    readonly property bool playing: amActive ? AppleMusic.playing : (player?.isPlaying ?? false)
+    readonly property string art: amActive ? (AppleMusic.artFile || AppleMusic.artUrl) : (player?.trackArtUrl ?? "")
+    readonly property string title: amActive ? AppleMusic.item.name : (player?.trackTitle ?? "")
+    readonly property string artist: amActive ? AppleMusic.item.artist : (player?.trackArtist ?? "")
+    readonly property real mediaLength: amActive ? AppleMusic.duration : (player?.length ?? 0)
+    readonly property real mediaPosition: amActive ? AppleMusic.position : (player?.position ?? 0)
+    readonly property bool canSeek: amActive || (player?.canSeek ?? false)
+    readonly property bool canPrev: amActive || (player?.canGoPrevious ?? false)
+    readonly property bool canNext: amActive || (player?.canGoNext ?? false)
+    readonly property bool canToggle: amActive || (player?.canTogglePlaying ?? false)
+    function mediaToggle() {
+        amActive ? AppleMusic.toggle() : player?.togglePlaying();
+    }
+    function mediaPrev() {
+        amActive ? AppleMusic.prev() : player?.previous();
+    }
+    function mediaNext() {
+        amActive ? AppleMusic.next() : player?.next();
+    }
+    function mediaSeek(t) {
+        if (amActive)
+            AppleMusic.seek(t);
+        else if (player)
+            player.position = t;
+    }
     // Browsers often hand over a black frame as "art"; treat that as no art.
     readonly property bool artUsable: art !== "" && (!art.startsWith("file://") || (quant.colors ?? []).some(c => c.hsvValue > 0.1))
 
@@ -96,7 +123,7 @@ PanelWindow {
         // MPRIS position is not pushed; nudge the binding while it is on screen.
         interval: 500
         repeat: true
-        running: win.mode === "expanded" && win.playing
+        running: win.mode === "expanded" && win.playing && !win.amActive
         onTriggered: win.player?.positionChanged()
     }
 
@@ -734,7 +761,7 @@ PanelWindow {
                     Text {
                         width: parent.width
                         elide: Text.ElideRight
-                        text: win.player?.trackTitle ?? ""
+                        text: win.title
                         color: "#ffffff"
                         font.family: Theme.font
                         font.pixelSize: Theme.fontSize + 1
@@ -743,7 +770,7 @@ PanelWindow {
                     Text {
                         width: parent.width
                         elide: Text.ElideRight
-                        text: win.player?.trackArtist ?? ""
+                        text: win.artist
                         color: Qt.rgba(1, 1, 1, 0.55)
                         font.family: Theme.font
                         font.pixelSize: Theme.fontSize - 1
@@ -767,8 +794,8 @@ PanelWindow {
                     anchors.topMargin: 16
                     height: 14
 
-                    readonly property real len: win.player?.length ?? 0
-                    readonly property real posn: win.player?.position ?? 0
+                    readonly property real len: win.mediaLength
+                    readonly property real posn: win.mediaPosition
                     readonly property real frac: len > 0 ? Math.max(0, Math.min(1, posn / len)) : 0
 
                     function fmt(s) {
@@ -821,11 +848,11 @@ PanelWindow {
                             anchors.fill: parent
                             anchors.margins: -6
                             hoverEnabled: true
-                            enabled: win.player?.canSeek ?? false
+                            enabled: win.canSeek
                             cursorShape: enabled ? Qt.PointingHandCursor : Qt.ArrowCursor
                             onClicked: m => {
                                 const f = Math.max(0, Math.min(1, (m.x - 6) / track.width));
-                                win.player.position = f * seek.len;
+                                win.mediaSeek(f * seek.len);
                             }
                         }
                     }
@@ -839,22 +866,22 @@ PanelWindow {
                         anchors.verticalCenter: parent.verticalCenter
                         glyph: "󰒮"
                         size: 22
-                        enabled: win.player?.canGoPrevious ?? false
-                        onClicked: win.player.previous()
+                        enabled: win.canPrev
+                        onClicked: win.mediaPrev()
                     }
                     Ctl {
                         anchors.verticalCenter: parent.verticalCenter
                         glyph: win.playing ? "󰏤" : "󰐊"
                         size: 30
-                        enabled: win.player?.canTogglePlaying ?? false
-                        onClicked: win.player.togglePlaying()
+                        enabled: win.canToggle
+                        onClicked: win.mediaToggle()
                     }
                     Ctl {
                         anchors.verticalCenter: parent.verticalCenter
                         glyph: "󰒭"
                         size: 22
-                        enabled: win.player?.canGoNext ?? false
-                        onClicked: win.player.next()
+                        enabled: win.canNext
+                        onClicked: win.mediaNext()
                     }
                 }
             }
