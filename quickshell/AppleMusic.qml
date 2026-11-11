@@ -66,8 +66,18 @@ Singleton {
     property var client: null
     property real lastSeen: 0
 
+    // Hot-reload race: the replacement server binds the path, then the old
+    // server's teardown unlinks it, leaving a listener with no file. Binding a
+    // moment after load lets the old one finish first.
+    property bool serverReady: false
+    Timer {
+        interval: 400
+        running: true
+        onTriggered: root.serverReady = true
+    }
+
     SocketServer {
-        active: true
+        active: root.serverReady
         path: root.sockPath
         handler: Socket {
             id: sock
