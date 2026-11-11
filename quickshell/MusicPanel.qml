@@ -180,6 +180,44 @@ Item {
                     }
                 }
             }
+
+            // Lyrics overlay toggle; red while on.
+            Rectangle {
+                width: lyrRow.implicitWidth + 20
+                height: 26
+                radius: 13
+                color: AppleMusic.lyricsOn ? root.red : lyrMouse.containsMouse ? Qt.rgba(1, 1, 1, 0.16) : root.faint
+                Behavior on color {
+                    ColorAnimation {
+                        duration: Theme.fast
+                    }
+                }
+                Row {
+                    id: lyrRow
+                    anchors.centerIn: parent
+                    spacing: 5
+                    Text {
+                        text: "󰎈"
+                        color: "#ffffff"
+                        font.family: Theme.font
+                        font.pixelSize: 12
+                    }
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: "Lyrics"
+                        color: "#ffffff"
+                        font.family: Theme.font
+                        font.pixelSize: Theme.fontSize - 2
+                    }
+                }
+                MouseArea {
+                    id: lyrMouse
+                    anchors.fill: parent
+                    hoverEnabled: true
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: AppleMusic.toggleLyrics()
+                }
+            }
         }
 
         // ---- browse list (playlists / pinned / recent)

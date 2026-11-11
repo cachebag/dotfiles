@@ -37,8 +37,13 @@ PanelWindow {
     readonly property int restH: 32
     readonly property int restY: 4
 
-    anchors.top: true
-    implicitWidth: 860
+    // Full width so the lyric capsule beside the island has room to grow;
+    // the input mask keeps everything but the pills click-through.
+    anchors {
+        top: true
+        left: true
+        right: true
+    }
     implicitHeight: 560
     exclusiveZone: restH + restY * 2
     color: "transparent"
@@ -463,6 +468,128 @@ PanelWindow {
             return 64;
         default:
             return restH;
+        }
+    }
+
+    // ---- lyrics capsule: the current line, beside the resting island --------
+    // Outside `hit`, so it never takes input; fades while the island is bigger.
+
+    readonly property var lyricLines: AppleMusic.lines
+    readonly property real lyricPos: AppleMusic.livePos + 0.08  // render lead
+    readonly property int lyricCur: {
+        const ls = win.lyricLines;
+        var i = -1;
+        for (var k = 0; k < ls.length; k++) {
+            if (ls[k].b <= win.lyricPos)
+                i = k;
+            else
+                break;
+        }
+        return i;
+    }
+    readonly property bool lyricGap: lyricCur < 0 || (win.lyricPos > lyricLines[lyricCur].e + 2.5 && (lyricCur + 1 >= lyricLines.length || lyricLines[lyricCur + 1].b - lyricLines[lyricCur].e > 4))
+    readonly property bool lyricShown: AppleMusic.lyricsOn && AppleMusic.hasLyrics && win.mode === "rest"
+
+    function esc(s) {
+        return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+    // Each word a span; grey level encodes progress on its own beat.
+    readonly property string lyricHtml: {
+        if (lyricCur < 0)
+            return "";
+        const line = lyricLines[lyricCur];
+        if (!line.w.length)
+            return esc(line.t);
+        var html = "";
+        for (var k = 0; k < line.w.length; k++) {
+            const w = line.w[k];
+            const prog = Math.max(0, Math.min(1, (lyricPos - w.b) / Math.max(0.05, w.e - w.b)));
+            const v = Math.round(255 * (0.45 + 0.55 * prog)).toString(16).padStart(2, "0");
+            html += '<font color="#' + v + v + v + '">' + esc(w.t) + "</font>" + (w.sp ? " " : "");
+        }
+        return html;
+    }
+    onLyricCurChanged: lyricIn.restart()
+
+    Rectangle {
+        id: lyric
+        x: hit.x + hit.width + 2
+        y: win.restY
+        height: win.restH
+        // As wide as the line needs; the screen edge is the only limit.
+        readonly property real room: win.width - x - 8
+        width: win.lyricGap ? 46 : Math.min(room, lyricText.implicitWidth + 28)
+        radius: height / 2
+        color: "#000000"
+        opacity: win.lyricShown ? 1 : 0
+        visible: opacity > 0
+        clip: true
+
+        Behavior on width {
+            NumberAnimation {
+                duration: Theme.normal
+                easing.type: Theme.easeOut
+            }
+        }
+        Behavior on opacity {
+            NumberAnimation {
+                duration: Theme.fast
+            }
+        }
+
+        Text {
+            id: lyricText
+            anchors.centerIn: parent
+            width: Math.min(implicitWidth, lyric.width - 28)
+            visible: !win.lyricGap
+            maximumLineCount: 1
+            elide: Text.ElideRight
+            textFormat: Text.StyledText
+            text: win.lyricHtml
+            color: "#ffffff"
+            font.family: Theme.font
+            font.pixelSize: Theme.fontSize + 1
+
+            // New line: nudge up into place.
+            transform: Translate {
+                id: lyricSlide
+            }
+            SequentialAnimation {
+                id: lyricIn
+                PropertyAction {
+                    target: lyricSlide
+                    property: "y"
+                    value: 6
+                }
+                NumberAnimation {
+                    target: lyricSlide
+                    property: "y"
+                    to: 0
+                    duration: Theme.normal
+                    easing.type: Theme.easeOut
+                }
+            }
+        }
+
+        Text {
+            anchors.centerIn: parent
+            visible: win.lyricGap
+            text: "•••"
+            color: "#ffffff"
+            font.family: Theme.font
+            font.pixelSize: Theme.fontSize
+            SequentialAnimation on opacity {
+                running: win.lyricGap && win.lyricShown
+                loops: Animation.Infinite
+                NumberAnimation {
+                    to: 0.3
+                    duration: 900
+                }
+                NumberAnimation {
+                    to: 1
+                    duration: 900
+                }
+            }
         }
     }
 
