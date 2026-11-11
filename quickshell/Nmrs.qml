@@ -63,7 +63,11 @@ Item {
             return "airplane";
         if (!root.primary)
             return root.wifiOn ? "offline" : "off";
-        return root.clip(root.primary.name, 16);
+        // NM's ethernet profile names ("Wired connection 1") carry no information;
+        // the icon says it all, and the tooltip has interface and speed.
+        if (root.primary.kind === "ethernet")
+            return "";
+        return root.clip(root.primary.name, 12);
     }
 
     readonly property string details: {
