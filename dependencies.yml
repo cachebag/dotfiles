@@ -35,6 +35,7 @@ arch_packages:
   - wl-clipboard
   - grim
   - slurp
+  - hyprpicker
   - swappy
   - xdg-desktop-portal-hyprland
   - qt5-wayland

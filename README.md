@@ -27,7 +27,7 @@
 | Lock | [Swaylock-effects](https://github.com/jirutka/swaylock-effects) |
 | Idle | [Hypridle](https://github.com/hyprwm/hypridle) |
 | Logout | [Wlogout](https://github.com/ArtsyMacaw/wlogout) |
-| Screenshot | [grim](https://sr.ht/~emersion/grim/) + [slurp](https://github.com/emersion/slurp) |
+| Screenshot | [hyprshot](https://github.com/Gustash/Hyprshot) (grim + slurp, frozen with [hyprpicker](https://github.com/hyprwm/hyprpicker) so open popups stay in the shot) |
 | Fetch | [Fastfetch](https://github.com/fastfetch-cli/fastfetch) |
 ## Installation
 
