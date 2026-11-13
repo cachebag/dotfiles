@@ -1,6 +1,5 @@
 import QtQuick
 import QtQuick.Effects
-import Qt.labs.folderlistmodel
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
@@ -18,7 +17,7 @@ import Quickshell.Services.Pipewire
 //   banner   – medium rounded panel: bluetooth, mic mute, notifications
 //   expanded – on hover: full player, or clock + what is using the mic/camera,
 //              plus a toolbar (do not disturb, wallpapers)
-//   walls    – wallpaper strip; `qs ipc call island walls`, Esc or leaving closes it
+//   walls    – wallpaper grid; `qs ipc call island walls`, Esc or leaving closes it
 //   music    – Apple Music panel (MusicPanel.qml); `qs ipc call island music`
 // Right-click toggles do not disturb (`qs ipc call island dnd`).
 PanelWindow {
@@ -316,9 +315,7 @@ PanelWindow {
     function openWalls() {
         thumbs.running = true;
         panel = "walls";
-        wallList.currentIndex = Math.max(0, wallList.indexOfCurrent());
-        wallList.positionViewAtIndex(wallList.currentIndex, ListView.Center);
-        wallList.forceActiveFocus();
+        wallPicker.open();
     }
     function openMusic() {
         if (!AppleMusic.connected) {
@@ -335,15 +332,6 @@ PanelWindow {
         }
         panel = "music";
         musicPanel.open();
-    }
-
-    FolderListModel {
-        id: wallFiles
-        folder: "file://" + win.wallDir
-        nameFilters: ["*.jpg", "*.jpeg", "*.png", "*.webp", "*.JPG", "*.JPEG", "*.PNG", "*.WEBP"]
-        showDirs: false
-        sortField: FolderListModel.Time
-        sortReversed: true
     }
 
     FileView {
@@ -440,10 +428,11 @@ PanelWindow {
     // ---- geometry ---------------------------------------------------------
 
     readonly property bool active: hasMedia || micOn || camOn
+    readonly property real wallsW: Math.min(win.width - 20, 840)
     readonly property real targetW: {
         switch (mode) {
         case "walls":
-            return Math.min(win.width - 20, 820);
+            return wallsW;
         case "music":
             return 440;
         case "expanded":
@@ -459,7 +448,7 @@ PanelWindow {
     readonly property real targetH: {
         switch (mode) {
         case "walls":
-            return 196;
+            return wallPicker.implicitHeight + 36;
         case "music":
             return musicPanel.implicitHeight + 36;
         case "expanded":
@@ -1090,167 +1079,25 @@ PanelWindow {
             }
         }
 
-        // ---- walls: thumbnail strip ----
-        Item {
-            anchors.fill: parent
-            anchors.margins: 16
+        // ---- walls: filterable thumbnail grid ----
+        WallPicker {
+            id: wallPicker
+            anchors.left: parent.left
+            anchors.top: parent.top
+            anchors.margins: 18
+            // Fixed (not the morphing island width): the grid lays out once.
+            width: win.wallsW - 36
+            dir: win.wallDir
+            thumbDir: win.thumbDir
+            current: win.wallNow
+            applying: win.applying
+            onPick: path => win.applyWall(path)
+            onClose: win.closePanel()
             opacity: win.mode === "walls" ? 1 : 0
             visible: opacity > 0 || win.mode === "walls"
             Behavior on opacity {
                 NumberAnimation {
                     duration: Theme.fast
-                }
-            }
-
-            Row {
-                id: wallHeader
-                spacing: 8
-                x: 6
-                Text {
-                    text: "󰸉"
-                    color: "#ffffff"
-                    font.family: Theme.font
-                    font.pixelSize: Theme.fontSize + 2
-                }
-                Text {
-                    text: "Wallpapers"
-                    color: "#ffffff"
-                    font.family: Theme.font
-                    font.pixelSize: Theme.fontSize + 1
-                    font.bold: true
-                }
-                Text {
-                    anchors.baseline: parent.children[1].baseline
-                    text: wallFiles.count + "  ·  ←/→ enter esc"
-                    color: Qt.rgba(1, 1, 1, 0.4)
-                    font.family: Theme.font
-                    font.pixelSize: Theme.fontSize - 2
-                }
-            }
-
-            ListView {
-                id: wallList
-                anchors.top: wallHeader.bottom
-                anchors.topMargin: 12
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                orientation: ListView.Horizontal
-                spacing: 10
-                clip: true
-                model: wallFiles
-                cacheBuffer: 1200
-                highlightMoveDuration: 180
-                highlightFollowsCurrentItem: false
-                boundsBehavior: Flickable.StopAtBounds
-
-                function indexOfCurrent() {
-                    for (var i = 0; i < wallFiles.count; i++)
-                        if (String(wallFiles.get(i, "filePath")) === win.wallNow)
-                            return i;
-                    return -1;
-                }
-
-                Keys.onEscapePressed: win.closePanel()
-                Keys.onReturnPressed: win.applyWall(String(wallFiles.get(currentIndex, "filePath")))
-                Keys.onEnterPressed: win.applyWall(String(wallFiles.get(currentIndex, "filePath")))
-                Keys.onLeftPressed: decrementCurrentIndex()
-                Keys.onRightPressed: incrementCurrentIndex()
-
-                // Vertical wheel scrolls the strip sideways.
-                WheelHandler {
-                    acceptedDevices: PointerDevice.Mouse
-                    onWheel: e => {
-                        wallList.flick(e.angleDelta.y * 12, 0);
-                    }
-                }
-
-                delegate: Item {
-                    id: cell
-                    required property int index
-                    required property string fileName
-                    required property string filePath
-
-                    readonly property bool isNow: filePath === win.wallNow
-                    readonly property bool isSel: ListView.isCurrentItem
-
-                    width: 192
-                    height: 120
-                    y: (wallList.height - height) / 2
-
-                    ClippingRectangle {
-                        anchors.fill: parent
-                        radius: 14
-                        color: Qt.rgba(1, 1, 1, 0.06)
-                        scale: cellMouse.containsMouse ? 1.04 : 1
-                        Behavior on scale {
-                            NumberAnimation {
-                                duration: Theme.fast
-                                easing.type: Theme.easeOut
-                            }
-                        }
-
-                        Image {
-                            id: thumb
-                            anchors.fill: parent
-                            fillMode: Image.PreserveAspectCrop
-                            asynchronous: true
-                            cache: true
-                            sourceSize: Qt.size(384, 240)
-                            source: "file://" + win.thumbDir + "/" + cell.fileName + ".jpg"
-                            // No thumbnail yet: fall back to the full image.
-                            onStatusChanged: if (status === Image.Error)
-                                source = "file://" + cell.filePath
-                            opacity: status === Image.Ready ? 1 : 0
-                            Behavior on opacity {
-                                NumberAnimation {
-                                    duration: Theme.normal
-                                }
-                            }
-                        }
-
-                        Rectangle {
-                            anchors.fill: parent
-                            color: Qt.rgba(0, 0, 0, 0.5)
-                            visible: win.applying === cell.filePath
-                            Text {
-                                anchors.centerIn: parent
-                                text: "󰑓"
-                                color: "#ffffff"
-                                font.family: Theme.font
-                                font.pixelSize: 22
-                                RotationAnimation on rotation {
-                                    running: win.applying === cell.filePath
-                                    from: 0
-                                    to: 360
-                                    duration: 900
-                                    loops: Animation.Infinite
-                                }
-                            }
-                        }
-                    }
-
-                    // Current wallpaper: solid ring; keyboard selection: faint ring.
-                    Rectangle {
-                        anchors.fill: parent
-                        anchors.margins: -3
-                        radius: 16
-                        color: "transparent"
-                        border.width: 2
-                        border.color: cell.isNow ? "#ffffff" : Qt.rgba(1, 1, 1, 0.35)
-                        visible: cell.isNow || (cell.isSel && wallList.activeFocus)
-                    }
-
-                    MouseArea {
-                        id: cellMouse
-                        anchors.fill: parent
-                        hoverEnabled: true
-                        cursorShape: Qt.PointingHandCursor
-                        onClicked: {
-                            wallList.currentIndex = cell.index;
-                            win.applyWall(cell.filePath);
-                        }
-                    }
                 }
             }
         }
